@@ -171,6 +171,15 @@
         return;
       }
 
+      var phoneField = form.querySelector("[name=phone]");
+      if (form.getAttribute("name") === "advisor-apply" && phoneField) {
+        phoneField.addEventListener("input", function () {
+          phoneField.value = String(phoneField.value || "").replace(/\D/g, "").slice(0, 10);
+          phoneField.setCustomValidity("");
+          phoneField.classList.remove("is-invalid");
+        });
+      }
+
       form.addEventListener("submit", async function (e) {
         e.preventDefault();
         var hp = form.querySelector("[name=website]");
@@ -181,12 +190,29 @@
         }
 
         var name = form.getAttribute("name") || "form";
+        var phoneInput = form.querySelector("[name=phone]");
+        if (name === "advisor-apply" && phoneInput) {
+          var digits = String(phoneInput.value || "").replace(/\D/g, "").slice(0, 10);
+          phoneInput.value = digits;
+          if (digits.length !== 10) {
+            phoneInput.classList.add("is-invalid");
+            phoneInput.setCustomValidity("Enter a 10-digit mobile number.");
+            phoneInput.reportValidity();
+            return;
+          }
+          phoneInput.setCustomValidity("");
+          phoneInput.classList.remove("is-invalid");
+        }
         var payload = formPayload(form);
         payload.userId = currentUserId();
         payload.source = name;
 
         var storedInFirebase = false;
-        if (name === "contact" && window.MyTalksDB && window.MyTalksDB.createContact) {
+        if (
+          (name === "contact" || name === "advisor-apply") &&
+          window.MyTalksDB &&
+          window.MyTalksDB.createContact
+        ) {
           try {
             await window.MyTalksDB.createContact(payload);
             storedInFirebase = true;
@@ -245,7 +271,9 @@
           (p.featured ? "btn--primary" : "btn--secondary") +
           '" href="' +
           base +
-          (p.id === "corporate" ? "/pages/partner" : "/pages/book-session") +
+          (p.id === "corporate"
+            ? "/pages/contact"
+            : "/pages/book-session?duration=" + encodeURIComponent(p.id)) +
           '">' +
           (p.id === "corporate" ? "Contact sales" : "Get started") +
           "</a></article>"
@@ -266,7 +294,7 @@
     if (source) {
       source.textContent =
         data.source === "firestore"
-          ? "Prices update live from MyTalks."
+          ? "Prices update live from MyTalk."
           : "Showing current session plans.";
     }
   }

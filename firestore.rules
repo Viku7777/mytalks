@@ -66,7 +66,8 @@ service cloud.firestore {
       allow create: if request.resource.data.keys().hasAll([
           'bookingId', 'advisorId', 'date', 'time', 'mode', 'status', 'total'
         ])
-        && request.resource.data.status == 'Confirmed';
+        && (request.resource.data.status == 'Pending'
+          || request.resource.data.status == 'Confirmed');
       allow read: if true;
       allow update: if isAdmin();
       allow delete: if false;
@@ -77,6 +78,29 @@ service cloud.firestore {
       allow create: if isSignedIn()
         && request.resource.data.page == 'book-session'
         && request.resource.data.userId == request.auth.uid;
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    // Browser crashes. Crashlytics has no web SDK, so the site writes here.
+    match /crashes/{crashId} {
+      allow create: if request.resource.data.keys().hasOnly([
+          'message', 'stack', 'fatal', 'url', 'path', 'userAgent', 'userId', 'createdAt'
+        ])
+        && request.resource.data.message is string
+        && request.resource.data.message.size() > 0
+        && request.resource.data.message.size() <= 500
+        && request.resource.data.stack is string
+        && request.resource.data.stack.size() <= 4000
+        && request.resource.data.fatal is bool
+        && request.resource.data.url is string
+        && request.resource.data.url.size() <= 500
+        && request.resource.data.path is string
+        && request.resource.data.path.size() <= 300
+        && request.resource.data.userAgent is string
+        && request.resource.data.userAgent.size() <= 300
+        && (request.resource.data.userId == null || request.resource.data.userId is string)
+        && request.resource.data.createdAt == request.time;
       allow read: if isAdmin();
       allow update, delete: if false;
     }

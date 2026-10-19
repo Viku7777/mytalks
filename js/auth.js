@@ -296,6 +296,9 @@
     }
     updateHeader(user);
     bindLogout(document);
+    if (window.MyTalksFirebase && typeof window.MyTalksFirebase.setUserId === "function") {
+      window.MyTalksFirebase.setUserId(user ? user.uid : null);
+    }
     listeners.slice().forEach(function (fn) {
       try {
         fn(user);

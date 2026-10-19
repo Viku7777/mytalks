@@ -2,17 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboard — Your MyTalks Account (UI Demo)</title>
-  <meta name="description" content="MyTalks user dashboard UI for upcoming sessions, invoices, wallet, notifications, settings, and support tickets." />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="../favicon.ico" sizes="32x32" />
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+  <title>Dashboard — Your MyTalk Account</title>
+  <meta name="description" content="MyTalk account dashboard for upcoming sessions, invoices, wallet, notifications, settings, and support tickets." />
   <link rel="canonical" href="https://mytalk.in/pages/dashboard" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Dashboard — Your MyTalks Account (UI Demo)" />
-  <meta property="og:description" content="MyTalks user dashboard UI for upcoming sessions, invoices, wallet, notifications, settings, and support tickets." />
+  <meta property="og:title" content="Dashboard — Your MyTalk Account" />
+  <meta property="og:description" content="MyTalk account dashboard for upcoming sessions, invoices, wallet, notifications, settings, and support tickets." />
   <meta property="og:image" content="https://images.unsplash.com/photo-1516302759342-fd024b64ad2b?w=1200&h=630&fit=crop" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Dashboard — Your MyTalks Account (UI Demo)" />
-  <meta name="twitter:description" content="MyTalks user dashboard UI for upcoming sessions, invoices, wallet, notifications, settings, and support tickets." />
+  <meta name="twitter:title" content="Dashboard — Your MyTalk Account" />
+  <meta name="twitter:description" content="MyTalk account dashboard for upcoming sessions, invoices, wallet, notifications, settings, and support tickets." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -23,6 +26,7 @@
   <link rel="stylesheet" href="../css/components.css" />
   <link rel="stylesheet" href="../css/pages.css" />
   <link rel="stylesheet" href="../css/dark.css" />
+  <link rel="stylesheet" href="../css/mobile.css" />
   <link rel="stylesheet" href="../css/animations.css" />
   
   <script src="../js/theme.js"></script>
@@ -34,7 +38,7 @@
     <section class="page-hero">
       <div class="container">
         <h1>Dashboard</h1>
-        <p>Manage sessions, wallet, and support for your MyTalks account.</p>
+        <p>Manage sessions, wallet, and support for your MyTalk account.</p>
       </div>
     </section>
 
@@ -76,7 +80,7 @@
             <div class="tab-panel" data-dash-panel="tickets"><div class="table-wrap card"><table><thead><tr><th>ID</th><th>Subject</th><th>Status</th><th>Updated</th></tr></thead><tbody data-tickets>
               <tr><td colspan="4">No tickets yet. <a href="support">Create one</a></td></tr>
             </tbody></table></div><a class="btn btn--secondary mt-4" href="support">New ticket</a></div>
-            <div class="tab-panel" data-dash-panel="referral" hidden><div class="card"><h3>Referral Earnings</h3><p class="mt-4">Lifetime earnings: <strong data-referral-earnings>₹0</strong></p><p class="mt-4">Share your code <strong>SAFE-ALEX</strong> with friends. <a href="refer-earn">Learn more</a></p><div class="coming-soon mt-4">Rewards Program — coming soon</div></div></div>
+            <div class="tab-panel" data-dash-panel="referral" hidden><div class="card"><h3>Referral Earnings</h3><p class="mt-4">Lifetime earnings: <strong data-referral-earnings>₹0</strong></p><p class="mt-4">Share your code <strong>SAFE-ALEX</strong> with friends.</p><div class="coming-soon mt-4">Rewards Program — coming soon</div></div></div>
           </div>
         </div>
         <p class="mt-8 hint">Admin Dashboard and Advisor Dashboard placeholders are planned for a later release.</p>

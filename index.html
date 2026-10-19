@@ -2,17 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MyTalks — Someone to Talk. Someone to Understand. | mytalk.in</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="favicon.ico" sizes="32x32" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <title>MyTalk — Someone to Talk. Someone to Understand. | mytalk.in</title>
   <meta name="description" content="Your safe space to talk. Speak privately with trusted listeners through chat, voice, or video. Real conversations. Real support. You're never alone." />
   <link rel="canonical" href="https://mytalk.in/" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="MyTalks — Someone to Talk. Someone to Understand." />
+  <meta property="og:title" content="MyTalk — Someone to Talk. Someone to Understand." />
   <meta property="og:description" content="Your safe space to talk. Talk freely. Feel better. Real conversations. Real support." />
   <meta property="og:url" content="https://mytalk.in/" />
   <meta property="og:image" content="https://mytalk.in/assets/images/og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="MyTalks — Someone to Talk. Someone to Understand." />
+  <meta name="twitter:title" content="MyTalk — Someone to Talk. Someone to Understand." />
   <meta name="twitter:description" content="Your safe space to talk. Real conversations. Real support on mytalk.in." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -24,12 +27,13 @@
   <link rel="stylesheet" href="css/components.css" />
   <link rel="stylesheet" href="css/pages.css" />
   <link rel="stylesheet" href="css/dark.css" />
+  <link rel="stylesheet" href="css/mobile.css" />
   <link rel="stylesheet" href="css/animations.css" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "MyTalks",
+    "name": "MyTalk",
     "url": "https://mytalk.in/",
     "description": "Someone to talk. Someone to understand. Your safe space for private emotional support and relationship guidance."
   }
@@ -52,7 +56,7 @@
         <div class="home-hero__overlay" aria-hidden="true"></div>
       </div>
       <div class="container home-hero__content">
-        <p class="home-hero__brand">My<span>Talks</span></p>
+        <p class="home-hero__brand">My<span>Talk</span></p>
         <h1>Someone to Talk.<br />Someone to Understand.</h1>
         <p class="home-hero__sub">Your safe space to talk—private, respectful, and judgment-free. Talk freely. Feel better.</p>
         <div class="btn-group">
@@ -116,7 +120,7 @@
           <div class="home-split__intro">
             <span class="section__eyebrow">Services</span>
             <h2>What you can talk about</h2>
-            <p>Whether it’s relationships, stress, or simply needing someone to listen—MyTalks is here for real conversations and real support.</p>
+            <p>Whether it’s relationships, stress, or simply needing someone to listen—MyTalk is here for real conversations and real support.</p>
             <a class="btn btn--primary mt-6" href="pages/services">Explore services</a>
           </div>
           <ul class="topic-list">
@@ -135,7 +139,7 @@
       <div class="container">
         <div class="home-split home-split--reverse">
           <div class="home-split__intro">
-            <span class="section__eyebrow">Why MyTalks</span>
+            <span class="section__eyebrow">Why MyTalk</span>
             <h2>Built for trust and comfort</h2>
             <p>Real conversations. Real support. Because everyone needs someone to talk to—without the feel of a dating app or a noisy social feed.</p>
           </div>
@@ -168,7 +172,11 @@
           <h2>Meet trusted listeners</h2>
           <p>Find someone who speaks your language and understands your situation.</p>
         </div>
-        <div class="grid-3 advisors-preview" data-home-advisors></div>
+        <div class="grid-3 advisors-preview" data-home-advisors aria-busy="true">
+          <article class="card advisor-card advisor-card--skeleton" aria-hidden="true"><div class="advisor-card__media"><span class="skeleton skeleton--avatar"></span><div><span class="skeleton skeleton--lg"></span><span class="skeleton skeleton--block"></span></div></div><span class="skeleton skeleton--block"></span></article>
+          <article class="card advisor-card advisor-card--skeleton" aria-hidden="true"><div class="advisor-card__media"><span class="skeleton skeleton--avatar"></span><div><span class="skeleton skeleton--lg"></span><span class="skeleton skeleton--block"></span></div></div><span class="skeleton skeleton--block"></span></article>
+          <article class="card advisor-card advisor-card--skeleton" aria-hidden="true"><div class="advisor-card__media"><span class="skeleton skeleton--avatar"></span><div><span class="skeleton skeleton--lg"></span><span class="skeleton skeleton--block"></span></div></div><span class="skeleton skeleton--block"></span></article>
+        </div>
         <div class="text-center mt-8">
           <a class="btn btn--primary" href="pages/find-advisor">Browse all advisors</a>
         </div>

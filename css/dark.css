@@ -79,9 +79,7 @@
 [data-theme="dark"] .why-card,
 [data-theme="dark"] .step-card,
 [data-theme="dark"] .service-tile,
-[data-theme="dark"] .reason-grid article,
-[data-theme="dark"] .partner-path,
-[data-theme="dark"] .partner-form {
+[data-theme="dark"] .reason-grid article {
   background: var(--color-surface);
   border-color: var(--color-border);
 }

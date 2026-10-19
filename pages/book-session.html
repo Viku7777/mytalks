@@ -2,17 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Book a Session — Chat, Voice or Video | MyTalks</title>
-  <meta name="description" content="Book a confidential MyTalks session: select advisor, date, time, communication mode, coupon, and payment." />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="../favicon.ico" sizes="32x32" />
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+  <title>Book a Session | MyTalk</title>
+  <meta name="description" content="Book a confidential MyTalk session: select advisor, session length, date, and time." />
   <link rel="canonical" href="https://mytalk.in/pages/book-session" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Book a Session — Chat, Voice or Video | MyTalks" />
-  <meta property="og:description" content="Book a confidential MyTalks session: select advisor, date, time, communication mode, coupon, and payment." />
+  <meta property="og:title" content="Book a Session | MyTalk" />
+  <meta property="og:description" content="Book a confidential MyTalk session: select advisor, session length, date, and time." />
   <meta property="og:image" content="https://images.unsplash.com/photo-1516302759342-fd024b64ad2b?w=1200&h=630&fit=crop" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Book a Session — Chat, Voice or Video | MyTalks" />
-  <meta name="twitter:description" content="Book a confidential MyTalks session: select advisor, date, time, communication mode, coupon, and payment." />
+  <meta name="twitter:title" content="Book a Session | MyTalk" />
+  <meta name="twitter:description" content="Book a confidential MyTalk session: select advisor, session length, date, and time." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -23,6 +26,7 @@
   <link rel="stylesheet" href="../css/components.css" />
   <link rel="stylesheet" href="../css/pages.css" />
   <link rel="stylesheet" href="../css/dark.css" />
+  <link rel="stylesheet" href="../css/mobile.css" />
   <link rel="stylesheet" href="../css/animations.css" />
   
   <script src="../js/theme.js"></script>
@@ -34,7 +38,7 @@
     <section class="page-hero">
       <div class="container">
         <h1>Book a Session</h1>
-        <p>Choose your advisor, pick a time, and tell us how you’d like to talk.</p>
+        <p>Choose your advisor, session length, and start time.</p>
       </div>
     </section>
 
@@ -64,66 +68,79 @@
             </fieldset>
 
             <fieldset class="booking-group">
+              <legend class="booking-group__title">Session length</legend>
+              <div class="duration-options" data-duration-options role="radiogroup" aria-label="Session length"></div>
+            </fieldset>
+
+            <fieldset class="booking-group">
               <legend class="booking-group__title">Date &amp; time</legend>
+              <p class="hint">Choose the date and the start time you prefer. A session must begin at least 2 hours from now.</p>
               <div class="form-group">
-                <label for="date">Date</label>
-                <input class="form-control" type="date" id="date" name="date" required />
+                <label id="date-label">Date</label>
+                <div class="date-picker" data-date-picker>
+                  <input type="hidden" id="date" name="date" />
+                  <button type="button" class="date-picker__button" data-date-open aria-expanded="false" aria-labelledby="date-label">
+                    <span data-date-label>Choose a date</span>
+                  </button>
+                  <div class="date-picker__panel" data-date-panel hidden>
+                    <div class="date-picker__nav">
+                      <button type="button" data-date-prev aria-label="Previous month">‹</button>
+                      <strong data-date-month></strong>
+                      <button type="button" data-date-next aria-label="Next month">›</button>
+                    </div>
+                    <div class="date-picker__week" aria-hidden="true"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+                    <div class="date-picker__grid" data-date-grid></div>
+                  </div>
+                </div>
               </div>
-              <div class="form-group">
-                <span class="booking-label" id="slots-label">Available times</span>
-                <div class="slot-grid" data-slots role="group" aria-labelledby="slots-label"></div>
+              <p class="hint" data-date-note hidden></p>
+              <div class="form-group" data-start-block hidden>
+                <label id="start-time-label">Start time</label>
+                <div class="start-picker" data-start-picker>
+                  <input type="hidden" id="start-time" name="startTime" value="" />
+                  <div class="start-picker__stage">
+                    <p class="start-picker__kicker">Preferred start</p>
+                    <div class="start-picker__clock" aria-hidden="true">
+                      <span class="start-picker__tile" data-hour-tile>–</span>
+                      <span class="start-picker__sep">:</span>
+                      <span class="start-picker__tile" data-minute-tile>–</span>
+                    </div>
+                    <p class="start-picker__period" data-start-period>Choose an hour, then a minute</p>
+                  </div>
+                  <div class="start-picker__body">
+                    <div class="start-picker__block">
+                      <div class="start-picker__label-row">
+                        <span class="start-picker__label">Hour and minute</span>
+                        <strong data-time-readout>Slide</strong>
+                      </div>
+                      <div class="start-picker__slider is-idle">
+                        <input type="range" min="0" max="1439" value="0" step="1" aria-label="Start time" data-time-range />
+                      </div>
+                      <div class="start-picker__scale" aria-hidden="true"><span>12 AM</span><span>6 AM</span><span>12 PM</span><span>6 PM</span><span>11 PM</span></div>
+                    </div>
+                  </div>
+                  <p class="start-picker__status" data-start-status>Select your preferred start time.</p>
+                </div>
               </div>
             </fieldset>
 
             <fieldset class="booking-group">
-              <legend class="booking-group__title">How you’d like to talk</legend>
-              <div class="comm-options">
-                <label class="comm-option">
-                  <input type="radio" name="mode" value="chat" checked />
-                  <i class="fa-solid fa-comments" aria-hidden="true"></i>
-                  <span class="comm-option__name">Chat</span>
-                </label>
-                <label class="comm-option">
-                  <input type="radio" name="mode" value="voice" />
-                  <i class="fa-solid fa-phone" aria-hidden="true"></i>
-                  <span class="comm-option__name">Voice</span>
-                </label>
-                <label class="comm-option">
-                  <input type="radio" name="mode" value="video" />
-                  <i class="fa-solid fa-video" aria-hidden="true"></i>
-                  <span class="comm-option__name">Video</span>
-                </label>
-              </div>
-            </fieldset>
-
-            <fieldset class="booking-group">
-              <legend class="booking-group__title">Contact &amp; payment</legend>
+              <legend class="booking-group__title">Contact</legend>
               <p class="hint">We need an email or a phone number to confirm your session.</p>
               <div class="form-row">
                 <div class="form-group">
                   <label for="booking-email">Email</label>
-                  <input class="form-control" type="email" id="booking-email" name="contactEmail" autocomplete="email" placeholder="you@example.com" />
+                  <input class="form-control" type="email" id="booking-email" name="contactEmail" autocomplete="email" placeholder="you@example.com" inputmode="email" />
                 </div>
                 <div class="form-group">
                   <label for="booking-phone">Phone</label>
-                  <input class="form-control" type="tel" id="booking-phone" name="contactPhone" autocomplete="tel" placeholder="+91 …" />
+                  <input class="form-control" type="tel" id="booking-phone" name="contactPhone" autocomplete="tel" inputmode="numeric" maxlength="10" placeholder="10-digit number" />
                 </div>
               </div>
-              <p class="hint" data-contact-hint>Provide an email or a phone number—whichever you prefer.</p>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="coupon">Coupon code <span class="label-optional">(optional)</span></label>
-                  <input class="form-control" id="coupon" name="coupon" placeholder="Try SAFE10" autocomplete="off" />
-                </div>
-                <div class="form-group">
-                  <label for="pay">Payment method</label>
-                  <select class="form-select" id="pay" name="payment" required>
-                    <option value="upi">UPI</option>
-                    <option value="card">Cards</option>
-                    <option value="netbanking">Net Banking</option>
-                    <option value="wallet">Wallet</option>
-                  </select>
-                </div>
+              <p class="hint" data-contact-hint>Enter a valid email, a 10-digit phone number, or both.</p>
+              <div class="form-group">
+                <label for="coupon">Coupon code <span class="label-optional">(optional)</span></label>
+                <input class="form-control" id="coupon" name="coupon" placeholder="Try SAFE10" autocomplete="off" />
               </div>
             </fieldset>
 
@@ -132,8 +149,7 @@
             <div class="booking-summary" data-booking-summary hidden></div>
 
             <div class="booking-actions">
-              <button class="btn btn--primary btn--block" type="submit">Confirm &amp; Pay (Demo)</button>
-              <p class="hint booking-actions__note">Demo only—no real payment is processed. Your booking still saves to your account.</p>
+              <button class="btn btn--primary btn--block" type="submit">Confirm &amp; Pay</button>
             </div>
           </form>
         </div>
@@ -142,8 +158,8 @@
 
     <div class="modal-backdrop" data-booking-modal>
       <div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
-        <h3 id="confirm-title">Session booked</h3>
-        <p>Your demo booking is confirmed. Check the dashboard for upcoming sessions.</p>
+        <h3 id="confirm-title">Pending</h3>
+        <p data-booking-confirm>Your booking is pending. The time may change in some cases. We’ll email you as soon as your advisor confirms.</p>
         <div class="modal__actions">
           <button type="button" class="btn btn--ghost" data-close-modal>Close</button>
           <a class="btn btn--primary" href="dashboard">Go to Dashboard</a>

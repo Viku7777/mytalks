@@ -3,7 +3,6 @@
   <url><loc>https://mytalk.in/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>https://mytalk.in/pages/about</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://mytalk.in/pages/advisor-profile</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mytalk.in/pages/affiliate</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mytalk.in/pages/become-advisor</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mytalk.in/pages/blog</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mytalk.in/pages/blog-details</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -22,12 +21,8 @@
   <url><loc>https://mytalk.in/pages/help-center</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mytalk.in/pages/how-it-works</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mytalk.in/pages/login</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mytalk.in/pages/media-kit</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mytalk.in/pages/partner</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mytalk.in/pages/press</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mytalk.in/pages/pricing</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://mytalk.in/pages/privacy</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mytalk.in/pages/refer-earn</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mytalk.in/pages/refund-policy</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mytalk.in/pages/register</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mytalk.in/pages/safety-policy</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>

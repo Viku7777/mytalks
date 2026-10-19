@@ -187,16 +187,20 @@
 
     function sessionLabel(s, source) {
       var status = (s.status || "").toLowerCase();
-      if (status === "completed") return "Completed";
+      if (status === "cancelled" || status === "canceled" || status === "cancel") return "Cancel";
+      if (status === "completed" || status === "complete") return "Completed";
       if (status === "past" || source === "past") return "Past";
-      var when = sessionSortKey(s);
-      if (when && when < Date.now()) return "Past";
-      return "Upcoming";
+      if (status === "confirmed") {
+        var when = sessionSortKey(s);
+        if (when && when < Date.now()) return "Past";
+        return "Upcoming";
+      }
+      return "Pending";
     }
 
     function badgeClassFor(label) {
-      if (label === "Upcoming") return "badge badge--warning";
-      if (label === "Completed") return "badge badge--success";
+      if (label === "Pending") return "badge badge--warning";
+      if (label === "Upcoming" || label === "Completed") return "badge badge--success";
       return "badge";
     }
 
@@ -220,8 +224,10 @@
             advisor: b.advisorName || b.advisorId,
             date: b.date,
             time: b.time,
+            endTime: b.endTime || "",
             mode: b.mode,
-            status: b.status || "Confirmed",
+            status: b.status || "Pending",
+            createdAt: b.createdAt || "",
             _source: "cloud",
           };
         });
@@ -245,14 +251,21 @@
             advisor: lastBooking.advisorName || lastBooking.advisorId,
             date: lastBooking.date,
             time: lastBooking.time,
+            endTime: lastBooking.endTime || "",
             mode: lastBooking.mode,
-            status: "Confirmed",
+            status: lastBooking.status || "Pending",
+            createdAt: lastBooking.createdAt || "",
             _source: "upcoming",
           });
         }
       }
 
       rows.sort(function (a, b) {
+        var aCreated = Date.parse(a.createdAt || "");
+        var bCreated = Date.parse(b.createdAt || "");
+        if (isNaN(aCreated)) aCreated = 0;
+        if (isNaN(bCreated)) bCreated = 0;
+        if (bCreated !== aCreated) return bCreated - aCreated;
         return sessionSortKey(b) - sessionSortKey(a);
       });
 
@@ -265,15 +278,15 @@
             .map(function (s) {
               var label = sessionLabel(s, s._source);
               return (
-                "<tr><td>" +
+                '<tr><td data-label="Advisor">' +
                 esc(s.advisor) +
-                "</td><td>" +
+                '</td><td data-label="Date">' +
                 esc(s.date) +
-                "</td><td>" +
-                esc(s.time || "—") +
-                "</td><td>" +
-                esc(s.mode) +
-                '</td><td><span class="' +
+                '</td><td data-label="Time">' +
+                esc(s.endTime ? s.time + "–" + s.endTime : s.time || "—") +
+                '</td><td data-label="Mode">' +
+                esc(String(s.mode || "").toLowerCase() === "chat" ? "Voice" : s.mode || "Voice") +
+                '</td><td data-label="Status"><span class="' +
                 badgeClassFor(label) +
                 '">' +
                 esc(label) +
@@ -294,13 +307,13 @@
         ? invoiceRows
             .map(function (i) {
               return (
-                "<tr><td>" +
+                '<tr><td data-label="Invoice">' +
                 esc(i.id) +
-                "</td><td>" +
+                '</td><td data-label="Date">' +
                 esc(i.date) +
-                "</td><td>₹" +
+                '</td><td data-label="Amount">₹' +
                 esc(i.amount) +
-                "</td><td>" +
+                '</td><td data-label="Status">' +
                 esc(i.status) +
                 "</td></tr>"
               );
@@ -368,13 +381,13 @@
         ? ticketRows
             .map(function (t) {
               return (
-                "<tr><td>" +
+                '<tr><td data-label="ID">' +
                 esc(t.id) +
-                "</td><td>" +
+                '</td><td data-label="Subject">' +
                 esc(t.subject) +
-                "</td><td>" +
+                '</td><td data-label="Status">' +
                 esc(t.status) +
-                "</td><td>" +
+                '</td><td data-label="Updated">' +
                 esc(t.updated) +
                 "</td></tr>"
               );

@@ -76,7 +76,7 @@
 
   function normalizeDoc(id, data) {
     var out = Object.assign({ id: id }, data || {});
-    ["createdAt", "updatedAt", "lastLoginAt"].forEach(function (key) {
+    ["createdAt", "updatedAt", "lastLoginAt", "visitedAt"].forEach(function (key) {
       if (out[key]) out[key] = toMillis(out[key]);
     });
     return out;
@@ -372,19 +372,21 @@
       advisorName: payload.advisorName || "",
       date: payload.date || "",
       time: payload.time || "",
-      mode: payload.mode || "chat",
+      endTime: payload.endTime || "",
+      durationMinutes: Number(payload.durationMinutes) || 0,
+      mode: payload.mode || "voice",
       coupon: payload.coupon || "",
       email: String(payload.email || "").trim().toLowerCase(),
       phone: String(payload.phone || "").trim(),
       userId: payload.userId || null,
       total: Number(payload.total) || 0,
-      status: "Confirmed",
+      status: "Pending",
       createdAt: now,
       updatedAt: now,
     };
 
     await firestore.collection(COL.bookings).doc(id).set(doc);
-    return { id: id, bookingId: id, status: "Confirmed" };
+    return { id: id, bookingId: id, status: "Pending" };
   }
 
   async function getBookingsForUser(userId, email) {
@@ -438,12 +440,25 @@
       name: String(payload.name || "").trim(),
       email: String(payload.email || "").trim().toLowerCase(),
       phone: String(payload.phone || "").trim(),
-      message: String(payload.message || payload.subject || "").trim(),
+      subject: String(payload.subject || "").trim(),
+      message: String(payload.message || "").trim(),
+      languages: String(payload.languages || "").trim(),
+      experience: String(payload.experience || "").trim(),
+      specialties: String(payload.specialties || "").trim(),
+      why: String(payload.why || "").trim(),
       source: payload.source || "contact",
       userId: payload.userId || null,
       createdAt: now,
     });
     return { id: ref.id };
+  }
+
+  async function listContacts() {
+    var rows = await listCollection(COL.contacts, 400);
+    rows.sort(function (a, b) {
+      return String(b.createdAt || "").localeCompare(String(a.createdAt || ""));
+    });
+    return rows;
   }
 
   async function getPricingFromFirestore() {
@@ -505,12 +520,30 @@
       .filter(Boolean);
   }
 
+  function durationRates(base) {
+    var amount = Number(base) || 0;
+    var tiers = [
+      { minutes: 30, discount: 0 },
+      { minutes: 45, discount: 0.05 },
+      { minutes: 60, discount: 0.1 },
+      { minutes: 90, discount: 0.15 },
+      { minutes: 120, discount: 0.2 },
+    ];
+    var prices = {};
+    tiers.forEach(function (tier) {
+      var gross = amount * (tier.minutes / 30);
+      prices[String(tier.minutes)] = Math.round(gross * (1 - tier.discount));
+    });
+    return prices;
+  }
+
   function advisorPayload(input, id) {
     input = input || {};
-    var chat = Number(input.chatPrice != null ? input.chatPrice : (input.sessionPrices && input.sessionPrices.chat)) || 0;
-    var voice = Number(input.voicePrice != null ? input.voicePrice : (input.sessionPrices && input.sessionPrices.voice)) || 0;
-    var video = Number(input.videoPrice != null ? input.videoPrice : (input.sessionPrices && input.sessionPrices.video)) || 0;
-    var price = Number(input.price) || voice || chat || video || 0;
+    var price30 =
+      Number(input.price30 != null ? input.price30 : input.price) || 0;
+    var rates = durationRates(price30);
+    var hoursStart = String(input.hoursStart || "").trim();
+    var hoursEnd = String(input.hoursEnd || "").trim();
     return {
       id: String(id || input.id || ""),
       name: String(input.name || "").trim(),
@@ -521,13 +554,21 @@
       specialties: splitList(input.specialties),
       rating: Number(input.rating) || 0,
       reviewsCount: Number(input.reviewsCount) || 0,
-      price: price,
+      price: rates["30"] || price30,
+      price30: rates["30"] || price30,
       currency: "INR",
       bio: String(input.bio || "").trim(),
       education: String(input.education || "").trim(),
       skills: splitList(input.skills),
       availability: splitList(input.availability),
-      sessionPrices: { chat: chat, voice: voice, video: video },
+      hoursStart: hoursStart,
+      hoursEnd: hoursEnd,
+      durationPrices: rates,
+      sessionPrices: {
+        chat: firebase.firestore.FieldValue.delete(),
+        voice: firebase.firestore.FieldValue.delete(),
+        video: firebase.firestore.FieldValue.delete(),
+      },
       active: input.active !== false && input.active !== "false",
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
     };
@@ -545,21 +586,64 @@
       if (!options.includeInactive && data.active === false) return;
       list.push(data);
     });
-    list.sort(function (a, b) {
-      return String(a.name || "").localeCompare(String(b.name || ""));
-    });
+    list.sort(compareAdvisorRank);
     return list;
+  }
+
+  function advisorRankValue(advisor, fallback) {
+    var rank = Number(advisor && advisor.rank);
+    return rank > 0 ? rank : fallback;
+  }
+
+  function compareAdvisorRank(a, b) {
+    var diff = advisorRankValue(a, 100000) - advisorRankValue(b, 100000);
+    if (diff) return diff;
+    return String(a.name || "").localeCompare(String(b.name || ""));
+  }
+
+  async function setAdvisorRank(id, rank) {
+    var firestore = await waitForDb();
+    if (!firestore) throw new Error("Firestore is not available.");
+    var list = await listAdvisors({ includeInactive: true });
+    var index = list.findIndex(function (advisor) {
+      return String(advisor.id) === String(id);
+    });
+    if (index < 0) throw new Error("Advisor not found.");
+    var next = Math.max(1, Math.min(Number(rank) || 1, list.length));
+    var moved = list.splice(index, 1)[0];
+    list.splice(next - 1, 0, moved);
+    var batch = firestore.batch();
+    list.forEach(function (advisor, position) {
+      batch.set(
+        firestore.collection(COL.advisors).doc(String(advisor.id)),
+        { rank: position + 1 },
+        { merge: true }
+      );
+    });
+    await batch.commit();
+    return next;
   }
 
   async function saveAdvisor(input) {
     var firestore = await waitForDb();
     if (!firestore) throw new Error("Firestore is not available.");
+    var isNew = !String((input && input.id) || "").trim();
     var id = String((input && input.id) || "").trim();
     if (!id) {
       id = firestore.collection(COL.advisors).doc().id;
     }
     var payload = advisorPayload(input, id);
     if (!payload.name) throw new Error("Advisor name is required.");
+    if (Number(input.rank) > 0) {
+      payload.rank = Number(input.rank);
+    } else if (isNew) {
+      var existing = await listAdvisors({ includeInactive: true });
+      var maxRank = 0;
+      existing.forEach(function (advisor) {
+        maxRank = Math.max(maxRank, Number(advisor.rank) || 0);
+      });
+      payload.rank = maxRank + 1;
+    }
     await firestore.collection(COL.advisors).doc(id).set(payload, { merge: true });
     return payload;
   }
@@ -603,6 +687,16 @@
     var rows = await listCollection(COL.tickets, 300);
     rows.sort(function (a, b) {
       return String(b.updatedAt || b.createdAt || "").localeCompare(String(a.updatedAt || a.createdAt || ""));
+    });
+    return rows;
+  }
+
+  async function listBookingVisits() {
+    var rows = await listCollection(COL.bookingVisits, 400);
+    rows.sort(function (a, b) {
+      return String(b.visitedAtClient || b.visitedAt || "").localeCompare(
+        String(a.visitedAtClient || a.visitedAt || "")
+      );
     });
     return rows;
   }
@@ -676,6 +770,7 @@
     createBooking: createBooking,
     getBookingsForUser: getBookingsForUser,
     createContact: createContact,
+    listContacts: listContacts,
     getPricing: getPricing,
     seedPricing: seedPricing,
     getUserProfile: getUserProfile,
@@ -684,12 +779,14 @@
     updateUserProfile: updateUserProfile,
     trackBookingPageVisit: trackBookingPageVisit,
     listAdvisors: listAdvisors,
+    setAdvisorRank: setAdvisorRank,
     saveAdvisor: saveAdvisor,
     deleteAdvisor: deleteAdvisor,
     seedAdvisors: seedAdvisors,
     listUsers: listUsers,
     listTickets: listTickets,
     listBookings: listBookings,
+    listBookingVisits: listBookingVisits,
     updateTicket: updateTicket,
     updateBooking: updateBooking,
     setUserAccess: setUserAccess,

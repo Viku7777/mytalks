@@ -1,10 +1,11 @@
 /**
- * Web error reporting for MyTalks.
+ * Web crash reporting for MyTalk.
  *
- * Firebase Crashlytics is native-first (iOS/Android) and has no production
- * web SDK on the Firebase compat CDN. This module captures global errors and
- * unhandled promise rejections, logs a concise `exception` Analytics event
- * when available, and always mirrors to the console.
+ * Firebase Crashlytics is not available for websites: firebase@13 has no
+ * crashlytics export, and the CDN script does not exist. This module captures
+ * global errors and unhandled rejections, then sends them through
+ * MyTalksFirebase.recordException (Analytics `exception` events plus the
+ * Firestore `crashes` collection).
  */
 (function () {
   var recentlyReported = Object.create(null);
@@ -25,10 +26,18 @@
     return true;
   }
 
+  function isNoise(msg) {
+    msg = String(msg || "");
+    if (!msg || msg === "Script error." || msg === "Script error") return true;
+    if (msg.indexOf("ResizeObserver loop") === 0) return true;
+    return false;
+  }
+
   function report(description, options) {
     options = options || {};
+    if (isNoise(description)) return;
     var fatal = !!options.fatal;
-    var desc = truncate(description || "unknown_error", 100);
+    var desc = truncate(description || "unknown_error", 500);
     var key = (fatal ? "f:" : "n:") + desc;
 
     if (!shouldReport(key)) return;
@@ -41,10 +50,18 @@
 
     try {
       var FB = window.MyTalksFirebase;
-      if (FB && typeof FB.logEvent === "function") {
-        FB.logEvent("exception", {
+      var stack = "";
+      if (options.error && options.error.stack) stack = String(options.error.stack);
+      if (FB && typeof FB.recordException === "function") {
+        FB.recordException({
           description: desc,
           fatal: fatal,
+          stack: stack,
+        });
+      } else if (FB && typeof FB.logEvent === "function") {
+        FB.logEvent("exception", {
+          description: desc,
+          fatal: fatal ? 1 : 0,
         });
       }
     } catch (e) {

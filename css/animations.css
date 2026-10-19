@@ -20,8 +20,8 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* Page chrome */
-  .site-header {
+  /* Animate the bar only. A transform on .site-header traps the fixed mobile menu inside the header height. */
+  .site-header__inner {
     animation: slideDownSoft 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 

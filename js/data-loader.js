@@ -23,18 +23,99 @@
     return res.json();
   }
 
-  async function getAdvisors() {
-    var DB = window.MyTalksDB || (await waitForMyTalksDB(4000));
-    if (DB && DB.listAdvisors) {
-      try {
-        if (DB.ready) await DB.ready;
-        var remote = await DB.listAdvisors();
-        if (remote && remote.length) return remote;
-      } catch (err) {
-        console.warn("Using local advisors fallback:", err);
-      }
+  function advisorRank(advisor) {
+    var rank = Number(advisor && advisor.rank);
+    return rank > 0 ? rank : 100000;
+  }
+
+  function sortAdvisors(list) {
+    return (list || []).slice().sort(function (a, b) {
+      var diff = advisorRank(a) - advisorRank(b);
+      if (diff) return diff;
+      return String(a.name || "").localeCompare(String(b.name || ""));
+    });
+  }
+
+  var advisorsCache = null;
+  var remoteAdvisorsStarted = false;
+  var ADVISOR_CACHE_KEY = "mytalks-advisors-v1";
+
+  function waitForAdvisorDb(timeoutMs) {
+    if (window.MyTalksDB && window.MyTalksDB.listAdvisors) {
+      return Promise.resolve(window.MyTalksDB);
     }
-    return loadJson("advisors.json");
+    return new Promise(function (resolve) {
+      var done = false;
+      function finish(db) {
+        if (done) return;
+        done = true;
+        resolve(db || null);
+      }
+      function onReady() {
+        if (window.MyTalksDB && window.MyTalksDB.listAdvisors) {
+          finish(window.MyTalksDB);
+        }
+      }
+      document.addEventListener("mytalks:firestore-ready", onReady);
+      setTimeout(function () {
+        finish((window.MyTalksDB && window.MyTalksDB.listAdvisors && window.MyTalksDB) || null);
+      }, timeoutMs == null ? 8000 : timeoutMs);
+    });
+  }
+
+  function readAdvisorCache() {
+    try {
+      var parsed = JSON.parse(sessionStorage.getItem(ADVISOR_CACHE_KEY) || "null");
+      if (parsed && parsed.length) return sortAdvisors(parsed);
+    } catch (err) {
+      /* Ignore a bad cache and load fresh data. */
+    }
+    return null;
+  }
+
+  function publishAdvisors(list) {
+    advisorsCache = list;
+    try {
+      sessionStorage.setItem(ADVISOR_CACHE_KEY, JSON.stringify(list));
+    } catch (err) {
+      /* Private mode can block storage. The in-memory list still works. */
+    }
+    document.dispatchEvent(
+      new CustomEvent("mytalks:advisors-updated", { detail: list })
+    );
+  }
+
+  function kickRemoteAdvisors() {
+    if (remoteAdvisorsStarted) return;
+    remoteAdvisorsStarted = true;
+    waitForAdvisorDb(8000)
+      .then(async function (DB) {
+        if (!DB || !DB.listAdvisors) return null;
+        if (DB.ready) await DB.ready;
+        return DB.listAdvisors();
+      })
+      .then(function (remote) {
+        if (!remote || !remote.length) return;
+        var sorted = sortAdvisors(remote);
+        if (JSON.stringify(sorted) === JSON.stringify(advisorsCache || [])) return;
+        publishAdvisors(sorted);
+      })
+      .catch(function (err) {
+        console.warn("Using local advisors fallback:", err);
+      });
+  }
+
+  async function getAdvisors() {
+    kickRemoteAdvisors();
+    if (advisorsCache && advisorsCache.length) return advisorsCache.slice();
+    var stored = readAdvisorCache();
+    if (stored && stored.length) {
+      advisorsCache = stored;
+      return stored.slice();
+    }
+    var local = sortAdvisors(await loadJson("advisors.json"));
+    if (!advisorsCache || !advisorsCache.length) advisorsCache = local;
+    return advisorsCache.slice();
   }
 
   async function getAdvisorById(id) {
@@ -98,21 +179,14 @@
       console.warn(err);
     }
 
+    if (local && local.plans && local.plans.length) return local;
+
     var DB = window.MyTalksDB || (await waitForMyTalksDB());
     if (DB && DB.getPricing) {
       try {
         if (DB.ready) await DB.ready;
         var remote = await DB.getPricing();
         if (remote) return remote;
-        if (local) {
-          try {
-            await DB.seedPricing(local);
-            var seeded = await DB.getPricing();
-            if (seeded) return seeded;
-          } catch (seedErr) {
-            console.warn("Pricing seed skipped:", seedErr);
-          }
-        }
       } catch (err) {
         console.warn("Using local pricing fallback:", err);
       }
@@ -163,6 +237,7 @@
     loadJson: loadJson,
     escapeHtml: escapeHtml,
     getAdvisors: getAdvisors,
+    sortAdvisors: sortAdvisors,
     getAdvisorById: getAdvisorById,
     getTestimonials: getTestimonials,
     getFaqs: getFaqs,

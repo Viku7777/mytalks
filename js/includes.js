@@ -16,7 +16,7 @@
   const BASE = getBasePath();
 
   function pageUrl(path) {
-    // Extensionless public URLs: /pages/partner (not partner.html)
+    // Extensionless public URLs: /pages/about (not about.html)
     return BASE + "/" + String(path || "").replace(/^\//, "").replace(/\.html$/i, "");
   }
 
@@ -42,12 +42,7 @@
         help: pageUrl("pages/help-center"),
         support: pageUrl("pages/support"),
         careers: pageUrl("pages/careers"),
-        partner: pageUrl("pages/partner"),
         become: pageUrl("pages/become-advisor"),
-        refer: pageUrl("pages/refer-earn"),
-        press: pageUrl("pages/press"),
-        media: pageUrl("pages/media-kit"),
-        affiliate: pageUrl("pages/affiliate"),
         privacy: pageUrl("pages/privacy"),
         terms: pageUrl("pages/terms"),
         cookie: pageUrl("pages/cookie-policy"),
@@ -139,6 +134,7 @@
       btn.addEventListener("click", function () {
         localStorage.setItem("mytalks-cookies", "accepted");
         banner.classList.remove("is-visible");
+        document.dispatchEvent(new CustomEvent("mytalks:cookies-accepted"));
       });
     });
     root.querySelectorAll("[data-cookie-decline]").forEach(function (btn) {
@@ -173,13 +169,13 @@
     try {
       if (!window.MyTalksFirebase) {
         await loadScript(sdk + "/firebase-app-compat.js");
-        await loadScript(sdk + "/firebase-auth-compat.js");
-        await loadScript(sdk + "/firebase-firestore-compat.js");
-        try {
-          await loadScript(sdk + "/firebase-analytics-compat.js");
-        } catch (analyticsErr) {
-          /* Analytics optional — auth/booking must still work */
-        }
+        await Promise.all([
+          loadScript(sdk + "/firebase-auth-compat.js"),
+          loadScript(sdk + "/firebase-firestore-compat.js"),
+          loadScript(sdk + "/firebase-analytics-compat.js").catch(function (analyticsErr) {
+            console.warn("Firebase Analytics SDK failed to load:", analyticsErr);
+          }),
+        ]);
         await loadScript(BASE + "/js/firebase-config.js");
       }
       try {
@@ -230,6 +226,8 @@
     }
   }
 
+  var firebaseStack = loadFirebaseStack();
+
   async function init() {
     const [header, footer, cookie] = await Promise.all([
       loadPartial("#header-root", "header.html"),
@@ -240,7 +238,7 @@
     initMobileNav(header);
     initCookieBanner(cookie);
     document.dispatchEvent(new CustomEvent("mytalks:layout-ready"));
-    await loadFirebaseStack();
+    await firebaseStack;
   }
 
   window.MyTalksBase = BASE;

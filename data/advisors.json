@@ -84,7 +84,7 @@
     "price": 549,
     "currency": "INR",
     "bio": "Priya guides couples and individuals through stress, trust repair, and post-breakup healing with structured, compassionate conversations.",
-    "education": "M.Phil. Clinical Psychology (supportive practice; non-clinical on MyTalks)",
+    "education": "M.Phil. Clinical Psychology (supportive practice; non-clinical on MyTalk)",
     "skills": ["Couples Dialogue", "Stress Management", "Boundary Setting"],
     "availability": ["Tue", "Wed", "Thu", "Fri", "Sat"],
     "sessionPrices": { "chat": 449, "voice": 549, "video": 649 }

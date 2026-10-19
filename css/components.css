@@ -135,6 +135,19 @@
   transition: border-color var(--transition), box-shadow var(--transition);
 }
 
+.form-select {
+  height: 3rem;
+  min-height: 3rem;
+  padding: 0 2.5rem 0 1rem;
+  line-height: 1.2;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%235c6570' d='M1.2 1.4 6 6.2 10.8 1.4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 0.75rem;
+}
+
 .form-control:focus,
 .form-select:focus,
 .form-textarea:focus,
@@ -223,6 +236,33 @@
   display: flex;
   gap: var(--space-4);
   align-items: flex-start;
+  position: relative;
+}
+
+.advisor-card__rank,
+.advisor-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.advisor-card__rank {
+  position: absolute;
+  top: -0.4rem;
+  left: -0.4rem;
+  z-index: 1;
+}
+
+.advisor-rank {
+  margin: var(--space-2) 0 0;
 }
 
 .advisor-card__photo {
@@ -525,9 +565,18 @@
   min-height: var(--tap-min);
 }
 
+.filters--single {
+  grid-template-columns: minmax(12rem, 18rem);
+  margin-bottom: var(--space-6);
+}
+
 @media (min-width: 768px) {
   .filters {
     grid-template-columns: 2fr repeat(4, 1fr);
+  }
+
+  .filters--single {
+    grid-template-columns: minmax(12rem, 18rem);
   }
 }
 
@@ -726,6 +775,11 @@
   margin: 0 0 var(--space-4);
 }
 
+.form-control.is-invalid,
+.form-select.is-invalid {
+  border-color: var(--color-error);
+}
+
 .hint--error {
   color: var(--color-error);
 }
@@ -902,6 +956,31 @@ th {
 .skeleton--block {
   display: block;
   width: 100%;
+}
+
+.skeleton--avatar {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.advisor-card--skeleton {
+  pointer-events: none;
+}
+
+.advisor-card--skeleton:hover {
+  border-color: var(--color-border);
+}
+
+.advisor-card--skeleton .advisor-card__media > div {
+  flex: 1;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.advisor-card--skeleton .skeleton--block {
+  margin-top: 0.85rem;
 }
 
 .skeleton-row td {

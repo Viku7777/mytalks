@@ -2,17 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Find an Advisor — Search Trusted Listeners | MyTalks</title>
-  <meta name="description" content="Search and filter MyTalks advisors by gender, language, experience, specialization, availability, and rating." />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="../favicon.ico" sizes="32x32" />
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+  <title>Find an Advisor — Search Trusted Listeners | MyTalk</title>
+  <meta name="description" content="Search and filter MyTalk advisors by gender, language, experience, specialization, availability, and rating." />
   <link rel="canonical" href="https://mytalk.in/pages/find-advisor" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Find an Advisor — Search Trusted Listeners | MyTalks" />
-  <meta property="og:description" content="Search and filter MyTalks advisors by gender, language, experience, specialization, availability, and rating." />
+  <meta property="og:title" content="Find an Advisor — Search Trusted Listeners | MyTalk" />
+  <meta property="og:description" content="Search and filter MyTalk advisors by gender, language, experience, specialization, availability, and rating." />
   <meta property="og:image" content="https://images.unsplash.com/photo-1516302759342-fd024b64ad2b?w=1200&h=630&fit=crop" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Find an Advisor — Search Trusted Listeners | MyTalks" />
-  <meta name="twitter:description" content="Search and filter MyTalks advisors by gender, language, experience, specialization, availability, and rating." />
+  <meta name="twitter:title" content="Find an Advisor — Search Trusted Listeners | MyTalk" />
+  <meta name="twitter:description" content="Search and filter MyTalk advisors by gender, language, experience, specialization, availability, and rating." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -23,6 +26,7 @@
   <link rel="stylesheet" href="../css/components.css" />
   <link rel="stylesheet" href="../css/pages.css" />
   <link rel="stylesheet" href="../css/dark.css" />
+  <link rel="stylesheet" href="../css/mobile.css" />
   <link rel="stylesheet" href="../css/animations.css" />
   
   <script src="../js/theme.js"></script>
@@ -47,8 +51,18 @@
           <select class="form-select" data-filter-specialty aria-label="Specialization"><option value="">Specialization</option><option>Relationship Guidance</option><option>Breakup Support</option><option>Marriage Discussions</option><option>Family Problems</option><option>Career Stress</option><option>Loneliness</option><option>Life Decisions</option><option>Emotional Support</option><option>General Conversation</option><option>Dating Advice</option><option>Stress Support</option><option>Friendship Issues</option><option>Breakup Recovery</option></select>
           <select class="form-select" data-filter-rating aria-label="Minimum rating"><option value="">Rating</option><option value="4.5">4.5+</option><option value="4.8">4.8+</option><option value="4.9">4.9+</option></select>
         </div>
-        <p class="mb-6"><span data-advisors-count>0</span> advisors available</p>
-        <div class="grid-3" data-advisors-grid></div>
+        <p class="mb-6" data-advisors-status aria-live="polite" aria-busy="true">
+          <span class="sr-only">Loading advisors…</span>
+          <span class="skeleton skeleton--xl" aria-hidden="true"></span>
+        </p>
+        <div class="grid-3" data-advisors-grid aria-busy="true">
+          <article class="card advisor-card advisor-card--skeleton" aria-hidden="true"><div class="advisor-card__media"><span class="skeleton skeleton--avatar"></span><div><span class="skeleton skeleton--lg"></span><span class="skeleton skeleton--block"></span></div></div><span class="skeleton skeleton--block"></span><span class="skeleton skeleton--md"></span></article>
+          <article class="card advisor-card advisor-card--skeleton" aria-hidden="true"><div class="advisor-card__media"><span class="skeleton skeleton--avatar"></span><div><span class="skeleton skeleton--lg"></span><span class="skeleton skeleton--block"></span></div></div><span class="skeleton skeleton--block"></span><span class="skeleton skeleton--md"></span></article>
+          <article class="card advisor-card advisor-card--skeleton" aria-hidden="true"><div class="advisor-card__media"><span class="skeleton skeleton--avatar"></span><div><span class="skeleton skeleton--lg"></span><span class="skeleton skeleton--block"></span></div></div><span class="skeleton skeleton--block"></span><span class="skeleton skeleton--md"></span></article>
+          <article class="card advisor-card advisor-card--skeleton" aria-hidden="true"><div class="advisor-card__media"><span class="skeleton skeleton--avatar"></span><div><span class="skeleton skeleton--lg"></span><span class="skeleton skeleton--block"></span></div></div><span class="skeleton skeleton--block"></span><span class="skeleton skeleton--md"></span></article>
+          <article class="card advisor-card advisor-card--skeleton" aria-hidden="true"><div class="advisor-card__media"><span class="skeleton skeleton--avatar"></span><div><span class="skeleton skeleton--lg"></span><span class="skeleton skeleton--block"></span></div></div><span class="skeleton skeleton--block"></span><span class="skeleton skeleton--md"></span></article>
+          <article class="card advisor-card advisor-card--skeleton" aria-hidden="true"><div class="advisor-card__media"><span class="skeleton skeleton--avatar"></span><div><span class="skeleton skeleton--lg"></span><span class="skeleton skeleton--block"></span></div></div><span class="skeleton skeleton--block"></span><span class="skeleton skeleton--md"></span></article>
+        </div>
       </div>
     </section>
 

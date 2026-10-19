@@ -1,9 +1,9 @@
-# MyTalks
+# MyTalk
 
 Premium static website for private emotional support and relationship guidance.
 
 **Domain:** [mytalk.in](https://mytalk.in)  
-**Brand:** MyTalks  
+**Brand:** MyTalk  
 **Primary tagline:** Someone to Talk. Someone to Understand.
 
 **Stack:** HTML5, CSS3, Vanilla JavaScript (no frameworks)  

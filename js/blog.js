@@ -61,7 +61,7 @@
       root.innerHTML = '<p class="empty-state">Article not found.</p>';
       return;
     }
-    document.title = post.title + " | MyTalks Blog";
+    document.title = post.title + " | MyTalk Blog";
     const desc = document.querySelector('meta[name="description"]');
     if (desc) desc.setAttribute("content", post.excerpt);
 
@@ -122,8 +122,8 @@
         })
         .join("") +
       "</div>" +
-      '<div class="comment-form"><h2>Comments</h2><p class="mt-4 mb-4">Comments are a demo UI for now.</p>' +
-      '<form data-demo-form data-success="Comment submitted (demo)."><div class="form-group"><label for="c-name">Name</label><input class="form-control" id="c-name" required /></div><div class="form-group"><label for="c-body">Comment</label><textarea class="form-textarea" id="c-body" required></textarea></div><button class="btn btn--primary" type="submit">Post comment</button></form></div>';
+      '<div class="comment-form"><h2>Comments</h2><p class="mt-4 mb-4">Share your thoughts.</p>' +
+      '<form data-demo-form data-success="Comment submitted."><div class="form-group"><label for="c-name">Name</label><input class="form-control" id="c-name" required /></div><div class="form-group"><label for="c-body">Comment</label><textarea class="form-textarea" id="c-body" required></textarea></div><button class="btn btn--primary" type="submit">Post comment</button></form></div>';
 
     root.querySelector("[data-share=copy]").addEventListener("click", function () {
       navigator.clipboard.writeText(window.location.href).then(function () {

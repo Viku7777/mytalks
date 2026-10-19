@@ -35,8 +35,22 @@
   var analytics = null;
   var analyticsReady = false;
   var analyticsFailed = false;
+  var analyticsStarting = false;
   var pendingEvents = [];
+  var pendingUserId = undefined;
   var MAX_PENDING = 20;
+
+  function cookieChoice() {
+    try {
+      return localStorage.getItem("mytalks-cookies");
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function analyticsAllowed() {
+    return cookieChoice() === "accepted";
+  }
 
   function canUseAnalyticsEnv() {
     try {
@@ -46,11 +60,30 @@
       if (!location || !location.protocol) return false;
       // Skip file://, about:, etc. — Analytics needs a normal http(s) origin.
       if (location.protocol.indexOf("http") !== 0) return false;
+      if (!firebaseConfig.measurementId) return false;
       if (typeof firebase.analytics !== "function") return false;
       return true;
     } catch (e) {
       return false;
     }
+  }
+
+  function sanitizeParams(params) {
+    var clean = {};
+    if (!params) return clean;
+    Object.keys(params).forEach(function (key) {
+      var value = params[key];
+      if (value == null) return;
+      if (typeof value === "boolean") value = value ? 1 : 0;
+      if (typeof value === "number" && isFinite(value)) {
+        clean[key] = value;
+        return;
+      }
+      if (typeof value === "string") {
+        clean[key] = value.length > 100 ? value.slice(0, 99) + "…" : value;
+      }
+    });
+    return clean;
   }
 
   function flushPending() {
@@ -62,21 +95,40 @@
     pendingEvents = [];
     queue.forEach(function (item) {
       try {
-        analytics.logEvent(item.name, item.params || {});
+        analytics.logEvent(item.name, sanitizeParams(item.params));
       } catch (e) {
         /* ignore */
       }
     });
   }
 
+  function applyUserId() {
+    if (!analytics || typeof analytics.setUserId !== "function") return;
+    if (pendingUserId === undefined) return;
+    try {
+      analytics.setUserId(pendingUserId);
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
   function attachAnalytics(instance) {
     analytics = instance || null;
     analyticsReady = true;
+    analyticsStarting = false;
     analyticsFailed = !analytics;
     if (window.MyTalksFirebase) {
       window.MyTalksFirebase.analytics = analytics;
     }
     if (analytics) {
+      try {
+        if (typeof analytics.setAnalyticsCollectionEnabled === "function") {
+          analytics.setAnalyticsCollectionEnabled(true);
+        }
+      } catch (e) {
+        /* ignore */
+      }
+      applyUserId();
       flushPending();
       document.dispatchEvent(new CustomEvent("mytalks:analytics-ready"));
     } else {
@@ -85,11 +137,14 @@
   }
 
   function initAnalytics() {
+    if (analytics || analyticsStarting || analyticsFailed) return;
+    if (!analyticsAllowed()) return;
     if (!canUseAnalyticsEnv()) {
       attachAnalytics(null);
       return;
     }
 
+    analyticsStarting = true;
     var supportedPromise =
       typeof firebase.analytics.isSupported === "function"
         ? firebase.analytics.isSupported()
@@ -97,7 +152,7 @@
 
     supportedPromise
       .then(function (supported) {
-        if (!supported) {
+        if (!supported || !analyticsAllowed()) {
           attachAnalytics(null);
           return;
         }
@@ -116,11 +171,11 @@
 
   /**
    * Safe Analytics logEvent — never throws; no-op when Analytics is unavailable.
-   * Queues briefly while isSupported() resolves so early auth events are not lost.
+   * Queues briefly while isSupported() resolves so early events are not lost.
    */
   function logEvent(name, params) {
-    if (!name) return false;
-    params = params || {};
+    if (!name || !analyticsAllowed()) return false;
+    params = sanitizeParams(params);
     try {
       if (analytics && typeof analytics.logEvent === "function") {
         analytics.logEvent(name, params);
@@ -138,6 +193,45 @@
     }
   }
 
+  function setUserId(uid) {
+    pendingUserId = uid ? String(uid) : null;
+    applyUserId();
+  }
+
+  /**
+   * Web crash record. Crashlytics has no published JavaScript SDK (nothing
+   * under firebase/crashlytics in firebase@13, and the CDN script 404s).
+   * Fatal and non-fatal errors are counted as Analytics `exception` events
+   * and stored in the Firestore `crashes` collection.
+   */
+  function recordException(details) {
+    details = details || {};
+    var description = String(details.description || "unknown_error");
+    var fatal = !!details.fatal;
+    logEvent("exception", {
+      description: description,
+      fatal: fatal ? 1 : 0,
+    });
+
+    if (!db) return;
+    var userId = pendingUserId || null;
+    var payload = {
+      message: description.slice(0, 500),
+      stack: String(details.stack || "").slice(0, 4000),
+      fatal: fatal,
+      url: String(location.href || "").slice(0, 500),
+      path: String(location.pathname || "").slice(0, 300),
+      userAgent: String(navigator.userAgent || "").slice(0, 300),
+      userId: userId,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+    db.collection("crashes")
+      .add(payload)
+      .catch(function () {
+        /* rules or network — never break the page */
+      });
+  }
+
   window.MyTalksFirebase = {
     app: app,
     auth: auth,
@@ -148,9 +242,16 @@
     },
     config: firebaseConfig,
     logEvent: logEvent,
+    setUserId: setUserId,
+    recordException: recordException,
   };
 
-  initAnalytics();
+  document.addEventListener("mytalks:cookies-accepted", initAnalytics);
+  if (cookieChoice() === "declined") {
+    analyticsFailed = true;
+  } else {
+    initAnalytics();
+  }
 
   document.dispatchEvent(new CustomEvent("mytalks:firebase-ready"));
 })();

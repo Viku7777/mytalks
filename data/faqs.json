@@ -20,8 +20,8 @@
   {
     "id": "4",
     "category": "Sessions",
-    "question": "Is MyTalks therapy or medical care?",
-    "answer": "No. MyTalks provides emotional support, guidance, and peer conversations only. Advisors do not diagnose illnesses or prescribe treatments."
+    "question": "Is MyTalk therapy or medical care?",
+    "answer": "No. MyTalk provides emotional support, guidance, and peer conversations only. Advisors do not diagnose illnesses or prescribe treatments."
   },
   {
     "id": "5",
@@ -38,8 +38,8 @@
   {
     "id": "7",
     "category": "Payments",
-    "question": "Are there student or membership discounts?",
-    "answer": "Yes. We offer student discounts, monthly memberships, and corporate plans. See the Pricing page for current options."
+    "question": "What session lengths can I book?",
+    "answer": "Sessions are 30, 45, 60, 90, or 120 minutes. See the Pricing page for current rates, then book a time that works for you."
   },
   {
     "id": "8",

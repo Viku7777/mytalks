@@ -3,7 +3,41 @@
     return window.MyTalksData.escapeHtml(s);
   };
 
-  function advisorCard(a, base) {
+  function durationPrices(a) {
+    var stored = (a && a.durationPrices) || {};
+    var base = Number(a && (a.price30 || stored["30"] || stored[30] || a.price)) || 0;
+    var tiers = [
+      { minutes: 30, discount: 0 },
+      { minutes: 45, discount: 0.05 },
+      { minutes: 60, discount: 0.1 },
+      { minutes: 90, discount: 0.15 },
+      { minutes: 120, discount: 0.2 },
+    ];
+    return tiers.map(function (tier) {
+      var saved = stored[String(tier.minutes)] != null ? stored[String(tier.minutes)] : stored[tier.minutes];
+      var price =
+        saved != null
+          ? Number(saved)
+          : Math.round(base * (tier.minutes / 30) * (1 - tier.discount));
+      return { minutes: tier.minutes, price: price };
+    });
+  }
+
+  function durationLine(a) {
+    return durationPrices(a)
+      .map(function (tier) {
+        return tier.minutes + " min ₹" + tier.price;
+      })
+      .join(" · ");
+  }
+
+  function shownRank(a, index) {
+    var rank = Number(a && a.rank);
+    return rank > 0 ? rank : index + 1;
+  }
+
+  function advisorCard(a, base, index) {
+    var rank = shownRank(a, index || 0);
     const tags = (a.specialties || [])
       .slice(0, 3)
       .map(function (t) {
@@ -13,6 +47,9 @@
     return (
       '<article class="card advisor-card">' +
       '<div class="advisor-card__media">' +
+      '<span class="advisor-card__rank">#' +
+      rank +
+      "</span>" +
       '<img class="advisor-card__photo" src="' +
       esc(a.photo) +
       '" alt="Portrait of ' +
@@ -23,6 +60,9 @@
       esc(a.name) +
       "</h3>" +
       '<p class="advisor-card__meta">' +
+      "Rank " +
+      rank +
+      " · " +
       esc((a.languages || []).join(", ")) +
       " · " +
       esc(a.experience) +
@@ -38,8 +78,8 @@
       "</div>" +
       '<div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-top:auto">' +
       '<div class="price">₹' +
-      esc(a.price) +
-      " <small>/ session</small></div>" +
+      esc((durationPrices(a)[0] || {}).price || a.price) +
+      " <small>/ 30 min</small></div>" +
       '<div class="btn-group">' +
       '<a class="btn btn--ghost btn--sm" href="' +
       base +
@@ -66,10 +106,12 @@
     const language = document.querySelector("[data-filter-language]");
     const specialty = document.querySelector("[data-filter-specialty]");
     const rating = document.querySelector("[data-filter-rating]");
-    const countEl = document.querySelector("[data-advisors-count]");
+    const statusEl = document.querySelector("[data-advisors-status]");
 
     function render() {
-      let list = advisors.slice();
+      let list = window.MyTalksData.sortAdvisors
+        ? window.MyTalksData.sortAdvisors(advisors)
+        : advisors.slice();
       const q = (search && search.value.trim().toLowerCase()) || "";
       if (q) {
         list = list.filter(function (a) {
@@ -101,10 +143,16 @@
           return a.rating >= min;
         });
       }
-      if (countEl) countEl.textContent = String(list.length);
+      grid.removeAttribute("aria-busy");
+      if (statusEl) {
+        statusEl.removeAttribute("aria-busy");
+        statusEl.textContent =
+          list.length +
+          (list.length === 1 ? " advisor available" : " advisors available");
+      }
       grid.innerHTML = list.length
-        ? list.map(function (a) {
-            return advisorCard(a, base);
+        ? list.map(function (a, index) {
+            return advisorCard(a, base, index);
           }).join("")
         : '<p class="empty-state">No advisors match your filters.</p>';
     }
@@ -115,6 +163,11 @@
       el.addEventListener("change", render);
     });
     render();
+    document.addEventListener("mytalks:advisors-updated", function (event) {
+      if (!event.detail || !event.detail.length) return;
+      advisors = event.detail;
+      render();
+    });
   }
 
   async function initProfile() {
@@ -128,7 +181,7 @@
       root.innerHTML = '<p class="empty-state">Advisor not found.</p>';
       return;
     }
-    document.title = a.name + " | MyTalks Advisor";
+    document.title = a.name + " | MyTalk Advisor";
     const skills = (a.skills || [])
       .map(function (s) {
         return '<span class="tag">' + esc(s) + "</span>";
@@ -158,6 +211,9 @@
       "<h1>" +
       esc(a.name) +
       "</h1>" +
+      '<p class="advisor-rank">Rank ' +
+      shownRank(a, 0) +
+      "</p>" +
       '<p class="mt-4">' +
       esc((a.languages || []).join(", ")) +
       " · " +
@@ -183,18 +239,18 @@
       "</div>" +
       '<h2 class="mt-8">Availability</h2><div class="calendar-placeholder mt-4"><div class="calendar-days">' +
       days +
-      "</div><p class=\"hint mt-4\">Select a slot on the booking page for exact times.</p></div>" +
+      "</div><p class=\"hint mt-4\">" +
+      (a.hoursStart && a.hoursEnd
+        ? "Available " + esc(a.hoursStart) + "–" + esc(a.hoursEnd) + "."
+        : "Select a time on the booking page.") +
+      "</p></div>" +
       "</div>" +
       '<aside class="card profile-sidebar">' +
-      '<div class="price">From ₹' +
-      esc(a.price) +
-      "</div>" +
-      "<p class=\"mt-4\">Chat ₹" +
-      esc(a.sessionPrices.chat) +
-      " · Voice ₹" +
-      esc(a.sessionPrices.voice) +
-      " · Video ₹" +
-      esc(a.sessionPrices.video) +
+      '<div class="price">₹' +
+      esc((a.durationPrices && (a.durationPrices["30"] || a.durationPrices[30])) || a.price30 || a.price) +
+      " <small>/ 30 min</small></div>" +
+      "<p class=\"mt-4\">" +
+      durationLine(a) +
       "</p>" +
       '<a class="btn btn--primary btn--block mt-6" href="' +
       base +
@@ -209,13 +265,25 @@
     const grid = document.querySelector("[data-home-advisors]");
     if (!grid) return;
     const base = window.MyTalksBase || ".";
-    const advisors = await window.MyTalksData.getAdvisors();
-    grid.innerHTML = advisors
-      .slice(0, 3)
-      .map(function (a) {
-        return advisorCard(a, base);
-      })
-      .join("");
+    let advisors = await window.MyTalksData.getAdvisors();
+    function renderHome() {
+      var ranked = window.MyTalksData.sortAdvisors
+        ? window.MyTalksData.sortAdvisors(advisors)
+        : advisors;
+      grid.innerHTML = ranked
+        .slice(0, 3)
+        .map(function (a, index) {
+          return advisorCard(a, base, index);
+        })
+        .join("");
+    }
+    renderHome();
+    grid.removeAttribute("aria-busy");
+    document.addEventListener("mytalks:advisors-updated", function (event) {
+      if (!event.detail || !event.detail.length) return;
+      advisors = event.detail;
+      renderHome();
+    });
   }
 
   async function initTestimonials() {

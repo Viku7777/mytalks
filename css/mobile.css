@@ -1,0 +1,264 @@
+/* Phone and small-tablet layout. Loaded last so it wins over desktop rules. */
+
+@media (max-width: 767px) {
+  :root {
+    --header-height: 3.75rem;
+  }
+
+  body {
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+
+  .site-header {
+    height: calc(var(--header-height) + env(safe-area-inset-top, 0px));
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .site-header__inner {
+    gap: var(--space-2);
+  }
+
+  .mobile-nav {
+    top: calc(var(--header-height) + env(safe-area-inset-top, 0px));
+    padding-bottom: max(var(--space-8), env(safe-area-inset-bottom, 0px));
+  }
+
+  h1 {
+    font-size: clamp(1.75rem, 8vw, 2.25rem);
+  }
+
+  h2 {
+    font-size: clamp(1.45rem, 6vw, 1.85rem);
+  }
+
+  .section {
+    padding: var(--space-10) 0;
+  }
+
+  .section--tight {
+    padding: var(--space-8) 0;
+  }
+
+  .section__header {
+    margin-bottom: var(--space-6);
+  }
+
+  .page-hero {
+    padding: var(--space-8) 0 var(--space-6);
+  }
+
+  .page-hero p,
+  .section__header p {
+    font-size: 1rem;
+  }
+
+  .card,
+  .booking-form {
+    padding: var(--space-5) var(--space-4);
+  }
+
+  /* Keep form text at 16px so iOS does not zoom the page on focus. */
+  input,
+  select,
+  textarea,
+  .form-control,
+  .form-select,
+  .form-textarea,
+  .newsletter input {
+    font-size: 16px;
+  }
+
+  .home-hero {
+    min-height: 0;
+    align-items: end;
+  }
+
+  .home-hero__content {
+    padding: 38vh 0 var(--space-8);
+  }
+
+  .home-hero__brand {
+    font-size: 2.25rem;
+    margin-bottom: var(--space-3);
+  }
+
+  .home-hero h1 {
+    font-size: 1.45rem;
+    max-width: 18ch;
+  }
+
+  .home-hero__sub {
+    font-size: 1rem;
+    margin-bottom: var(--space-5);
+  }
+
+  .home-split__intro h2,
+  .cta-band h2 {
+    max-width: none;
+  }
+
+  .cta-band {
+    padding: var(--space-10) 0;
+  }
+
+  .cta-band__inner {
+    align-items: stretch;
+  }
+
+  .btn-group,
+  .cta-band__inner,
+  .cookie-banner .btn-group,
+  .modal__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-group .btn,
+  .cta-band .btn,
+  .cookie-banner .btn,
+  .modal__actions .btn {
+    width: 100%;
+    white-space: normal;
+  }
+
+  .profile-sidebar {
+    position: static;
+    top: auto;
+  }
+
+  .blog-detail__hero {
+    aspect-ratio: 16 / 10;
+  }
+
+  .error-page {
+    padding: var(--space-12) 0;
+  }
+
+  .site-footer {
+    padding: var(--space-10) 0 calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .site-footer__crisis {
+    margin-top: var(--space-8);
+  }
+
+  .pricing-card--featured {
+    margin-top: var(--space-4);
+  }
+
+  .admin-user__head {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .admin-user__head .btn {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .coming-soon {
+    white-space: normal;
+    max-width: 100%;
+  }
+
+  .filters {
+    grid-template-columns: 1fr;
+  }
+
+  .table-wrap {
+    overflow: visible;
+  }
+
+  .table-wrap table,
+  .table-wrap tbody,
+  .table-wrap tr {
+    display: block;
+    width: 100%;
+  }
+
+  .table-wrap thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+
+  .table-wrap tr {
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .table-wrap tr:last-child {
+    border-bottom: 0;
+  }
+
+  .table-wrap td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    width: 100%;
+    padding: var(--space-2) 0;
+    border: 0;
+    text-align: right;
+  }
+
+  .table-wrap td[data-label]::before {
+    content: attr(data-label);
+    flex: 0 0 6.25rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+  }
+
+  .table-wrap td[colspan] {
+    display: block;
+    text-align: left;
+  }
+
+  .table-wrap td[colspan]::before,
+  .table-wrap td[data-label=""]::before {
+    content: none;
+    flex: 0;
+  }
+
+  .table-wrap td .btn,
+  .table-wrap td .form-select {
+    width: auto;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+  .filters {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 380px) {
+  .logo {
+    font-size: 1.2rem;
+  }
+
+  .header-actions > .btn[data-link="admin"] {
+    display: none;
+  }
+
+  .comm-options {
+    grid-template-columns: 1fr;
+  }
+
+  .trust-bar__list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.page-hero + .booking-section {
+  padding-top: 3.5rem;
+}

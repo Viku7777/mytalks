@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Book a Session — Chat, Voice or Video | MyTalks</title>
+  <meta name="description" content="Book a confidential MyTalks session: select advisor, date, time, communication mode, coupon, and payment." />
+  <link rel="canonical" href="https://mytalknow.com/pages/book-session" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Book a Session — Chat, Voice or Video | MyTalks" />
+  <meta property="og:description" content="Book a confidential MyTalks session: select advisor, date, time, communication mode, coupon, and payment." />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1516302759342-fd024b64ad2b?w=1200&h=630&fit=crop" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Book a Session — Chat, Voice or Video | MyTalks" />
+  <meta name="twitter:description" content="Book a confidential MyTalks session: select advisor, date, time, communication mode, coupon, and payment." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/pages.css" />
+  <link rel="stylesheet" href="../css/dark.css" />
+  <link rel="stylesheet" href="../css/animations.css" />
+  
+  <script src="../js/theme.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div id="header-root"></div>
+  <main id="main" class="page-main">
+    <section class="page-hero">
+      <div class="container">
+        <h1>Book a Session</h1>
+        <p>Choose your advisor, pick a time, and tell us how you’d like to talk.</p>
+      </div>
+    </section>
+
+    <section class="section section--tight booking-section" aria-busy="true" data-booking-section>
+      <div class="container container--narrow">
+        <div class="booking-loading" data-booking-loading role="status" aria-live="polite">
+          <p class="booking-loading__title">Preparing your booking</p>
+          <p class="booking-loading__text">Checking your account…</p>
+        </div>
+
+        <div data-booking-ui hidden>
+          <form class="booking-form" data-booking-form novalidate>
+            <fieldset class="booking-group">
+              <legend class="booking-group__title">Advisor</legend>
+              <div class="form-group">
+                <label for="advisor">Select your advisor</label>
+                <select
+                  class="form-select"
+                  id="advisor"
+                  name="advisor"
+                  data-advisor-picker
+                  required
+                >
+                  <option value="">Loading advisors…</option>
+                </select>
+              </div>
+            </fieldset>
+
+            <fieldset class="booking-group">
+              <legend class="booking-group__title">Date &amp; time</legend>
+              <div class="form-group">
+                <label for="date">Date</label>
+                <input class="form-control" type="date" id="date" name="date" required />
+              </div>
+              <div class="form-group">
+                <span class="booking-label" id="slots-label">Available times</span>
+                <div class="slot-grid" data-slots role="group" aria-labelledby="slots-label"></div>
+              </div>
+            </fieldset>
+
+            <fieldset class="booking-group">
+              <legend class="booking-group__title">How you’d like to talk</legend>
+              <div class="comm-options">
+                <label class="comm-option">
+                  <input type="radio" name="mode" value="chat" checked />
+                  <i class="fa-solid fa-comments" aria-hidden="true"></i>
+                  <span class="comm-option__name">Chat</span>
+                </label>
+                <label class="comm-option">
+                  <input type="radio" name="mode" value="voice" />
+                  <i class="fa-solid fa-phone" aria-hidden="true"></i>
+                  <span class="comm-option__name">Voice</span>
+                </label>
+                <label class="comm-option">
+                  <input type="radio" name="mode" value="video" />
+                  <i class="fa-solid fa-video" aria-hidden="true"></i>
+                  <span class="comm-option__name">Video</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="booking-group">
+              <legend class="booking-group__title">Contact &amp; payment</legend>
+              <p class="hint">We need an email or a phone number to confirm your session.</p>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="booking-email">Email</label>
+                  <input class="form-control" type="email" id="booking-email" name="contactEmail" autocomplete="email" placeholder="you@example.com" />
+                </div>
+                <div class="form-group">
+                  <label for="booking-phone">Phone</label>
+                  <input class="form-control" type="tel" id="booking-phone" name="contactPhone" autocomplete="tel" placeholder="+91 …" />
+                </div>
+              </div>
+              <p class="hint" data-contact-hint>Provide an email or a phone number—whichever you prefer.</p>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="coupon">Coupon code <span class="label-optional">(optional)</span></label>
+                  <input class="form-control" id="coupon" name="coupon" placeholder="Try SAFE10" autocomplete="off" />
+                </div>
+                <div class="form-group">
+                  <label for="pay">Payment method</label>
+                  <select class="form-select" id="pay" name="payment" required>
+                    <option value="upi">UPI</option>
+                    <option value="card">Cards</option>
+                    <option value="netbanking">Net Banking</option>
+                    <option value="wallet">Wallet</option>
+                  </select>
+                </div>
+              </div>
+            </fieldset>
+
+            <div class="honeypot" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off" /></div>
+
+            <div class="booking-summary" data-booking-summary hidden></div>
+
+            <div class="booking-actions">
+              <button class="btn btn--primary btn--block" type="submit">Confirm &amp; Pay (Demo)</button>
+              <p class="hint booking-actions__note">Demo only—no real payment is processed. Your booking still saves to your account.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <div class="modal-backdrop" data-booking-modal>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+        <h3 id="confirm-title">Session booked</h3>
+        <p>Your demo booking is confirmed. Check the dashboard for upcoming sessions.</p>
+        <div class="modal__actions">
+          <button type="button" class="btn btn--ghost" data-close-modal>Close</button>
+          <a class="btn btn--primary" href="dashboard">Go to Dashboard</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+  <div id="footer-root"></div>
+  <div id="cookie-root"></div>
+  <script src="../js/includes.js" defer></script>
+  <script src="../js/data-loader.js" defer></script>
+  <script src="../js/main.js" defer></script>
+  <script src="../js/booking.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Help Center — Guides & Popular Questions | MyTalks</title>
+  <meta name="description" content="Search the MyTalks Help Center for popular questions, guides, and ticket support." />
+  <link rel="canonical" href="https://mytalknow.com/pages/help-center" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Help Center — Guides & Popular Questions | MyTalks" />
+  <meta property="og:description" content="Search the MyTalks Help Center for popular questions, guides, and ticket support." />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1516302759342-fd024b64ad2b?w=1200&h=630&fit=crop" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Help Center — Guides & Popular Questions | MyTalks" />
+  <meta name="twitter:description" content="Search the MyTalks Help Center for popular questions, guides, and ticket support." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/pages.css" />
+  <link rel="stylesheet" href="../css/dark.css" />
+  <link rel="stylesheet" href="../css/animations.css" />
+  
+  <script src="../js/theme.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div id="header-root"></div>
+  <main id="main" class="page-main">
+    <section class="page-hero">
+      <div class="container">
+        <h1>Help Center</h1>
+        <p>Search guides or submit a ticket when you need more help.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <input class="form-control mb-8" type="search" placeholder="Search help articles" aria-label="Search help" oninput="const q=this.value.toLowerCase();document.querySelectorAll('[data-help-item]').forEach(el=>el.style.display=el.textContent.toLowerCase().includes(q)?'':'none')" />
+        <h2>Popular Questions</h2>
+        <div class="grid-2 mt-6">
+          <a class="card" data-help-item href="faq"><h3>Is MyTalks confidential?</h3><p>Yes—sessions are private. See Privacy Policy for details.</p></a>
+          <a class="card" data-help-item href="faq"><h3>How do refunds work?</h3><p>Review eligible refunds and processing times.</p></a>
+          <a class="card" data-help-item href="book-session"><h3>How do I book?</h3><p>Choose advisor, slot, mode, and payment.</p></a>
+          <a class="card" data-help-item href="emergency"><h3>What if I’m in crisis?</h3><p>Contact emergency services—MyTalks is not crisis intervention.</p></a>
+        </div>
+        <div class="btn-group mt-8">
+          <a class="btn btn--primary" href="support">Submit a ticket</a>
+          <a class="btn btn--ghost" href="support#track">Track a ticket</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div id="footer-root"></div>
+  <div id="cookie-root"></div>
+  <script src="../js/includes.js" defer></script>
+  <script src="../js/data-loader.js" defer></script>
+  <script src="../js/main.js" defer></script>
+  
+</body>
+</html>

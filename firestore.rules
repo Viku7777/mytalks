@@ -1,0 +1,91 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Dynamic pricing — public read; one-time create so the app can seed from JSON
+    match /settings/{docId} {
+      allow read: if true;
+      allow create: if docId == "pricing";
+      allow update: if isAdmin();
+      allow delete: if false;
+    }
+
+    // User profiles — created on signup; is_block only changeable in Firebase Console
+    match /users/{userId} {
+      allow create: if isOwner(userId)
+        && request.resource.data.uid == userId
+        && request.resource.data.is_block == false
+        && request.resource.data.email is string;
+
+      allow read: if isOwner(userId) || isAdmin();
+
+      allow update: if isAdmin()
+        || (isOwner(userId)
+          && request.resource.data.get('is_block', false) == resource.data.get('is_block', false)
+          && request.resource.data.get('role', 'user') == resource.data.get('role', 'user')
+          && request.resource.data.get('uid', userId) == resource.data.get('uid', userId));
+
+      allow delete: if false;
+    }
+
+    // Support tickets
+    match /tickets/{ticketId} {
+      allow create: if request.resource.data.keys().hasAll([
+          'ticketId', 'email', 'subject', 'description', 'status'
+        ])
+        && request.resource.data.status == 'Open'
+        && request.resource.data.email is string
+        && request.resource.data.subject is string
+        && request.resource.data.description is string;
+      allow read: if true;
+      allow update: if isAdmin();
+      allow delete: if false;
+    }
+
+    // Advisor profiles managed from the admin panel
+    match /advisors/{advisorId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Session bookings
+    match /bookings/{bookingId} {
+      allow create: if request.resource.data.keys().hasAll([
+          'bookingId', 'advisorId', 'date', 'time', 'mode', 'status', 'total'
+        ])
+        && request.resource.data.status == 'Confirmed';
+      allow read: if true;
+      allow update: if isAdmin();
+      allow delete: if false;
+    }
+
+    // Book-session page visits (funnel tracking)
+    match /booking_visits/{visitId} {
+      allow create: if isSignedIn()
+        && request.resource.data.page == 'book-session'
+        && request.resource.data.userId == request.auth.uid;
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    // Contact / inquiry forms
+    match /contacts/{contactId} {
+      allow create: if request.resource.data.email is string;
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+  }
+}

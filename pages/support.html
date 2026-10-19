@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Support — Submit & Track Tickets | MyTalks</title>
+  <meta name="description" content="Submit a MyTalks support ticket or track an existing request about booking, payments, or technical issues." />
+  <link rel="canonical" href="https://mytalknow.com/pages/support" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Support — Submit & Track Tickets | MyTalks" />
+  <meta property="og:description" content="Submit a MyTalks support ticket or track an existing request about booking, payments, or technical issues." />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1516302759342-fd024b64ad2b?w=1200&h=630&fit=crop" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Support — Submit & Track Tickets | MyTalks" />
+  <meta name="twitter:description" content="Submit a MyTalks support ticket or track an existing request about booking, payments, or technical issues." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/pages.css" />
+  <link rel="stylesheet" href="../css/dark.css" />
+  <link rel="stylesheet" href="../css/animations.css" />
+  
+  <script src="../js/theme.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div id="header-root"></div>
+  <main id="main" class="page-main">
+    <section class="page-hero">
+      <div class="container">
+        <h1>Support</h1>
+        <p>Submit a ticket or track progress on an existing request.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container grid-2">
+        <form class="card" name="ticket">
+          <h2>Submit Ticket</h2>
+          <p class="hint mt-2">Saved securely — you’ll get a ticket ID to track status.</p>
+          <div class="form-group mt-4"><label>Email</label><input class="form-control" type="email" name="email" required /></div>
+          <div class="form-group"><label>Category</label><select class="form-select" name="category"><option>Payments</option><option>Booking</option><option>Technical Issues</option><option>Account</option><option>Other</option></select></div>
+          <div class="form-group"><label>Subject</label><input class="form-control" name="subject" required /></div>
+          <div class="form-group"><label>Description</label><textarea class="form-textarea" name="description" required></textarea></div>
+          <div class="honeypot" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off" /></div>
+          <button class="btn btn--primary" type="submit">Submit</button>
+        </form>
+        <form class="card" id="track" name="track">
+          <h2>Track Ticket</h2>
+          <p class="hint mt-2">Enter your ticket ID to see the latest status.</p>
+          <div class="form-group mt-4"><label>Ticket ID</label><input class="form-control" name="ticketId" placeholder="T-XXXXXX" required autocomplete="off" /></div>
+          <button class="btn btn--secondary" type="submit">Track</button>
+          <div class="card mt-6" data-ticket-status hidden style="background:var(--color-bg-light)"></div>
+        </form>
+      </div>
+    </section>
+
+  </main>
+  <div id="footer-root"></div>
+  <div id="cookie-root"></div>
+  <script src="../js/includes.js" defer></script>
+  <script src="../js/data-loader.js" defer></script>
+  <script src="../js/main.js" defer></script>
+  <script src="../js/forms.js" defer></script>
+</body>
+</html>

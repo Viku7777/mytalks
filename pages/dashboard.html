@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard — Your MyTalks Account (UI Demo)</title>
+  <meta name="description" content="MyTalks user dashboard UI for upcoming sessions, invoices, wallet, notifications, settings, and support tickets." />
+  <link rel="canonical" href="https://mytalknow.com/pages/dashboard" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Dashboard — Your MyTalks Account (UI Demo)" />
+  <meta property="og:description" content="MyTalks user dashboard UI for upcoming sessions, invoices, wallet, notifications, settings, and support tickets." />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1516302759342-fd024b64ad2b?w=1200&h=630&fit=crop" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Dashboard — Your MyTalks Account (UI Demo)" />
+  <meta name="twitter:description" content="MyTalks user dashboard UI for upcoming sessions, invoices, wallet, notifications, settings, and support tickets." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/pages.css" />
+  <link rel="stylesheet" href="../css/dark.css" />
+  <link rel="stylesheet" href="../css/animations.css" />
+  
+  <script src="../js/theme.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div id="header-root"></div>
+  <main id="main" class="page-main">
+    <section class="page-hero">
+      <div class="container">
+        <h1>Dashboard</h1>
+        <p>Manage sessions, wallet, and support for your MyTalks account.</p>
+      </div>
+    </section>
+
+    <section class="section">
+        <div class="container" data-dashboard data-auth-required aria-busy="true">
+        <p class="mb-6">Hello, <strong data-user-name><span class="skeleton skeleton--md" aria-hidden="true"></span></strong> <span class="hint" data-user-email></span></p>
+        <div class="dashboard-layout">
+          <nav class="card dashboard-nav" aria-label="Dashboard">
+            <button type="button" class="is-active" data-dash-nav="sessions">Sessions</button>
+            <button type="button" data-dash-nav="invoices" hidden>Invoices</button>
+            <button type="button" data-dash-nav="wallet" hidden>Wallet</button>
+            <button type="button" data-dash-nav="profile">Profile</button>
+            <button type="button" data-dash-nav="notifications" hidden>Notifications</button>
+            <button type="button" data-dash-nav="settings" hidden>Settings</button>
+            <button type="button" data-dash-nav="tickets">Support Tickets</button>
+            <button type="button" data-dash-nav="referral" hidden>Referral Earnings</button>
+            <button type="button" class="dashboard-nav__logout" data-logout>Log out</button>
+          </nav>
+          <div>
+            <div class="tab-panel is-active" data-dash-panel="sessions">
+              <div class="stat-row">
+                <div class="card stat-box"><strong data-sessions-count><span class="skeleton skeleton--lg" aria-hidden="true"></span></strong><span>Sessions</span></div>
+                <div class="card stat-box"><strong data-wallet><span class="skeleton skeleton--lg" aria-hidden="true"></span></strong><span>Wallet</span></div>
+                <div class="card stat-box"><strong data-referral-earnings><span class="skeleton skeleton--lg" aria-hidden="true"></span></strong><span>Referrals</span></div>
+              </div>
+              <div class="table-wrap card"><table><thead><tr><th>Advisor</th><th>Date</th><th>Time</th><th>Mode</th><th>Status</th></tr></thead><tbody data-dash-sessions aria-busy="true">
+                <tr class="skeleton-row" aria-hidden="true"><td><span class="skeleton skeleton--xl"></span></td><td><span class="skeleton skeleton--md"></span></td><td><span class="skeleton skeleton--sm"></span></td><td><span class="skeleton skeleton--sm"></span></td><td><span class="skeleton skeleton--md"></span></td></tr>
+                <tr class="skeleton-row" aria-hidden="true"><td><span class="skeleton skeleton--md"></span></td><td><span class="skeleton skeleton--md"></span></td><td><span class="skeleton skeleton--sm"></span></td><td><span class="skeleton skeleton--sm"></span></td><td><span class="skeleton skeleton--sm"></span></td></tr>
+                <tr class="skeleton-row" aria-hidden="true"><td><span class="skeleton skeleton--lg"></span></td><td><span class="skeleton skeleton--md"></span></td><td><span class="skeleton skeleton--sm"></span></td><td><span class="skeleton skeleton--sm"></span></td><td><span class="skeleton skeleton--md"></span></td></tr>
+                <tr class="skeleton-row" aria-hidden="true"><td><span class="skeleton skeleton--xl"></span></td><td><span class="skeleton skeleton--sm"></span></td><td><span class="skeleton skeleton--sm"></span></td><td><span class="skeleton skeleton--sm"></span></td><td><span class="skeleton skeleton--sm"></span></td></tr>
+              </tbody></table></div>
+              <div class="mt-6"><span class="coming-soon"><i class="fa-solid fa-video"></i> Video / voice room — coming soon</span></div>
+            </div>
+            <div class="tab-panel" data-dash-panel="invoices" hidden><div class="table-wrap card"><table><thead><tr><th>Invoice</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead><tbody data-dash-invoices></tbody></table></div></div>
+            <div class="tab-panel" data-dash-panel="wallet" hidden><div class="card"><h3>Wallet</h3><p class="mt-4">Balance: <strong data-wallet>₹0</strong></p><p class="mt-4">Top-ups and gifts cards will connect to Firebase payments later.</p><div class="coming-soon mt-4">Gift Cards — coming soon</div></div></div>
+            <div class="tab-panel" data-dash-panel="profile"><div class="card"><h3>Profile</h3><p class="mt-4">Your signed-in account details. Phone is saved locally for booking prefills.</p><form data-profile-form data-success="Profile saved." name="profile" aria-busy="true"><div class="form-group"><label>Display name</label><input class="form-control is-skeleton" name="displayName" data-profile-name disabled /></div><div class="form-group"><label>Email</label><input class="form-control is-skeleton" type="email" name="email" data-profile-email readonly disabled /></div><div class="form-group"><label>Phone</label><input class="form-control is-skeleton" type="tel" name="phone" data-profile-phone autocomplete="tel" disabled /></div><button class="btn btn--primary" type="submit" disabled data-profile-submit>Save</button></form></div></div>
+            <div class="tab-panel" data-dash-panel="notifications" hidden><ul data-notifications></ul></div>
+            <div class="tab-panel" data-dash-panel="settings" hidden><div class="card"><h3>Settings</h3><p class="mt-4">Theme follows the site toggle. Notification preferences are placeholders.</p><label class="form-check mt-4"><input type="checkbox" checked /> Email reminders</label><label class="form-check mt-4"><input type="checkbox" checked /> Promotional emails</label></div></div>
+            <div class="tab-panel" data-dash-panel="tickets"><div class="table-wrap card"><table><thead><tr><th>ID</th><th>Subject</th><th>Status</th><th>Updated</th></tr></thead><tbody data-tickets>
+              <tr><td colspan="4">No tickets yet. <a href="support">Create one</a></td></tr>
+            </tbody></table></div><a class="btn btn--secondary mt-4" href="support">New ticket</a></div>
+            <div class="tab-panel" data-dash-panel="referral" hidden><div class="card"><h3>Referral Earnings</h3><p class="mt-4">Lifetime earnings: <strong data-referral-earnings>₹0</strong></p><p class="mt-4">Share your code <strong>SAFE-ALEX</strong> with friends. <a href="refer-earn">Learn more</a></p><div class="coming-soon mt-4">Rewards Program — coming soon</div></div></div>
+          </div>
+        </div>
+        <p class="mt-8 hint">Admin Dashboard and Advisor Dashboard placeholders are planned for a later release.</p>
+      </div>
+    </section>
+
+  </main>
+  <div id="footer-root"></div>
+  <div id="cookie-root"></div>
+  <script src="../js/includes.js" defer></script>
+  <script src="../js/data-loader.js?v=20260715" defer></script>
+  <script src="../js/main.js" defer></script>
+  <script src="../js/dashboard.js?v=20260715b" defer></script>
+  <script src="../js/forms.js" defer></script>
+</body>
+</html>

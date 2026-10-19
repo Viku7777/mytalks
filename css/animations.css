@@ -1,0 +1,186 @@
+/* Premium motion — respectful of reduced-motion */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Skip continuous hero/ambient motion on small screens and touch-first devices */
+@media (max-width: 767px), (hover: none) and (pointer: coarse) {
+  .home-hero__media img {
+    animation: none !important;
+    will-change: auto;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Page chrome */
+  .site-header {
+    animation: slideDownSoft 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* Hero — gentle ken burns + staggered copy */
+  .home-hero__media img {
+    animation: heroKenBurns 30s ease-in-out infinite alternate;
+    transform-origin: 74% 20%;
+    will-change: transform;
+  }
+
+  .home-hero__content > * {
+    opacity: 0;
+    transform: translateY(1.25rem);
+    animation: riseIn 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .home-hero__brand {
+    animation-delay: 0.06s;
+  }
+
+  .home-hero h1 {
+    animation-delay: 0.18s;
+  }
+
+  .home-hero__sub {
+    animation-delay: 0.3s;
+  }
+
+  .home-hero .btn-group {
+    animation-delay: 0.42s;
+  }
+
+  .home-hero .btn {
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .home-hero .btn:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(1.75rem);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0s);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal--left {
+    transform: translateX(-1.5rem);
+  }
+
+  .reveal--left.is-visible {
+    transform: translateX(0);
+  }
+
+  .reveal--scale {
+    transform: translateY(1rem) scale(0.96);
+  }
+
+  .reveal--scale.is-visible {
+    transform: translateY(0) scale(1);
+  }
+
+  /* Cards & tiles */
+  .step-card,
+  .service-tile,
+  .why-card,
+  .advisor-card,
+  .testimonial,
+  .pricing-card {
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.3s ease, box-shadow 0.35s ease, background 0.3s ease;
+  }
+
+  .advisor-card:hover,
+  .testimonial:hover,
+  .pricing-card:hover,
+  .reason-grid article:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .topic-list li {
+    transition: padding-left 0.3s ease, background 0.3s ease;
+  }
+
+  .topic-list li:hover {
+    padding-left: 0.35rem;
+  }
+
+  .topic-list li:hover i {
+    background: var(--color-primary);
+    color: #fff;
+  }
+
+  .topic-list i {
+    transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+  }
+
+  /* Buttons */
+  .btn {
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease,
+      border-color 0.25s ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(91, 108, 255, 0.22);
+  }
+
+  .btn--accent:hover {
+    box-shadow: 0 10px 24px rgba(255, 122, 89, 0.28);
+  }
+
+  /* Nav links */
+  .nav a {
+    position: relative;
+    transition: color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+  }
+
+  .nav a:hover {
+    transform: translateY(-1px);
+  }
+
+}
+
+@keyframes riseIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDownSoft {
+  from {
+    opacity: 0;
+    transform: translateY(-0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroKenBurns {
+  0% {
+    transform: scale(1.03) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: scale(1.08) translate3d(-0.8%, -0.5%, 0);
+  }
+}
+

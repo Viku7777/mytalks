@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Log In — MyTalks Account</title>
+  <meta name="description" content="Log in to your MyTalks account to manage sessions, wallet, and support tickets." />
+  <link rel="canonical" href="https://mytalknow.com/pages/login" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Log In — MyTalks Account" />
+  <meta property="og:description" content="Log in to your MyTalks account to manage sessions, wallet, and support tickets." />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1516302759342-fd024b64ad2b?w=1200&h=630&fit=crop" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Log In — MyTalks Account" />
+  <meta name="twitter:description" content="Log in to your MyTalks account to manage sessions, wallet, and support tickets." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/pages.css" />
+  <link rel="stylesheet" href="../css/dark.css" />
+  <link rel="stylesheet" href="../css/animations.css" />
+  
+  <script src="../js/theme.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div id="header-root"></div>
+  <main id="main" class="page-main">
+    <section class="section section--tight">
+      <div class="container">
+        <div class="auth-panel">
+          <h1>Welcome back</h1>
+          <p>Log in to manage sessions and your wallet.</p>
+          <form class="mt-6" data-login-form>
+            <p class="form-error" data-auth-error hidden role="alert"></p>
+            <div class="form-group"><label for="email">Email</label><input class="form-control" type="email" id="email" name="email" required autocomplete="email" /></div>
+            <div class="form-group"><label for="password">Password</label><input class="form-control" type="password" id="password" name="password" required minlength="6" autocomplete="current-password" /></div>
+            <div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem">
+              <label class="form-check"><input type="checkbox" name="remember" checked /> Remember me</label>
+              <a href="#" data-forgot-password>Forgot password?</a>
+            </div>
+            <div class="honeypot" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off" /></div>
+            <button class="btn btn--primary btn--block" type="submit">Log in</button>
+          </form>
+          <div class="auth-divider">or</div>
+          <div class="social-auth">
+            <button type="button" class="btn btn--ghost btn--block" data-social-auth="Google"><i class="fa-brands fa-google"></i> Continue with Google</button>
+          </div>
+          <p class="text-center mt-6">New here? <a href="register">Create an account</a></p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div id="footer-root"></div>
+  <div id="cookie-root"></div>
+  <script src="../js/includes.js" defer></script>
+  <script src="../js/data-loader.js" defer></script>
+  <script src="../js/main.js" defer></script>
+</body>
+</html>

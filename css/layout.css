@@ -1,0 +1,360 @@
+.site-chrome {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+}
+
+.site-header {
+  height: var(--header-height);
+  background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-height);
+  gap: var(--space-4);
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+
+@media (min-width: 640px) {
+  .logo {
+    font-size: 1.5rem;
+  }
+}
+
+.logo span {
+  color: var(--color-primary);
+}
+
+.logo:hover {
+  color: var(--color-text);
+}
+
+.nav {
+  display: none;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.nav a {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+}
+
+.nav a:hover,
+.nav a.is-active {
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Avoid Log in flash while Firebase restores the session */
+html:not([data-auth-state]) [data-auth-guest],
+html:not([data-auth-state]) [data-auth-user] {
+  visibility: hidden;
+}
+
+html[data-auth-state="user"] [data-auth-guest] {
+  display: none !important;
+}
+
+html[data-auth-state="guest"] [data-auth-user] {
+  display: none !important;
+}
+
+@media (max-width: 1023px) {
+  .header-actions > .btn--ghost[data-auth-guest],
+  .header-actions > .btn--primary[data-link="book"] {
+    display: none;
+  }
+}
+
+.nav-toggle {
+  width: var(--tap-min);
+  height: var(--tap-min);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  flex-shrink: 0;
+}
+
+.nav-toggle:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--color-bg);
+  padding: var(--space-4) var(--space-6) max(var(--space-8), env(safe-area-inset-bottom, 0px));
+  z-index: calc(var(--z-header) - 1);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.mobile-nav.is-open {
+  display: block;
+  animation: fadeIn 0.2s ease;
+}
+
+.mobile-nav a:not([hidden]) {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  padding: var(--space-3) 0;
+  color: var(--color-text);
+  font-weight: 500;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.mobile-nav .btn {
+  display: inline-flex;
+  margin-top: var(--space-4);
+  width: 100%;
+  min-height: var(--tap-min);
+  border-bottom: none;
+}
+
+@media (min-width: 1024px) {
+  .nav {
+    display: flex;
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+
+  .mobile-nav {
+    display: none !important;
+  }
+}
+
+.site-footer {
+  background: var(--color-bg-dark);
+  color: #e5e7eb;
+  padding: var(--space-16) 0 var(--space-8);
+  margin-top: auto;
+}
+
+.site-footer a {
+  color: #d1d5db;
+  font-size: 0.9375rem;
+  min-height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.site-footer a:hover {
+  color: #fff;
+}
+
+.site-footer__grid {
+  display: grid;
+  gap: var(--space-8);
+}
+
+@media (min-width: 768px) {
+  .site-footer__grid {
+    grid-template-columns: 1.4fr repeat(3, 1fr);
+  }
+}
+
+.site-footer__brand .logo {
+  color: #fff;
+  display: inline-block;
+  margin-bottom: var(--space-4);
+}
+
+.site-footer__brand p {
+  color: #9ca3af;
+  max-width: 18rem;
+}
+
+.site-footer h4 {
+  color: #fff;
+  font-size: 0.9375rem;
+  margin-bottom: var(--space-4);
+}
+
+.site-footer ul {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.site-footer__crisis {
+  margin-top: var(--space-10);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid #374151;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.site-footer__crisis a {
+  color: #c7d2fe;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.site-footer__bottom {
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid #374151;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  justify-content: space-between;
+  align-items: center;
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+.site-footer__social {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.site-footer__social a {
+  width: var(--tap-min);
+  height: var(--tap-min);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid #374151;
+}
+
+.newsletter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  max-width: 22rem;
+}
+
+.newsletter input {
+  flex: 1 1 10rem;
+  min-width: 0;
+  min-height: var(--tap-min);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid #374151;
+  background: #1f2937;
+  color: #fff;
+}
+
+.newsletter .btn {
+  flex: 1 1 auto;
+  min-height: var(--tap-min);
+}
+
+.page-main {
+  min-height: calc(100vh - var(--header-height) - 20rem);
+}
+
+.page-hero {
+  padding: var(--space-10) 0 var(--space-8);
+  background: var(--color-bg-light);
+}
+
+@media (min-width: 768px) {
+  .page-hero {
+    padding: var(--space-16) 0 var(--space-12);
+  }
+}
+
+.page-hero h1 {
+  margin-bottom: var(--space-4);
+}
+
+.page-hero p {
+  font-size: 1.0625rem;
+  max-width: 36rem;
+}
+
+@media (min-width: 768px) {
+  .page-hero p {
+    font-size: 1.125rem;
+  }
+}
+
+.cookie-banner {
+  position: fixed;
+  bottom: max(var(--space-4), env(safe-area-inset-bottom, 0px));
+  left: var(--space-3);
+  right: var(--space-3);
+  z-index: var(--z-toast);
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-5);
+  display: none;
+  gap: var(--space-4);
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 48rem;
+  margin-inline: auto;
+}
+
+.cookie-banner.is-visible {
+  display: flex;
+  animation: fadeInUp 0.35s ease;
+}
+
+.cookie-banner p {
+  flex: 1 1 100%;
+  min-width: 0;
+  font-size: 0.9375rem;
+}
+
+@media (min-width: 480px) {
+  .cookie-banner p {
+    flex: 1 1 auto;
+    min-width: 12rem;
+  }
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+#header-root,
+#footer-root,
+#cookie-root {
+  width: 100%;
+}

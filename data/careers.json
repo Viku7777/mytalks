@@ -1,0 +1,30 @@
+[
+  {
+    "id": "c1",
+    "title": "Product Designer",
+    "location": "Remote / Hybrid",
+    "type": "Full-time",
+    "department": "Design"
+  },
+  {
+    "id": "c2",
+    "title": "Frontend Engineer",
+    "location": "Remote",
+    "type": "Full-time",
+    "department": "Engineering"
+  },
+  {
+    "id": "c3",
+    "title": "Advisor Success Manager",
+    "location": "Bengaluru / Remote",
+    "type": "Full-time",
+    "department": "Operations"
+  },
+  {
+    "id": "c4",
+    "title": "Content & Trust Writer",
+    "location": "Remote",
+    "type": "Contract",
+    "department": "Marketing"
+  }
+]

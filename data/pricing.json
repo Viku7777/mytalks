@@ -1,0 +1,62 @@
+{
+  "plans": [
+    {
+      "id": "intro",
+      "name": "Free Intro Call",
+      "price": 0,
+      "duration": "10 min",
+      "featured": false,
+      "features": ["Meet your advisor", "Clarify your goals", "No commitment", "Chat only"]
+    },
+    {
+      "id": "15",
+      "name": "15 Minutes",
+      "price": 299,
+      "duration": "15 min",
+      "featured": false,
+      "features": ["Chat, voice, or video", "Single focused topic", "Secure session link", "Post-session notes optional"]
+    },
+    {
+      "id": "30",
+      "name": "30 Minutes",
+      "price": 499,
+      "duration": "30 min",
+      "featured": true,
+      "features": ["Most popular length", "Deeper conversation", "All communication modes", "Priority support"]
+    },
+    {
+      "id": "60",
+      "name": "60 Minutes",
+      "price": 899,
+      "duration": "60 min",
+      "featured": false,
+      "features": ["Extended support", "Multiple topics", "Ideal for complex situations", "Follow-up tips"]
+    },
+    {
+      "id": "monthly",
+      "name": "Monthly Membership",
+      "price": 2499,
+      "duration": "month",
+      "featured": false,
+      "features": ["4 × 30-min sessions", "Member-only rates", "Flexible scheduling", "Referral bonus boost"]
+    },
+    {
+      "id": "corporate",
+      "name": "Corporate Plans",
+      "price": null,
+      "duration": "custom",
+      "featured": false,
+      "features": ["Employee emotional support", "Usage reporting", "Dedicated onboarding", "Custom SLAs"]
+    }
+  ],
+  "discounts": [
+    { "name": "Student Discount", "detail": "20% off eligible sessions with a valid student ID." },
+    { "name": "First Session Offer", "detail": "Special pricing on your first paid booking when available." }
+  ],
+  "paymentMethods": ["UPI", "Cards", "Net Banking", "Wallet"],
+  "coupons": {
+    "SAFE10": 10,
+    "MYTALKS15": 15,
+    "FIRST20": 20
+  }
+}

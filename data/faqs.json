@@ -1,0 +1,74 @@
+[
+  {
+    "id": "1",
+    "category": "Privacy",
+    "question": "Are my conversations confidential?",
+    "answer": "Yes. Sessions are private between you and your advisor. We do not share conversation content publicly. Review our Privacy Policy for details on data handling."
+  },
+  {
+    "id": "2",
+    "category": "Booking",
+    "question": "How do I book a session?",
+    "answer": "Choose an advisor, select a date and time, pick chat, voice, or video, apply a coupon if you have one, and complete payment to receive confirmation."
+  },
+  {
+    "id": "3",
+    "category": "Payments",
+    "question": "What payment methods do you accept?",
+    "answer": "We support UPI, cards, net banking, and popular wallets. All payments are processed through secure payment gateways."
+  },
+  {
+    "id": "4",
+    "category": "Sessions",
+    "question": "Is MyTalks therapy or medical care?",
+    "answer": "No. MyTalks provides emotional support, guidance, and peer conversations only. Advisors do not diagnose illnesses or prescribe treatments."
+  },
+  {
+    "id": "5",
+    "category": "Sessions",
+    "question": "Can I choose chat, voice, or video?",
+    "answer": "Yes. Every booking lets you select the communication mode that feels most comfortable for you."
+  },
+  {
+    "id": "6",
+    "category": "Account",
+    "question": "Do I need an account to book?",
+    "answer": "You can browse advisors freely. Creating an account helps you manage upcoming sessions, invoices, and referrals."
+  },
+  {
+    "id": "7",
+    "category": "Payments",
+    "question": "Are there student or membership discounts?",
+    "answer": "Yes. We offer student discounts, monthly memberships, and corporate plans. See the Pricing page for current options."
+  },
+  {
+    "id": "8",
+    "category": "Booking",
+    "question": "Can I reschedule or cancel?",
+    "answer": "Yes, subject to our Cancellation Policy. Late cancellations and no-shows may incur fees."
+  },
+  {
+    "id": "9",
+    "category": "Privacy",
+    "question": "Can I stay anonymous?",
+    "answer": "You can use a display name and share only what you are comfortable sharing during sessions."
+  },
+  {
+    "id": "10",
+    "category": "Technical Issues",
+    "question": "What if my call drops mid-session?",
+    "answer": "Reconnect using the same session link. If issues persist, contact Support and we will help restore time or reschedule."
+  },
+  {
+    "id": "11",
+    "category": "Account",
+    "question": "How do I reset my password?",
+    "answer": "Use Forgot Password on the login page. You will receive a reset link at your registered email."
+  },
+  {
+    "id": "12",
+    "category": "Technical Issues",
+    "question": "Which browsers work best?",
+    "answer": "Current versions of Chrome, Safari, Firefox, and Edge work best for chat, voice, and video sessions."
+  }
+]

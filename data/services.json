@@ -1,0 +1,50 @@
+[
+  {
+    "id": "relationship",
+    "title": "Relationship Advice",
+    "icon": "fa-heart",
+    "description": "Talk through communication gaps, expectations, and next steps with a trusted listener."
+  },
+  {
+    "id": "marriage",
+    "title": "Marriage Support",
+    "icon": "fa-rings-wedding",
+    "description": "Discuss partnership stress, trust, and shared decisions in a confidential setting."
+  },
+  {
+    "id": "dating",
+    "title": "Dating Advice",
+    "icon": "fa-comments",
+    "description": "Build confidence, clarity, and kinder boundaries while navigating dating."
+  },
+  {
+    "id": "breakup",
+    "title": "Breakup Recovery",
+    "icon": "fa-hand-holding-heart",
+    "description": "Process endings gently and reclaim stability after a painful split."
+  },
+  {
+    "id": "family",
+    "title": "Family Issues",
+    "icon": "fa-people-roof",
+    "description": "Find support for family conflict, expectations, and emotional distance."
+  },
+  {
+    "id": "stress",
+    "title": "Stress Support",
+    "icon": "fa-spa",
+    "description": "Unload everyday pressure and leave with calmer next steps."
+  },
+  {
+    "id": "loneliness",
+    "title": "Loneliness",
+    "icon": "fa-house-user",
+    "description": "Speak with someone when solitude feels heavy and friends are unavailable."
+  },
+  {
+    "id": "life",
+    "title": "General Life Guidance",
+    "icon": "fa-compass",
+    "description": "Explore life decisions, identity questions, and everyday emotional support."
+  }
+]

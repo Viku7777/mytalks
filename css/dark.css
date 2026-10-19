@@ -1,0 +1,96 @@
+/* Dark-mode polish beyond CSS variables */
+[data-theme="dark"] .site-header {
+  background: color-mix(in srgb, var(--color-bg) 85%, transparent);
+}
+
+[data-theme="dark"] .home-hero {
+  background: #111827;
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .home-hero__overlay {
+  background:
+    linear-gradient(
+      105deg,
+      rgba(17, 24, 39, 0.94) 0%,
+      rgba(17, 24, 39, 0.82) 30%,
+      rgba(17, 24, 39, 0.4) 52%,
+      rgba(17, 24, 39, 0.1) 72%,
+      transparent 86%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(17, 24, 39, 0.2) 0%,
+      transparent 40%,
+      rgba(17, 24, 39, 0.7) 100%
+    );
+}
+
+@media (max-width: 767px) {
+  [data-theme="dark"] .home-hero__overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(17, 24, 39, 0.25) 0%,
+        rgba(17, 24, 39, 0.45) 30%,
+        rgba(17, 24, 39, 0.88) 60%,
+        rgba(17, 24, 39, 0.96) 100%
+      );
+  }
+}
+
+[data-theme="dark"] .home-hero__brand {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .home-hero__brand span {
+  color: #a5b4fc;
+}
+
+[data-theme="dark"] .home-hero h1 {
+  color: rgba(249, 250, 251, 0.95);
+}
+
+[data-theme="dark"] .home-hero__sub {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .btn--light {
+  background: var(--color-surface-elevated);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .btn--ghost {
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .cta-band {
+  background: linear-gradient(135deg, #4338ca, #5b6cff);
+}
+
+[data-theme="dark"] .newsletter input {
+  background: #111827;
+}
+
+[data-theme="dark"] img[loading="lazy"] {
+  background: #1f2937;
+}
+
+[data-theme="dark"] .why-card,
+[data-theme="dark"] .step-card,
+[data-theme="dark"] .service-tile,
+[data-theme="dark"] .reason-grid article,
+[data-theme="dark"] .partner-path,
+[data-theme="dark"] .partner-form {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .trust-bar {
+  background: var(--color-bg);
+}
+
+[data-theme="dark"] .trust-bar__list li,
+[data-theme="dark"] .steps__item {
+  background: var(--color-surface);
+}

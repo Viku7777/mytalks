@@ -2,7 +2,7 @@
 
 Premium static website for private emotional support and relationship guidance.
 
-**Domain:** [mytalknow.com](https://mytalknow.com)  
+**Domain:** [mytalk.in](https://mytalk.in)  
 **Brand:** MyTalks  
 **Primary tagline:** Someone to Talk. Someone to Understand.
 

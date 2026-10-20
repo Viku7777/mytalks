@@ -536,19 +536,6 @@
     });
   }
 
-  function useGoogleRedirect() {
-    if (typeof navigator === "undefined") return true;
-    var ua = navigator.userAgent || "";
-    // Phones / classic tablets
-    if (/iPhone|iPad|iPod|Android/i.test(ua)) return true;
-    // iPadOS 13+ often reports as Macintosh with touch
-    if (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) return true;
-    // Safari popup auth is unreliable (ITP / popup blockers)
-    var isSafari = /Safari/i.test(ua) && !/Chrome|CriOS|FxiOS|EdgiOS|OPiOS|Android/i.test(ua);
-    if (isSafari) return true;
-    return false;
-  }
-
   function signInWithGoogle(remember) {
     var auth = ensureFirebase();
     var provider = new firebase.auth.GoogleAuthProvider();
@@ -556,14 +543,18 @@
     provider.addScope("profile");
     provider.setCustomParameters({ prompt: "select_account" });
     resolveAuthNext();
+
+    function redirectSignIn() {
+      markGoogleRedirectPending(true);
+      return auth.signInWithRedirect(provider).then(function () {
+        // Page will navigate to Google. Do not continue to redirectAfterAuth.
+        return { redirected: true, user: null };
+      });
+    }
+
     return setPersistence(remember !== false).then(function () {
-      if (useGoogleRedirect()) {
-        markGoogleRedirectPending(true);
-        return auth.signInWithRedirect(provider).then(function () {
-          // Page will navigate to Google. Do not continue to redirectAfterAuth.
-          return { redirected: true, user: null };
-        });
-      }
+      // Prefer popup (works with the existing Google redirect URI). Fall back
+      // to full-page redirect if the popup is blocked (common on some phones).
       return auth.signInWithPopup(provider).then(
         function (cred) {
           return finishGoogleCredential(cred).then(function () {
@@ -575,12 +566,10 @@
           if (
             code === "auth/popup-blocked" ||
             code === "auth/cancelled-popup-request" ||
-            code === "auth/web-storage-unsupported"
+            code === "auth/web-storage-unsupported" ||
+            code === "auth/operation-not-supported-in-this-environment"
           ) {
-            markGoogleRedirectPending(true);
-            return auth.signInWithRedirect(provider).then(function () {
-              return { redirected: true, user: null };
-            });
+            return redirectSignIn();
           }
           throw err;
         }

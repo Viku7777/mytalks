@@ -299,6 +299,11 @@
     return end > 0 && end < Date.now();
   }
 
+  function notifyBookingMail(event, booking, extras) {
+    if (!window.MyTalksMail || !window.MyTalksMail.notify || !booking) return;
+    window.MyTalksMail.notify(event, booking, extras || {}).catch(function () {});
+  }
+
   function setBookingBusy(button, label) {
     if (!button) return;
     var row = button.closest("tr");
@@ -435,6 +440,9 @@
               : '<button type="button" class="btn btn--primary btn--sm" data-booking-confirm="' +
                 esc(id) +
                 '">Confirm</button>') +
+            '<button type="button" class="btn btn--primary btn--sm" data-booking-complete="' +
+            esc(id) +
+            '">Complete</button>' +
             '<button type="button" class="btn btn--ghost btn--sm" data-booking-cancel="' +
             esc(id) +
             '">Cancel</button></div></td></tr>'
@@ -1389,11 +1397,30 @@
       }
       setBookingBusy(saveTime, "Updating…");
       try {
+        var nextEnd = endClock(nextTime, currentBooking && currentBooking.durationMinutes);
+        var previousTime =
+          (currentBooking &&
+            (dayKey(currentBooking.date) +
+              ", " +
+              (currentBooking.endTime
+                ? (currentBooking.time || "") + "–" + currentBooking.endTime
+                : currentBooking.time || ""))) ||
+          "";
         await window.MyTalksDB.updateBooking(timeId, {
           date: nextDate,
           time: nextTime,
-          endTime: endClock(nextTime, currentBooking && currentBooking.durationMinutes),
+          endTime: nextEnd,
         });
+        notifyBookingMail(
+          "time-changed",
+          Object.assign({}, currentBooking || {}, {
+            bookingId: timeId,
+            date: nextDate,
+            time: nextTime,
+            endTime: nextEnd,
+          }),
+          { previousTime: previousTime }
+        );
         await loadAll();
         render();
         toast("Time updated.");
@@ -1407,9 +1434,20 @@
     if (confirmBooking) {
       setBookingBusy(confirmBooking, "Confirming…");
       try {
-        await window.MyTalksDB.updateBooking(confirmBooking.getAttribute("data-booking-confirm"), {
+        var confirmId = confirmBooking.getAttribute("data-booking-confirm");
+        var confirmRow = state.bookings.find(function (item) {
+          return String(item.bookingId || item.id) === String(confirmId);
+        });
+        await window.MyTalksDB.updateBooking(confirmId, {
           status: "Confirmed",
         });
+        notifyBookingMail(
+          "confirmed",
+          Object.assign({}, confirmRow || {}, {
+            bookingId: confirmId,
+            status: "Confirmed",
+          })
+        );
         await loadAll();
         render();
         toast("Booking confirmed.");
@@ -1419,14 +1457,53 @@
       }
       return;
     }
+    var completeBooking = e.target.closest("[data-booking-complete]");
+    if (completeBooking) {
+      if (!window.confirm("Mark this booking as completed?")) return;
+      setBookingBusy(completeBooking, "Completing…");
+      try {
+        var completeId = completeBooking.getAttribute("data-booking-complete");
+        var completeRow = state.bookings.find(function (item) {
+          return String(item.bookingId || item.id) === String(completeId);
+        });
+        await window.MyTalksDB.updateBooking(completeId, {
+          status: "Completed",
+        });
+        notifyBookingMail(
+          "completed",
+          Object.assign({}, completeRow || {}, {
+            bookingId: completeId,
+            status: "Completed",
+          })
+        );
+        await loadAll();
+        render();
+        toast("Booking completed.");
+      } catch (err) {
+        clearBookingBusy(completeBooking);
+        toast((err && err.message) || "Could not complete the booking.", "error");
+      }
+      return;
+    }
     var cancelBooking = e.target.closest("[data-booking-cancel]");
     if (cancelBooking) {
       if (!window.confirm("Cancel this booking?")) return;
       setBookingBusy(cancelBooking, "Cancelling…");
       try {
-        await window.MyTalksDB.updateBooking(cancelBooking.getAttribute("data-booking-cancel"), {
+        var cancelId = cancelBooking.getAttribute("data-booking-cancel");
+        var cancelRow = state.bookings.find(function (item) {
+          return String(item.bookingId || item.id) === String(cancelId);
+        });
+        await window.MyTalksDB.updateBooking(cancelId, {
           status: "Cancelled",
         });
+        notifyBookingMail(
+          "cancelled",
+          Object.assign({}, cancelRow || {}, {
+            bookingId: cancelId,
+            status: "Cancelled",
+          })
+        );
         await loadAll();
         render();
         toast("Booking cancelled.");
@@ -1586,11 +1663,25 @@
       var advisor = state.advisors.find(function (a) {
         return String(a.id) === booking.value;
       });
+      var advisorBookingId = booking.getAttribute("data-booking-advisor");
+      var advisorRow = state.bookings.find(function (item) {
+        return String(item.bookingId || item.id) === String(advisorBookingId);
+      });
+      var previousAdvisor = (advisorRow && advisorRow.advisorName) || "";
       try {
-        await window.MyTalksDB.updateBooking(booking.getAttribute("data-booking-advisor"), {
+        await window.MyTalksDB.updateBooking(advisorBookingId, {
           advisorId: booking.value,
           advisorName: advisor ? advisor.name : "",
         });
+        notifyBookingMail(
+          "advisor-changed",
+          Object.assign({}, advisorRow || {}, {
+            bookingId: advisorBookingId,
+            advisorId: booking.value,
+            advisorName: advisor ? advisor.name : "",
+          }),
+          { previousAdvisor: previousAdvisor }
+        );
         await loadAll();
         render();
         toast("Advisor changed.");

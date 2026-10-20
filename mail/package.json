@@ -1,0 +1,14 @@
+{
+  "name": "mytalk-mail",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Titan SMTP mailer for MyTalk booking emails",
+  "scripts": {
+    "test:smtp": "node test-smtp.js",
+    "send:templates": "node send-templates.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "nodemailer": "^10.1.7"
+  }
+}

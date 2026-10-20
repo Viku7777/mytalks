@@ -1134,6 +1134,9 @@
         }
         localStorage.setItem("mytalks-last-booking", JSON.stringify(booking));
         rememberPhone(Auth, sessionUser, contact.phone);
+        if (window.MyTalksMail && window.MyTalksMail.notify) {
+          window.MyTalksMail.notify("pending", booking).catch(function () {});
+        }
         trackEvent("book_session_complete", {
           advisor_id: booking.advisorId || "",
           mode: booking.mode || "",

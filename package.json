@@ -1,0 +1,9 @@
+{
+  "name": "mytalk",
+  "private": true,
+  "description": "MyTalk static site with Vercel API for Titan booking emails",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "nodemailer": "^10.1.7"
+  }
+}

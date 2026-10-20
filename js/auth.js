@@ -2,6 +2,7 @@
   var PROFILE_PREFIX = "mytalks-user-profile:";
   var AUTH_NEXT_KEY = "mytalks-auth-next";
   var SESSION_KEY = "mytalks-session";
+  var GOOGLE_REDIRECT_KEY = "mytalks-google-redirect";
   var listeners = [];
   var currentUser = null;
   var ready = false;
@@ -9,6 +10,10 @@
   var readyResolve;
   var readyPromise = new Promise(function (resolve) {
     readyResolve = resolve;
+  });
+  var redirectHandledResolve;
+  var redirectHandledPromise = new Promise(function (resolve) {
+    redirectHandledResolve = resolve;
   });
 
   function getSessionHint() {
@@ -92,11 +97,21 @@
     } catch (e) {
       /* ignore */
     }
+    // localStorage survives Google redirect better on some iPhone Safari builds
+    try {
+      localStorage.setItem(AUTH_NEXT_KEY, next);
+    } catch (e) {
+      /* ignore */
+    }
   }
 
   function readStoredAuthNext() {
     try {
-      return sessionStorage.getItem(AUTH_NEXT_KEY) || "";
+      return (
+        sessionStorage.getItem(AUTH_NEXT_KEY) ||
+        localStorage.getItem(AUTH_NEXT_KEY) ||
+        ""
+      );
     } catch (e) {
       return "";
     }
@@ -107,6 +122,36 @@
       sessionStorage.removeItem(AUTH_NEXT_KEY);
     } catch (e) {
       /* ignore */
+    }
+    try {
+      localStorage.removeItem(AUTH_NEXT_KEY);
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
+  function markGoogleRedirectPending(pending) {
+    try {
+      if (pending) {
+        sessionStorage.setItem(GOOGLE_REDIRECT_KEY, "1");
+        localStorage.setItem(GOOGLE_REDIRECT_KEY, "1");
+      } else {
+        sessionStorage.removeItem(GOOGLE_REDIRECT_KEY);
+        localStorage.removeItem(GOOGLE_REDIRECT_KEY);
+      }
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
+  function wasGoogleRedirectPending() {
+    try {
+      return !!(
+        sessionStorage.getItem(GOOGLE_REDIRECT_KEY) ||
+        localStorage.getItem(GOOGLE_REDIRECT_KEY)
+      );
+    } catch (e) {
+      return false;
     }
   }
 
@@ -204,11 +249,13 @@
         ". In Firebase Console, enable the Google provider and add this domain under Authentication → Settings → Authorized domains.",
       "auth/operation-not-supported-in-this-environment":
         "Google sign-in cannot run on this page. Open the site with http:// or https://, not as a local file.",
-      "auth/network-request-failed": "Network error. Check your connection.",
+      "auth/network-request-failed": "Network error. Check your connection and try Google again.",
       "auth/too-many-requests": "Too many attempts. Please try again later.",
       "auth/requires-recent-login": "Please sign in again to continue.",
       "auth/account-exists-with-different-credential":
         "An account already exists with this email using a different sign-in method.",
+      "auth/redirect-cancelled-by-user": "Google sign-in was cancelled. Please try again.",
+      "auth/redirect-operation-pending": "Google sign-in is already in progress.",
     };
     return map[code] || (err && err.message) || "Authentication failed.";
   }
@@ -490,8 +537,16 @@
   }
 
   function useGoogleRedirect() {
-    var ua = (typeof navigator !== "undefined" && navigator.userAgent) || "";
-    return /iPhone|iPad|iPod|Android/i.test(ua);
+    if (typeof navigator === "undefined") return true;
+    var ua = navigator.userAgent || "";
+    // Phones / classic tablets
+    if (/iPhone|iPad|iPod|Android/i.test(ua)) return true;
+    // iPadOS 13+ often reports as Macintosh with touch
+    if (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) return true;
+    // Safari popup auth is unreliable (ITP / popup blockers)
+    var isSafari = /Safari/i.test(ua) && !/Chrome|CriOS|FxiOS|EdgiOS|OPiOS|Android/i.test(ua);
+    if (isSafari) return true;
+    return false;
   }
 
   function signInWithGoogle(remember) {
@@ -503,19 +558,33 @@
     resolveAuthNext();
     return setPersistence(remember !== false).then(function () {
       if (useGoogleRedirect()) {
-        return auth.signInWithRedirect(provider);
+        markGoogleRedirectPending(true);
+        return auth.signInWithRedirect(provider).then(function () {
+          // Page will navigate to Google. Do not continue to redirectAfterAuth.
+          return { redirected: true, user: null };
+        });
       }
-      return auth.signInWithPopup(provider).then(finishGoogleCredential, function (err) {
-        var code = (err && err.code) || "";
-        if (
-          code === "auth/popup-blocked" ||
-          code === "auth/cancelled-popup-request" ||
-          code === "auth/web-storage-unsupported"
-        ) {
-          return auth.signInWithRedirect(provider);
+      return auth.signInWithPopup(provider).then(
+        function (cred) {
+          return finishGoogleCredential(cred).then(function () {
+            return { redirected: false, user: cred && cred.user ? cred.user : null };
+          });
+        },
+        function (err) {
+          var code = (err && err.code) || "";
+          if (
+            code === "auth/popup-blocked" ||
+            code === "auth/cancelled-popup-request" ||
+            code === "auth/web-storage-unsupported"
+          ) {
+            markGoogleRedirectPending(true);
+            return auth.signInWithRedirect(provider).then(function () {
+              return { redirected: true, user: null };
+            });
+          }
+          throw err;
         }
-        throw err;
-      });
+      );
     });
   }
 
@@ -599,18 +668,28 @@
     );
   }
 
+  function finishRedirectHandled() {
+    if (redirectHandledResolve) {
+      redirectHandledResolve();
+      redirectHandledResolve = null;
+    }
+  }
+
   function init() {
     if (!window.MyTalksFirebase || !window.MyTalksFirebase.auth) {
       console.warn("MyTalksAuth: Firebase not ready");
       notify(null);
+      finishRedirectHandled();
       return;
     }
 
     var auth = ensureFirebase();
 
+    var expectedRedirect = wasGoogleRedirectPending();
     auth
       .getRedirectResult()
       .then(function (result) {
+        markGoogleRedirectPending(false);
         if (result && result.user) {
           return finishGoogleCredential(result).then(function () {
             var onAuthPage =
@@ -620,16 +699,29 @@
             return result;
           });
         }
+        if (expectedRedirect && window.MyTalksUI) {
+          window.MyTalksUI.showToast(
+            "Google sign-in did not finish. Please try Continue with Google again.",
+            "error"
+          );
+        }
         return result;
       })
       .catch(function (err) {
+        markGoogleRedirectPending(false);
         if (err && err.code === "auth/account-blocked") {
           auth.signOut();
         }
         if (err && window.MyTalksUI) {
           window.MyTalksUI.showToast(authErrorMessage(err), "error");
         }
+      })
+      .finally(function () {
+        finishRedirectHandled();
       });
+
+    // Safety: never leave login UI waiting forever if redirect APIs hang
+    setTimeout(finishRedirectHandled, 8000);
 
     auth.onAuthStateChanged(function (user) {
       if (!user) {
@@ -689,9 +781,11 @@
   window.MyTalksAuth = {
     init: init,
     ready: readyPromise,
+    redirectHandled: redirectHandledPromise,
     onAuthStateChanged: onAuthStateChanged,
     getUser: getUser,
     isReady: isReady,
+    usesGoogleRedirect: useGoogleRedirect,
     signInWithEmail: signInWithEmail,
     signUpWithEmail: signUpWithEmail,
     signInWithGoogle: signInWithGoogle,

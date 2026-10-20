@@ -93,6 +93,15 @@
     if (Auth.resolveAuthNext) Auth.resolveAuthNext();
     preserveNextOnAuthLinks();
 
+    // Wait for Firebase redirect result (iPhone Google return) before deciding.
+    if (Auth.redirectHandled) {
+      try {
+        await Auth.redirectHandled;
+      } catch (redirectWaitErr) {
+        /* continue */
+      }
+    }
+
     var user = Auth.getUser();
     var onAuthPage =
       document.querySelector("[data-login-form]") ||
@@ -211,7 +220,12 @@
         var label = btn.innerHTML;
         btn.innerHTML = '<i class="fa-brands fa-google"></i> Connecting…';
         try {
-          await Auth.signInWithGoogle(true);
+          var outcome = await Auth.signInWithGoogle(true);
+          // iPhone / Safari: full-page redirect to Google. Do not navigate away here.
+          if (outcome && outcome.redirected) {
+            btn.innerHTML = '<i class="fa-brands fa-google"></i> Opening Google…';
+            return;
+          }
           if (window.MyTalksUI) window.MyTalksUI.showToast("Signed in with Google.");
           Auth.redirectAfterAuth();
         } catch (err) {

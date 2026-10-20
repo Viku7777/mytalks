@@ -31,5 +31,14 @@ All reads go through `js/data-loader.js` (`MyTalksData.getAdvisors()`, etc.). Re
 ## Theme
 
 Light/dark mode toggles with `data-theme` and persists in `localStorage` (`mytalks-theme`).
-# mytalks
-# mytalks
+
+## Email (Titan SMTP)
+
+Booking emails send through Titan (`admin@mytalk.in`).
+
+1. Follow `mail/TITAN-SETUP.md`
+2. Local SMTP test: copy `mail/.env.example` → `mail/.env`, then `cd mail && npm install && npm run test:smtp`
+3. On Vercel, set the same `SMTP_*` environment variables and redeploy
+4. Live emails fire from Book a Session (pending) and Admin (confirm / time / advisor / cancel)
+
+Never commit `mail/.env`.

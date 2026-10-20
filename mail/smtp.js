@@ -22,7 +22,7 @@ function smtpConfig() {
 
   if (!user || !pass) {
     throw new Error(
-      "Missing SMTP_USER or SMTP_PASS. Copy mail/.env.example to mail/.env and fill Titan details."
+      "Missing SMTP_USER or SMTP_PASS. On Vercel: Project → Settings → Environment Variables → add SMTP_* then Redeploy. Locally: copy mail/.env.example to mail/.env."
     );
   }
 

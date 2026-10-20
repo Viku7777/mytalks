@@ -3,9 +3,26 @@
  * Restrict use via Firebase Console → Authentication → Settings → Authorized domains.
  */
 (function () {
+  // Same-origin authDomain on live/preview (via Vercel /__/auth proxy) so
+  // Safari iPhone can finish Google redirect sign-in (ITP / 3P storage).
+  var defaultAuthDomain = "location-461df.firebaseapp.com";
+  var authDomain = defaultAuthDomain;
+  try {
+    var host = typeof location !== "undefined" ? location.hostname : "";
+    if (
+      host === "mytalk.in" ||
+      host === "www.mytalk.in" ||
+      (host && host.indexOf(".vercel.app") !== -1)
+    ) {
+      authDomain = host;
+    }
+  } catch (e) {
+    authDomain = defaultAuthDomain;
+  }
+
   var firebaseConfig = {
     apiKey: "AIzaSyBj8PA7Eq04bV3TTL2bC4XmX4a6Ob6F8YQ",
-    authDomain: "location-461df.firebaseapp.com",
+    authDomain: authDomain,
     databaseURL: "https://location-461df-default-rtdb.firebaseio.com",
     projectId: "location-461df",
     storageBucket: "location-461df.appspot.com",

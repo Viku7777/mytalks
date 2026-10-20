@@ -87,16 +87,26 @@ Optional preview to your test inbox:
 cd mail && npm run send:templates
 ```
 
-## Step 3 — Live sending on Vercel
+## Step 3 — Live sending on Vercel (required or live emails fail)
 
-1. In Vercel → Project → Settings → Environment Variables, add:
-   - `SMTP_USER`
-   - `SMTP_PASS`
-   - `SMTP_FROM_NAME` = `MyTalk Bookings`
-   - `SMTP_HOST` = `smtp.titan.email`
-   - `SMTP_PORT` = `465`
-   - `SMTP_SECURE` = `true`
-2. Deploy the site.
-3. Book a session / confirm in admin — the user receives the matching email.
+`mail/.env` is **local only** (gitignored). Production does **not** get those values until you add them in Vercel.
+
+Without this, `https://mytalk.in/api/send-booking-email` returns:
+`Missing SMTP_USER or SMTP_PASS`.
+
+1. Open Vercel → your **mytalk** project → **Settings** → **Environment Variables**.
+2. Add these for **Production** (and Preview if you want preview deploys to send mail):
+
+| Name | Value |
+| --- | --- |
+| `SMTP_USER` | `admin@mytalk.in` |
+| `SMTP_PASS` | *(same Titan password as in local `mail/.env`)* |
+| `SMTP_FROM_NAME` | `MyTalk Bookings` |
+| `SMTP_HOST` | `smtp.titan.email` |
+| `SMTP_PORT` | `465` |
+| `SMTP_SECURE` | `true` |
+
+3. **Redeploy** (Deployments → ⋮ on latest → Redeploy). Env vars apply only after a new deploy.
+4. Book a session / confirm in admin — the user should get the email.
 
 API route: `POST /api/send-booking-email`

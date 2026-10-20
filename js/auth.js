@@ -686,26 +686,72 @@
     var auth = ensureFirebase();
 
     var expectedRedirect = wasGoogleRedirectPending();
+
+    function completeGoogleRedirect(cred) {
+      markGoogleRedirectPending(false);
+      return finishGoogleCredential(cred).then(function () {
+        var onAuthPage =
+          document.querySelector("[data-login-form]") ||
+          document.querySelector("[data-register-form]");
+        if (onAuthPage) redirectAfterAuth();
+        return cred;
+      });
+    }
+
+    function waitForRedirectUser(timeoutMs) {
+      if (auth.currentUser) return Promise.resolve(auth.currentUser);
+      return new Promise(function (resolve) {
+        var settled = false;
+        var unsub = auth.onAuthStateChanged(function (user) {
+          if (settled || !user) return;
+          settled = true;
+          try {
+            unsub();
+          } catch (e) {
+            /* ignore */
+          }
+          resolve(user);
+        });
+        setTimeout(function () {
+          if (settled) return;
+          settled = true;
+          try {
+            unsub();
+          } catch (e) {
+            /* ignore */
+          }
+          resolve(auth.currentUser || null);
+        }, timeoutMs);
+      });
+    }
+
     auth
       .getRedirectResult()
       .then(function (result) {
-        markGoogleRedirectPending(false);
         if (result && result.user) {
-          return finishGoogleCredential(result).then(function () {
+          return completeGoogleRedirect(result);
+        }
+        // Safari often returns an empty redirect result even when sign-in
+        // succeeded (or is about to). Wait briefly for auth state.
+        if (!expectedRedirect) return result;
+        return waitForRedirectUser(3500).then(function (user) {
+          if (user) {
+            markGoogleRedirectPending(false);
             var onAuthPage =
               document.querySelector("[data-login-form]") ||
               document.querySelector("[data-register-form]");
             if (onAuthPage) redirectAfterAuth();
             return result;
-          });
-        }
-        if (expectedRedirect && window.MyTalksUI) {
-          window.MyTalksUI.showToast(
-            "Google sign-in did not finish. Please try Continue with Google again.",
-            "error"
-          );
-        }
-        return result;
+          }
+          markGoogleRedirectPending(false);
+          if (window.MyTalksUI) {
+            window.MyTalksUI.showToast(
+              "Google sign-in did not finish. Please try Continue with Google again.",
+              "error"
+            );
+          }
+          return result;
+        });
       })
       .catch(function (err) {
         markGoogleRedirectPending(false);
@@ -721,7 +767,7 @@
       });
 
     // Safety: never leave login UI waiting forever if redirect APIs hang
-    setTimeout(finishRedirectHandled, 8000);
+    setTimeout(finishRedirectHandled, 12000);
 
     auth.onAuthStateChanged(function (user) {
       if (!user) {

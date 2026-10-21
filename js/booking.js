@@ -1118,7 +1118,7 @@
           submitBtn.setAttribute("data-label", submitBtn.textContent);
         }
         submitBtn.innerHTML =
-          '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Confirming…';
+          '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Opening payment…';
       }
 
       trackEvent("begin_checkout", {
@@ -1128,6 +1128,39 @@
       });
 
       try {
+        if (!window.MyTalksPay || typeof window.MyTalksPay.checkout !== "function") {
+          throw new Error("Payment is not available. Refresh and try again.");
+        }
+
+        var amountPaise = Math.round(Number(total) * 100);
+        if (!Number.isFinite(amountPaise) || amountPaise < 100) {
+          throw new Error("Session total is too low to charge.");
+        }
+
+        var payment = await window.MyTalksPay.checkout({
+          amountPaise: amountPaise,
+          currency: "INR",
+          receipt: "bk_" + Date.now().toString(36),
+          description: minutes + " min session" + (advisor ? " with " + advisor.name : ""),
+          prefillName: sessionUser.displayName || "",
+          prefillEmail: contact.email || "",
+          prefillContact: contact.phone || "",
+          notes: {
+            advisorId: booking.advisorId || "",
+            date: booking.date || "",
+            time: booking.time || "",
+          },
+        });
+
+        booking.paymentStatus = "paid";
+        booking.razorpayOrderId = payment.razorpay_order_id || "";
+        booking.razorpayPaymentId = payment.razorpay_payment_id || "";
+
+        if (submitBtn) {
+          submitBtn.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Confirming…';
+        }
+
         if (window.MyTalksDB && window.MyTalksDB.createBooking) {
           var saved = await window.MyTalksDB.createBooking(booking);
           booking.bookingId = saved.bookingId || saved.id;
@@ -1137,6 +1170,11 @@
         if (window.MyTalksMail && window.MyTalksMail.notify) {
           window.MyTalksMail.notify("pending", booking).catch(function () {});
         }
+        trackEvent("purchase", {
+          transaction_id: booking.razorpayPaymentId || "",
+          currency: "INR",
+          value: total,
+        });
         trackEvent("book_session_complete", {
           advisor_id: booking.advisorId || "",
           mode: booking.mode || "",
@@ -1146,28 +1184,34 @@
         const modal = document.querySelector("[data-booking-modal]");
         if (modal) modal.classList.add("is-open");
         window.MyTalksUI.showToast(
-          "Your booking is pending. We’ll email you when your advisor confirms."
+          "Payment successful. Your booking is pending — we’ll email you when your advisor confirms."
         );
       } catch (err) {
         console.error(err);
-        try {
-          if (window.MyTalksErrors && typeof window.MyTalksErrors.report === "function") {
-            window.MyTalksErrors.report(
-              (err && err.message) || "booking_sync_failed",
-              { fatal: false, error: err }
-            );
+        var reason = (err && err.reason) || "";
+        if (reason === "dismissed") {
+          window.MyTalksUI.showToast("Payment cancelled. Your booking was not created.", "error");
+        } else if (reason === "payment_failed" || reason === "verify_failed") {
+          window.MyTalksUI.showToast(
+            (err && err.message) || "Payment failed. Please try again.",
+            "error"
+          );
+        } else {
+          try {
+            if (window.MyTalksErrors && typeof window.MyTalksErrors.report === "function") {
+              window.MyTalksErrors.report(
+                (err && err.message) || "booking_pay_failed",
+                { fatal: false, error: err }
+              );
+            }
+          } catch (reportErr) {
+            /* ignore */
           }
-        } catch (reportErr) {
-          /* ignore */
+          window.MyTalksUI.showToast(
+            (err && err.message) || "Could not complete booking. Please try again.",
+            "error"
+          );
         }
-        localStorage.setItem("mytalks-last-booking", JSON.stringify(booking));
-        rememberPhone(Auth, sessionUser, contact.phone);
-        const modal = document.querySelector("[data-booking-modal]");
-        if (modal) modal.classList.add("is-open");
-        window.MyTalksUI.showToast(
-          "Booking saved locally. Cloud sync failed — check Firebase rules.",
-          "error"
-        );
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;

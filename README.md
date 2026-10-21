@@ -32,6 +32,22 @@ All reads go through `js/data-loader.js` (`MyTalksData.getAdvisors()`, etc.). Re
 
 Light/dark mode toggles with `data-theme` and persists in `localStorage` (`mytalks-theme`).
 
+## Payments (Razorpay)
+
+Book a Session uses Razorpay Standard Checkout.
+
+1. Copy `.env.example` → `.env` and set `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET`
+2. On Vercel: Project → Settings → Environment Variables → add the same keys → Redeploy
+3. Local API testing needs Vercel Functions (static `serve.py` alone cannot create orders):
+
+```bash
+npx vercel dev
+```
+
+Then open the printed URL, book a session, and use [Razorpay test cards](https://razorpay.com/docs/payments/payments/test-card-upi-details/).
+
+API routes: `POST /api/create-order`, `POST /api/verify-payment`
+
 ## Email (Titan SMTP)
 
 Booking emails send through Titan (`admin@mytalk.in`).

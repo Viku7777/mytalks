@@ -381,6 +381,9 @@
       userId: payload.userId || null,
       total: Number(payload.total) || 0,
       status: "Pending",
+      paymentStatus: payload.paymentStatus || "",
+      razorpayOrderId: payload.razorpayOrderId || "",
+      razorpayPaymentId: payload.razorpayPaymentId || "",
       createdAt: now,
       updatedAt: now,
     };

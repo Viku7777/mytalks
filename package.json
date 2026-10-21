@@ -1,9 +1,15 @@
 {
   "name": "mytalk",
   "private": true,
-  "description": "MyTalk static site with Vercel API for Titan booking emails",
+  "description": "MyTalk static site with Vercel API for Titan booking emails and Razorpay checkout",
+  "scripts": {
+    "dev": "node local-dev.js",
+    "serve": "python3 serve.py",
+    "vercel:dev": "vercel dev"
+  },
   "dependencies": {
     "dotenv": "^16.4.7",
-    "nodemailer": "^10.1.7"
+    "nodemailer": "^10.1.7",
+    "razorpay": "^2.9.8"
   }
 }

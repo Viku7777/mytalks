@@ -820,7 +820,6 @@
     onAuthStateChanged: onAuthStateChanged,
     getUser: getUser,
     isReady: isReady,
-    usesGoogleRedirect: useGoogleRedirect,
     signInWithEmail: signInWithEmail,
     signUpWithEmail: signUpWithEmail,
     signInWithGoogle: signInWithGoogle,

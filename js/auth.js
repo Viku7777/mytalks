@@ -3,6 +3,9 @@
   var AUTH_NEXT_KEY = "mytalks-auth-next";
   var SESSION_KEY = "mytalks-session";
   var GOOGLE_REDIRECT_KEY = "mytalks-google-redirect";
+  var GOOGLE_ID_TOKEN_KEY = "mytalks-google-id-token";
+  var GOOGLE_ID_TOKEN_NEXT_KEY = "mytalks-google-id-token-next";
+  var GOOGLE_OAUTH_ERR_KEY = "mytalks-google-oauth-error";
   var listeners = [];
   var currentUser = null;
   var ready = false;
@@ -573,43 +576,42 @@
     });
   }
 
-  function loadGoogleIdentityServices() {
-    if (
-      typeof window !== "undefined" &&
-      window.google &&
-      window.google.accounts &&
-      window.google.accounts.oauth2
-    ) {
-      return Promise.resolve();
+  function takeStoredGoogleIdToken() {
+    var token = "";
+    try {
+      token =
+        sessionStorage.getItem(GOOGLE_ID_TOKEN_KEY) ||
+        localStorage.getItem(GOOGLE_ID_TOKEN_KEY) ||
+        "";
+      sessionStorage.removeItem(GOOGLE_ID_TOKEN_KEY);
+      localStorage.removeItem(GOOGLE_ID_TOKEN_KEY);
+      sessionStorage.removeItem(GOOGLE_ID_TOKEN_NEXT_KEY);
+      localStorage.removeItem(GOOGLE_ID_TOKEN_NEXT_KEY);
+    } catch (e) {
+      token = "";
     }
-    return new Promise(function (resolve, reject) {
-      var existing = document.querySelector('script[data-mytalks-gis="1"]');
-      if (existing) {
-        existing.addEventListener("load", function () {
-          resolve();
-        });
-        existing.addEventListener("error", function () {
-          reject(new Error("gis-script-failed"));
-        });
-        return;
-      }
-      var script = document.createElement("script");
-      script.src = "https://accounts.google.com/gsi/client";
-      script.async = true;
-      script.defer = true;
-      script.setAttribute("data-mytalks-gis", "1");
-      script.onload = function () {
-        resolve();
-      };
-      script.onerror = function () {
-        reject(new Error("gis-script-failed"));
-      };
-      document.head.appendChild(script);
-    });
+    return token;
   }
 
-  /** iOS: Google Identity Services access token → Firebase credential (no redirect storage). */
-  function signInWithGoogleGis(auth) {
+  function takeGoogleOAuthError() {
+    try {
+      var err =
+        sessionStorage.getItem(GOOGLE_OAUTH_ERR_KEY) ||
+        localStorage.getItem(GOOGLE_OAUTH_ERR_KEY) ||
+        "";
+      sessionStorage.removeItem(GOOGLE_OAUTH_ERR_KEY);
+      localStorage.removeItem(GOOGLE_OAUTH_ERR_KEY);
+      return err;
+    } catch (e) {
+      return "";
+    }
+  }
+
+  /**
+   * iOS: full-page Google OAuth (id_token in hash) → our callback page →
+   * signInWithCredential. Avoids Safari popup + Firebase redirect storage.
+   */
+  function signInWithGoogleIdTokenRedirect() {
     var clientId =
       (window.MyTalksFirebase && window.MyTalksFirebase.googleClientId) || "";
     if (!clientId) {
@@ -619,117 +621,51 @@
         })
       );
     }
-    return loadGoogleIdentityServices().then(function () {
-      return new Promise(function (resolve, reject) {
-        // #region agent log
-        __dbg73({
-            sessionId: "73d7f6",
-            runId: "post-fix-3",
-            hypothesisId: "H",
-            location: "auth.js:signInWithGoogleGis:start",
-            message: "Starting GIS token client",
-            data: { hasClientId: !!clientId },
-            timestamp: Date.now(),
-          });
-        // #endregion
-        try {
-          var client = window.google.accounts.oauth2.initTokenClient({
-            client_id: clientId,
-            scope: "openid email profile",
-            prompt: "select_account",
-            callback: function (tokenResponse) {
-              if (!tokenResponse || tokenResponse.error || !tokenResponse.access_token) {
-                // #region agent log
-                __dbg73({
-                    sessionId: "73d7f6",
-                    runId: "post-fix-3",
-                    hypothesisId: "H",
-                    location: "auth.js:signInWithGoogleGis:tokenError",
-                    message: "GIS token response error",
-                    data: {
-                      error: (tokenResponse && tokenResponse.error) || "no-token",
-                    },
-                    timestamp: Date.now(),
-                  });
-                // #endregion
-                reject(
-                  Object.assign(
-                    new Error(
-                      (tokenResponse && tokenResponse.error) || "gis-token-error"
-                    ),
-                    { code: "auth/gis-token-error" }
-                  )
-                );
-                return;
-              }
-              var credential = firebase.auth.GoogleAuthProvider.credential(
-                null,
-                tokenResponse.access_token
-              );
-              auth
-                .signInWithCredential(credential)
-                .then(function (cred) {
-                  // #region agent log
-                  __dbg73({
-                      sessionId: "73d7f6",
-                      runId: "post-fix-3",
-                      hypothesisId: "H",
-                      location: "auth.js:signInWithGoogleGis:success",
-                      message: "GIS → Firebase credential succeeded",
-                      data: {
-                        hasUser: !!(cred && cred.user),
-                        uidLen:
-                          cred && cred.user && cred.user.uid
-                            ? String(cred.user.uid).length
-                            : 0,
-                      },
-                      timestamp: Date.now(),
-                    });
-                  // #endregion
-                  return finishGoogleCredential(cred).then(function () {
-                    return {
-                      redirected: false,
-                      user: cred && cred.user ? cred.user : null,
-                    };
-                  });
-                })
-                .then(resolve)
-                .catch(reject);
-            },
-            error_callback: function (err) {
-              var typ = (err && err.type) || "";
-              // #region agent log
-              __dbg73({
-                  sessionId: "73d7f6",
-                  runId: "post-fix-3",
-                  hypothesisId: "H",
-                  location: "auth.js:signInWithGoogleGis:error",
-                  message: "GIS token client error_callback",
-                  data: {
-                    type: typ,
-                    errMsg: String((err && err.message) || err || "").slice(0, 160),
-                  },
-                  timestamp: Date.now(),
-                });
-              // #endregion
-              reject(
-                Object.assign(new Error((err && err.message) || typ || "gis-error"), {
-                  code:
-                    typ === "popup_closed"
-                      ? "auth/popup-closed-by-user"
-                      : typ === "popup_failed_to_open"
-                        ? "auth/popup-blocked"
-                        : "auth/gis-error",
-                })
-              );
-            },
-          });
-          client.requestAccessToken();
-        } catch (e) {
-          reject(e);
-        }
+    var origin =
+      typeof location !== "undefined" ? String(location.origin || "") : "";
+    var redirectUri = origin + "/pages/google-callback";
+    var returnTo =
+      typeof location !== "undefined"
+        ? String(location.pathname || "/pages/login") +
+          String(location.search || "")
+        : "/pages/login";
+    if (returnTo.indexOf("/pages/login") !== 0 && returnTo.indexOf("/pages/register") !== 0) {
+      returnTo = "/pages/login";
+    }
+    var nonce =
+      Math.random().toString(36).slice(2) +
+      Date.now().toString(36) +
+      Math.random().toString(36).slice(2);
+    // #region agent log
+    __dbg73({
+        sessionId: "73d7f6",
+        runId: "post-fix-4",
+        hypothesisId: "I",
+        location: "auth.js:signInWithGoogleIdTokenRedirect",
+        message: "iOS: full-page Google id_token redirect",
+        data: { redirectUri: redirectUri, returnTo: returnTo },
+        timestamp: Date.now(),
       });
+    // #endregion
+    try {
+      sessionStorage.setItem(GOOGLE_ID_TOKEN_NEXT_KEY, returnTo);
+      localStorage.setItem(GOOGLE_ID_TOKEN_NEXT_KEY, returnTo);
+    } catch (e) {
+      /* ignore */
+    }
+    markGoogleRedirectPending(true);
+    var params = new URLSearchParams({
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      response_type: "id_token",
+      scope: "openid email profile",
+      nonce: nonce,
+      prompt: "select_account",
     });
+    location.assign(
+      "https://accounts.google.com/o/oauth2/v2/auth?" + params.toString()
+    );
+    return Promise.resolve({ redirected: true, user: null });
   }
 
   function signInWithGoogle(remember) {
@@ -746,8 +682,8 @@
     var _isSafari = /Safari/i.test(_ua) && !/CriOS|FxiOS|EdgiOS|Chrome|Android/i.test(_ua);
     __dbg73({
         sessionId: "73d7f6",
-        runId: "post-fix-3",
-        hypothesisId: "H",
+        runId: "post-fix-4",
+        hypothesisId: "I",
         location: "auth.js:signInWithGoogle:entry",
         message: "Google sign-in started",
         data: {
@@ -765,7 +701,7 @@
       // #region agent log
       __dbg73({
           sessionId: "73d7f6",
-          runId: "post-fix-3",
+          runId: "post-fix-4",
           hypothesisId: "F",
           location: "auth.js:redirectSignIn",
           message: "Using signInWithRedirect",
@@ -783,7 +719,7 @@
           // #region agent log
           __dbg73({
               sessionId: "73d7f6",
-              runId: "post-fix-3",
+              runId: "post-fix-4",
               hypothesisId: "G",
               location: "auth.js:signInWithRedirect:error",
               message: "signInWithRedirect failed",
@@ -806,42 +742,10 @@
     }
 
     return setPersistence(remember !== false).then(function () {
-      // iPhone/iPad: GIS credential flow (Firebase Option 5). Redirect is a
-      // fallback — Safari often returns empty getRedirectResult after OAuth.
+      // iPhone/iPad: full-page Google id_token OAuth (no popup / no Firebase
+      // redirect storage). Requires Google redirect URI google-callback.
       if (_isiOS) {
-        // #region agent log
-        __dbg73({
-            sessionId: "73d7f6",
-            runId: "post-fix-3",
-            hypothesisId: "H",
-            location: "auth.js:signInWithGoogle:iosGis",
-            message: "iOS: trying GIS credential sign-in",
-            data: { isiOS: true, isSafari: _isSafari },
-            timestamp: Date.now(),
-          });
-        // #endregion
-        return signInWithGoogleGis(auth).then(
-          function (outcome) {
-            return outcome;
-          },
-          function (gisErr) {
-            // #region agent log
-            __dbg73({
-                sessionId: "73d7f6",
-                runId: "post-fix-3",
-                hypothesisId: "H",
-                location: "auth.js:signInWithGoogle:iosGisFallback",
-                message: "GIS failed; falling back to redirect",
-                data: {
-                  code: (gisErr && gisErr.code) || "",
-                  errMsg: String((gisErr && gisErr.message) || "").slice(0, 160),
-                },
-                timestamp: Date.now(),
-              });
-            // #endregion
-            return redirectSignIn();
-          }
-        );
+        return signInWithGoogleIdTokenRedirect();
       }
 
       // Desktop: prefer popup; fall back to redirect if blocked.
@@ -998,16 +902,20 @@
     var auth = ensureFirebase();
 
     var expectedRedirect = wasGoogleRedirectPending();
+    var storedIdToken = takeStoredGoogleIdToken();
+    var oauthReturnErr = takeGoogleOAuthError();
     // #region agent log
     var _uaInit = String((typeof navigator !== "undefined" && navigator.userAgent) || "");
     __dbg73({
         sessionId: "73d7f6",
-        runId: "pre-fix",
-        hypothesisId: "B",
+        runId: "post-fix-4",
+        hypothesisId: "I",
         location: "auth.js:init:redirectCheck",
         message: "Auth init redirect pending check",
         data: {
           expectedRedirect: !!expectedRedirect,
+          hasStoredIdToken: !!storedIdToken,
+          oauthReturnErr: String(oauthReturnErr || "").slice(0, 80),
           hasCurrentUser: !!auth.currentUser,
           path: typeof location !== "undefined" ? String(location.pathname || "") : "",
           host: typeof location !== "undefined" ? String(location.host || "") : "",
@@ -1080,103 +988,170 @@
       });
     }
 
-    auth
-      .getRedirectResult()
-      .then(function (result) {
-        // #region agent log
-        __dbg73({
-            sessionId: "73d7f6",
-            runId: "post-fix-2",
-            hypothesisId: "F",
-            location: "auth.js:getRedirectResult:then",
-            message: "getRedirectResult resolved",
-            data: {
-              expectedRedirect: !!expectedRedirect,
-              hasResultUser: !!(result && result.user),
-              hasCurrentUser: !!auth.currentUser,
-              operationType: (result && result.operationType) || "",
-              authDomain:
-                (window.MyTalksFirebase &&
-                  window.MyTalksFirebase.config &&
-                  window.MyTalksFirebase.config.authDomain) ||
-                "",
-              href: typeof location !== "undefined" ? String(location.href || "").slice(0, 180) : "",
-              search: typeof location !== "undefined" ? String(location.search || "").slice(0, 120) : "",
-            },
-            timestamp: Date.now(),
-          });
-        // #endregion
-        if (result && result.user) {
-          return completeGoogleRedirect(result);
-        }
-        // Safari often returns an empty redirect result even when sign-in
-        // succeeded (or is about to). Wait briefly for auth state.
-        if (!expectedRedirect) return result;
-        return waitForRedirectUser(3500).then(function (user) {
+    // iOS id_token return path (from /pages/google-callback).
+    if (storedIdToken) {
+      // #region agent log
+      __dbg73({
+          sessionId: "73d7f6",
+          runId: "post-fix-4",
+          hypothesisId: "I",
+          location: "auth.js:init:idToken",
+          message: "Consuming stored Google id_token",
+          data: { tokenLen: String(storedIdToken).length },
+          timestamp: Date.now(),
+        });
+      // #endregion
+      var idCred = firebase.auth.GoogleAuthProvider.credential(storedIdToken);
+      auth
+        .signInWithCredential(idCred)
+        .then(function (cred) {
           // #region agent log
           __dbg73({
               sessionId: "73d7f6",
-              runId: "post-fix-2",
-              hypothesisId: "F",
-              location: "auth.js:waitForRedirectUser:done",
-              message: "waitForRedirectUser finished",
+              runId: "post-fix-4",
+              hypothesisId: "I",
+              location: "auth.js:init:idToken:success",
+              message: "id_token signInWithCredential succeeded",
+              data: { hasUser: !!(cred && cred.user) },
+              timestamp: Date.now(),
+            });
+          // #endregion
+          return completeGoogleRedirect(cred);
+        })
+        .catch(function (err) {
+          // #region agent log
+          __dbg73({
+              sessionId: "73d7f6",
+              runId: "post-fix-4",
+              hypothesisId: "I",
+              location: "auth.js:init:idToken:error",
+              message: "id_token signInWithCredential failed",
               data: {
-                hasUser: !!user,
-                expectedRedirect: true,
+                code: (err && err.code) || "",
+                errMsg: String((err && err.message) || "").slice(0, 180),
+              },
+              timestamp: Date.now(),
+            });
+          // #endregion
+          markGoogleRedirectPending(false);
+          if (err && err.code === "auth/account-blocked") {
+            auth.signOut();
+          }
+          if (window.MyTalksUI) {
+            window.MyTalksUI.showToast(authErrorMessage(err), "error");
+          }
+        })
+        .finally(function () {
+          finishRedirectHandled();
+        });
+    } else if (oauthReturnErr) {
+      markGoogleRedirectPending(false);
+      if (window.MyTalksUI) {
+        window.MyTalksUI.showToast(
+          "Google sign-in was cancelled or failed. Please try again.",
+          "error"
+        );
+      }
+      finishRedirectHandled();
+    } else {
+      auth
+        .getRedirectResult()
+        .then(function (result) {
+          // #region agent log
+          __dbg73({
+              sessionId: "73d7f6",
+              runId: "post-fix-4",
+              hypothesisId: "F",
+              location: "auth.js:getRedirectResult:then",
+              message: "getRedirectResult resolved",
+              data: {
+                expectedRedirect: !!expectedRedirect,
+                hasResultUser: !!(result && result.user),
+                hasCurrentUser: !!auth.currentUser,
+                operationType: (result && result.operationType) || "",
                 authDomain:
                   (window.MyTalksFirebase &&
                     window.MyTalksFirebase.config &&
                     window.MyTalksFirebase.config.authDomain) ||
                   "",
+                href: typeof location !== "undefined" ? String(location.href || "").slice(0, 180) : "",
+                search: typeof location !== "undefined" ? String(location.search || "").slice(0, 120) : "",
               },
               timestamp: Date.now(),
             });
           // #endregion
-          if (user) {
+          if (result && result.user) {
+            return completeGoogleRedirect(result);
+          }
+          // Safari often returns an empty redirect result even when sign-in
+          // succeeded (or is about to). Wait briefly for auth state.
+          if (!expectedRedirect) return result;
+          return waitForRedirectUser(3500).then(function (user) {
+            // #region agent log
+            __dbg73({
+                sessionId: "73d7f6",
+                runId: "post-fix-4",
+                hypothesisId: "F",
+                location: "auth.js:waitForRedirectUser:done",
+                message: "waitForRedirectUser finished",
+                data: {
+                  hasUser: !!user,
+                  expectedRedirect: true,
+                  authDomain:
+                    (window.MyTalksFirebase &&
+                      window.MyTalksFirebase.config &&
+                      window.MyTalksFirebase.config.authDomain) ||
+                    "",
+                },
+                timestamp: Date.now(),
+              });
+            // #endregion
+            if (user) {
+              markGoogleRedirectPending(false);
+              var onAuthPage =
+                document.querySelector("[data-login-form]") ||
+                document.querySelector("[data-register-form]");
+              if (onAuthPage) redirectAfterAuth();
+              return result;
+            }
             markGoogleRedirectPending(false);
-            var onAuthPage =
-              document.querySelector("[data-login-form]") ||
-              document.querySelector("[data-register-form]");
-            if (onAuthPage) redirectAfterAuth();
+            if (window.MyTalksUI) {
+              window.MyTalksUI.showToast(
+                "Google sign-in did not finish. Please try Continue with Google again.",
+                "error"
+              );
+            }
             return result;
-          }
-          markGoogleRedirectPending(false);
-          if (window.MyTalksUI) {
-            window.MyTalksUI.showToast(
-              "Google sign-in did not finish. Please try Continue with Google again.",
-              "error"
-            );
-          }
-          return result;
-        });
-      })
-      .catch(function (err) {
-        // #region agent log
-        __dbg73({
-            sessionId: "73d7f6",
-            runId: "pre-fix",
-            hypothesisId: "D",
-            location: "auth.js:getRedirectResult:catch",
-            message: "getRedirectResult failed",
-            data: {
-              code: (err && err.code) || "",
-              errMsg: String((err && err.message) || "").slice(0, 180),
-              expectedRedirect: !!expectedRedirect,
-            },
-            timestamp: Date.now(),
           });
-        // #endregion
-        markGoogleRedirectPending(false);
-        if (err && err.code === "auth/account-blocked") {
-          auth.signOut();
-        }
-        if (err && window.MyTalksUI) {
-          window.MyTalksUI.showToast(authErrorMessage(err), "error");
-        }
-      })
-      .finally(function () {
-        finishRedirectHandled();
-      });
+        })
+        .catch(function (err) {
+          // #region agent log
+          __dbg73({
+              sessionId: "73d7f6",
+              runId: "post-fix-4",
+              hypothesisId: "D",
+              location: "auth.js:getRedirectResult:catch",
+              message: "getRedirectResult failed",
+              data: {
+                code: (err && err.code) || "",
+                errMsg: String((err && err.message) || "").slice(0, 180),
+                expectedRedirect: !!expectedRedirect,
+              },
+              timestamp: Date.now(),
+            });
+          // #endregion
+          markGoogleRedirectPending(false);
+          if (err && err.code === "auth/account-blocked") {
+            auth.signOut();
+          }
+          if (err && window.MyTalksUI) {
+            window.MyTalksUI.showToast(authErrorMessage(err), "error");
+          }
+        })
+        .finally(function () {
+          finishRedirectHandled();
+        });
+    }
 
     // Safety: never leave login UI waiting forever if redirect APIs hang
     setTimeout(finishRedirectHandled, 12000);

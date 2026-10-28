@@ -46,7 +46,16 @@ npx vercel dev
 
 Then open the printed URL, book a session, and use [Razorpay test cards](https://razorpay.com/docs/payments/payments/test-card-upi-details/).
 
-API routes: `POST /api/create-order`, `POST /api/verify-payment`
+API routes: `POST /api/create-order`, `POST /api/verify-payment`, `POST /api/razorpay-webhook`
+
+### Razorpay webhook
+
+1. Deploy so `https://mytalk.in/api/razorpay-webhook` is live
+2. [Razorpay Dashboard → Webhooks](https://dashboard.razorpay.com/app/webhooks) → **+ Create Webhook**
+3. URL: `https://mytalk.in/api/razorpay-webhook`
+4. Secret: generate/copy → set as `RAZORPAY_WEBHOOK_SECRET` in Vercel (and local `.env`) → Redeploy
+5. Enable events: `payment.captured`, `payment.failed`, `order.paid`
+6. Active = on → Save. Use **Send test webhook** to confirm `ok: true`
 
 ## Email (Titan SMTP)
 

@@ -16,6 +16,7 @@ const HOST = "127.0.0.1";
 const API = {
   "/api/create-order": require("./api/create-order"),
   "/api/verify-payment": require("./api/verify-payment"),
+  "/api/razorpay-webhook": require("./api/razorpay-webhook"),
   "/api/send-booking-email": require("./api/send-booking-email"),
   "/api/debug-ingest": require("./api/debug-ingest"),
 };
@@ -155,6 +156,8 @@ const server = http.createServer(async function (req, res) {
 
 server.listen(PORT, HOST, function () {
   console.log("MyTalk local (static + API) at http://" + HOST + ":" + PORT + "/");
-  console.log("APIs: /api/create-order, /api/verify-payment, /api/send-booking-email");
+  console.log(
+    "APIs: /api/create-order, /api/verify-payment, /api/razorpay-webhook, /api/send-booking-email"
+  );
   console.log("Press Ctrl+C to stop.");
 });

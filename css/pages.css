@@ -2034,3 +2034,53 @@ tr.is-saving {
   padding-top: var(--space-8);
   border-top: 1px solid var(--color-border);
 }
+
+/* Full-screen Google sign-in (redirect / return) */
+.auth-google-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 1.5rem;
+  background: #000;
+  color: #fff;
+  text-align: center;
+}
+
+.auth-google-loading[hidden] {
+  display: none !important;
+}
+
+.auth-google-loading__spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid rgba(255, 255, 255, 0.22);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: auth-google-spin 0.75s linear infinite;
+}
+
+.auth-google-loading__text {
+  margin: 0;
+  font-family: var(--font-display, Poppins, sans-serif);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+@keyframes auth-google-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+html.auth-google-loading-active,
+html.auth-google-loading-active body {
+  overflow: hidden;
+}

@@ -80,6 +80,76 @@
     showFormError(form, "");
   }
 
+  var GOOGLE_REDIRECT_KEY = "mytalks-google-redirect";
+
+  function isGoogleRedirectPending() {
+    try {
+      return !!(
+        sessionStorage.getItem(GOOGLE_REDIRECT_KEY) ||
+        localStorage.getItem(GOOGLE_REDIRECT_KEY)
+      );
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function ensureGoogleAuthLoading() {
+    var el = document.querySelector("[data-google-auth-loading]");
+    if (el) return el;
+    el = document.createElement("div");
+    el.className = "auth-google-loading";
+    el.setAttribute("data-google-auth-loading", "1");
+    el.setAttribute("role", "status");
+    el.setAttribute("aria-live", "polite");
+    el.setAttribute("aria-busy", "true");
+    el.innerHTML =
+      '<div class="auth-google-loading__spinner" aria-hidden="true"></div>' +
+      '<p class="auth-google-loading__text">Signing you in…</p>';
+    (document.body || document.documentElement).appendChild(el);
+    return el;
+  }
+
+  function showGoogleAuthLoading(text) {
+    var el = ensureGoogleAuthLoading();
+    var label = el.querySelector(".auth-google-loading__text");
+    if (label) label.textContent = text || "Signing you in…";
+    el.hidden = false;
+    el.setAttribute("aria-busy", "true");
+    try {
+      document.documentElement.classList.add("auth-google-loading-active");
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
+  function hideGoogleAuthLoading() {
+    var el = document.querySelector("[data-google-auth-loading]");
+    if (el) {
+      el.hidden = true;
+      el.setAttribute("aria-busy", "false");
+    }
+    try {
+      document.documentElement.classList.remove("auth-google-loading-active");
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
+  // Return from Google redirect: paint full-screen loader before auth finishes.
+  if (isGoogleRedirectPending()) {
+    if (document.body) {
+      showGoogleAuthLoading("Signing you in…");
+    } else {
+      document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+          showGoogleAuthLoading("Signing you in…");
+        },
+        { once: true }
+      );
+    }
+  }
+
   function preserveNextOnAuthLinks() {
     var params = new URLSearchParams(window.location.search);
     var next = params.get("next");
@@ -125,6 +195,9 @@
     preserveNextOnAuthLinks();
 
     // Wait for Firebase redirect result (iPhone Google return) before deciding.
+    if (isGoogleRedirectPending()) {
+      showGoogleAuthLoading("Signing you in…");
+    }
     if (Auth.redirectHandled) {
       try {
         await Auth.redirectHandled;
@@ -138,9 +211,11 @@
       document.querySelector("[data-login-form]") ||
       document.querySelector("[data-register-form]");
     if (user && onAuthPage) {
+      showGoogleAuthLoading("Signing you in…");
       Auth.redirectAfterAuth();
       return;
     }
+    hideGoogleAuthLoading();
 
     var login = document.querySelector("[data-login-form]");
     var register = document.querySelector("[data-register-form]");
@@ -249,7 +324,7 @@
         }
         btn.disabled = true;
         var label = btn.innerHTML;
-        btn.innerHTML = '<i class="fa-brands fa-google"></i> Connecting…';
+        showGoogleAuthLoading("Connecting to Google…");
         try {
           var outcome = await Auth.signInWithGoogle(true);
           // #region agent log
@@ -266,11 +341,12 @@
               timestamp: Date.now(),
             });
           // #endregion
-          // iPhone / Safari: full-page redirect to Google. Do not navigate away here.
+          // iPhone / Safari: full-page redirect to Google. Keep overlay until leave.
           if (outcome && outcome.redirected) {
-            btn.innerHTML = '<i class="fa-brands fa-google"></i> Opening Google…';
+            showGoogleAuthLoading("Opening Google…");
             return;
           }
+          showGoogleAuthLoading("Signing you in…");
           if (window.MyTalksUI) window.MyTalksUI.showToast("Signed in with Google.");
           Auth.redirectAfterAuth();
         } catch (err) {
@@ -288,6 +364,7 @@
               timestamp: Date.now(),
             });
           // #endregion
+          hideGoogleAuthLoading();
           if (
             err.code !== "auth/popup-closed-by-user" &&
             err.code !== "auth/cancelled-popup-request"

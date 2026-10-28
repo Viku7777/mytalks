@@ -16,6 +16,43 @@
     redirectHandledResolve = resolve;
   });
 
+  // #region agent log
+  function __dbg73(payload) {
+    try {
+      var rows = [];
+      try {
+        rows = JSON.parse(localStorage.getItem("mytalks-dbg-73d7f6") || "[]");
+      } catch (e) {
+        rows = [];
+      }
+      if (!Array.isArray(rows)) rows = [];
+      rows.push(payload);
+      if (rows.length > 40) rows = rows.slice(-40);
+      localStorage.setItem("mytalks-dbg-73d7f6", JSON.stringify(rows));
+    } catch (e) {}
+    try {
+      fetch("/api/debug-ingest", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Debug-Session-Id": "73d7f6",
+        },
+        body: JSON.stringify(payload),
+      }).catch(function () {});
+    } catch (e) {}
+    try {
+      fetch("http://127.0.0.1:7936/ingest/1fcfce45-4f72-4d34-a1ed-ba61bcd3164f", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Debug-Session-Id": "73d7f6",
+        },
+        body: JSON.stringify(payload),
+      }).catch(function () {});
+    } catch (e) {}
+  }
+  // #endregion
+
   function getSessionHint() {
     try {
       return JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
@@ -544,7 +581,39 @@
     provider.setCustomParameters({ prompt: "select_account" });
     resolveAuthNext();
 
+    // #region agent log
+    var _ua = String((typeof navigator !== "undefined" && navigator.userAgent) || "");
+    var _isiOS = /iPhone|iPad|iPod/i.test(_ua) || (/Macintosh/i.test(_ua) && typeof document !== "undefined" && "ontouchend" in document);
+    var _isSafari = /Safari/i.test(_ua) && !/CriOS|FxiOS|EdgiOS|Chrome|Android/i.test(_ua);
+    __dbg73({
+        sessionId: "73d7f6",
+        runId: "pre-fix",
+        hypothesisId: "A",
+        location: "auth.js:signInWithGoogle:entry",
+        message: "Google sign-in started",
+        data: {
+          isiOS: _isiOS,
+          isSafari: _isSafari,
+          host: typeof location !== "undefined" ? location.host : "",
+          authDomain: (window.MyTalksFirebase && window.MyTalksFirebase.config && window.MyTalksFirebase.config.authDomain) || "",
+          ua: _ua.slice(0, 180),
+        },
+        timestamp: Date.now(),
+      });
+    // #endregion
+
     function redirectSignIn() {
+      // #region agent log
+      __dbg73({
+          sessionId: "73d7f6",
+          runId: "pre-fix",
+          hypothesisId: "A",
+          location: "auth.js:redirectSignIn",
+          message: "Falling back to signInWithRedirect",
+          data: { isiOS: _isiOS },
+          timestamp: Date.now(),
+        });
+      // #endregion
       markGoogleRedirectPending(true);
       return auth.signInWithRedirect(provider).then(function () {
         // Page will navigate to Google. Do not continue to redirectAfterAuth.
@@ -557,18 +626,49 @@
       // to full-page redirect if the popup is blocked (common on some phones).
       return auth.signInWithPopup(provider).then(
         function (cred) {
+          // #region agent log
+          __dbg73({
+              sessionId: "73d7f6",
+              runId: "pre-fix",
+              hypothesisId: "A",
+              location: "auth.js:signInWithPopup:success",
+              message: "Popup Google sign-in succeeded",
+              data: {
+                isiOS: _isiOS,
+                hasUser: !!(cred && cred.user),
+                uidLen: cred && cred.user && cred.user.uid ? String(cred.user.uid).length : 0,
+              },
+              timestamp: Date.now(),
+            });
+          // #endregion
           return finishGoogleCredential(cred).then(function () {
             return { redirected: false, user: cred && cred.user ? cred.user : null };
           });
         },
         function (err) {
           var code = (err && err.code) || "";
-          if (
+          var willRedirect =
             code === "auth/popup-blocked" ||
             code === "auth/cancelled-popup-request" ||
             code === "auth/web-storage-unsupported" ||
-            code === "auth/operation-not-supported-in-this-environment"
-          ) {
+            code === "auth/operation-not-supported-in-this-environment";
+          // #region agent log
+          __dbg73({
+              sessionId: "73d7f6",
+              runId: "pre-fix",
+              hypothesisId: "A",
+              location: "auth.js:signInWithPopup:error",
+              message: "Popup Google sign-in failed",
+              data: {
+                isiOS: _isiOS,
+                code: code,
+                willRedirect: willRedirect,
+                errMsg: String((err && err.message) || "").slice(0, 160),
+              },
+              timestamp: Date.now(),
+            });
+          // #endregion
+          if (willRedirect) {
             return redirectSignIn();
           }
           throw err;
@@ -675,8 +775,51 @@
     var auth = ensureFirebase();
 
     var expectedRedirect = wasGoogleRedirectPending();
+    // #region agent log
+    var _uaInit = String((typeof navigator !== "undefined" && navigator.userAgent) || "");
+    __dbg73({
+        sessionId: "73d7f6",
+        runId: "pre-fix",
+        hypothesisId: "B",
+        location: "auth.js:init:redirectCheck",
+        message: "Auth init redirect pending check",
+        data: {
+          expectedRedirect: !!expectedRedirect,
+          hasCurrentUser: !!auth.currentUser,
+          path: typeof location !== "undefined" ? String(location.pathname || "") : "",
+          host: typeof location !== "undefined" ? String(location.host || "") : "",
+          isiOS: /iPhone|iPad|iPod/i.test(_uaInit),
+          sessionFlag: (function () {
+            try {
+              return sessionStorage.getItem(GOOGLE_REDIRECT_KEY) || "";
+            } catch (e) {
+              return "err";
+            }
+          })(),
+          localFlag: (function () {
+            try {
+              return localStorage.getItem(GOOGLE_REDIRECT_KEY) || "";
+            } catch (e) {
+              return "err";
+            }
+          })(),
+        },
+        timestamp: Date.now(),
+      });
+    // #endregion
 
     function completeGoogleRedirect(cred) {
+      // #region agent log
+      __dbg73({
+          sessionId: "73d7f6",
+          runId: "pre-fix",
+          hypothesisId: "C",
+          location: "auth.js:completeGoogleRedirect",
+          message: "Completing Google redirect credential",
+          data: { hasUser: !!(cred && cred.user) },
+          timestamp: Date.now(),
+        });
+      // #endregion
       markGoogleRedirectPending(false);
       return finishGoogleCredential(cred).then(function () {
         var onAuthPage =
@@ -717,6 +860,22 @@
     auth
       .getRedirectResult()
       .then(function (result) {
+        // #region agent log
+        __dbg73({
+            sessionId: "73d7f6",
+            runId: "pre-fix",
+            hypothesisId: "B",
+            location: "auth.js:getRedirectResult:then",
+            message: "getRedirectResult resolved",
+            data: {
+              expectedRedirect: !!expectedRedirect,
+              hasResultUser: !!(result && result.user),
+              hasCurrentUser: !!auth.currentUser,
+              operationType: (result && result.operationType) || "",
+            },
+            timestamp: Date.now(),
+          });
+        // #endregion
         if (result && result.user) {
           return completeGoogleRedirect(result);
         }
@@ -724,6 +883,17 @@
         // succeeded (or is about to). Wait briefly for auth state.
         if (!expectedRedirect) return result;
         return waitForRedirectUser(3500).then(function (user) {
+          // #region agent log
+          __dbg73({
+              sessionId: "73d7f6",
+              runId: "pre-fix",
+              hypothesisId: "C",
+              location: "auth.js:waitForRedirectUser:done",
+              message: "waitForRedirectUser finished",
+              data: { hasUser: !!user, expectedRedirect: true },
+              timestamp: Date.now(),
+            });
+          // #endregion
           if (user) {
             markGoogleRedirectPending(false);
             var onAuthPage =
@@ -743,6 +913,21 @@
         });
       })
       .catch(function (err) {
+        // #region agent log
+        __dbg73({
+            sessionId: "73d7f6",
+            runId: "pre-fix",
+            hypothesisId: "D",
+            location: "auth.js:getRedirectResult:catch",
+            message: "getRedirectResult failed",
+            data: {
+              code: (err && err.code) || "",
+              errMsg: String((err && err.message) || "").slice(0, 180),
+              expectedRedirect: !!expectedRedirect,
+            },
+            timestamp: Date.now(),
+          });
+        // #endregion
         markGoogleRedirectPending(false);
         if (err && err.code === "auth/account-blocked") {
           auth.signOut();

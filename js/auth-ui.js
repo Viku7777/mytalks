@@ -1,4 +1,35 @@
 (function () {
+  // #region agent log
+  function __dbg73(payload) {
+    try {
+      var rows = [];
+      try {
+        rows = JSON.parse(localStorage.getItem("mytalks-dbg-73d7f6") || "[]");
+      } catch (e) {
+        rows = [];
+      }
+      if (!Array.isArray(rows)) rows = [];
+      rows.push(payload);
+      if (rows.length > 40) rows = rows.slice(-40);
+      localStorage.setItem("mytalks-dbg-73d7f6", JSON.stringify(rows));
+    } catch (e) {}
+    try {
+      fetch("/api/debug-ingest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "73d7f6" },
+        body: JSON.stringify(payload),
+      }).catch(function () {});
+    } catch (e) {}
+    try {
+      fetch("http://127.0.0.1:7936/ingest/1fcfce45-4f72-4d34-a1ed-ba61bcd3164f", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "73d7f6" },
+        body: JSON.stringify(payload),
+      }).catch(function () {});
+    } catch (e) {}
+  }
+  // #endregion
+
   function waitForAuth() {
     if (window.MyTalksAuth && window.MyTalksAuth.ready) {
       return window.MyTalksAuth.ready.then(function () {
@@ -221,6 +252,20 @@
         btn.innerHTML = '<i class="fa-brands fa-google"></i> Connecting…';
         try {
           var outcome = await Auth.signInWithGoogle(true);
+          // #region agent log
+          __dbg73({
+              sessionId: "73d7f6",
+              runId: "pre-fix",
+              hypothesisId: "E",
+              location: "auth-ui.js:google:outcome",
+              message: "Google button outcome",
+              data: {
+                redirected: !!(outcome && outcome.redirected),
+                hasUser: !!(outcome && outcome.user),
+              },
+              timestamp: Date.now(),
+            });
+          // #endregion
           // iPhone / Safari: full-page redirect to Google. Do not navigate away here.
           if (outcome && outcome.redirected) {
             btn.innerHTML = '<i class="fa-brands fa-google"></i> Opening Google…';
@@ -229,6 +274,20 @@
           if (window.MyTalksUI) window.MyTalksUI.showToast("Signed in with Google.");
           Auth.redirectAfterAuth();
         } catch (err) {
+          // #region agent log
+          __dbg73({
+              sessionId: "73d7f6",
+              runId: "pre-fix",
+              hypothesisId: "A",
+              location: "auth-ui.js:google:catch",
+              message: "Google button caught error",
+              data: {
+                code: (err && err.code) || "",
+                errMsg: String((err && err.message) || "").slice(0, 160),
+              },
+              timestamp: Date.now(),
+            });
+          // #endregion
           if (
             err.code !== "auth/popup-closed-by-user" &&
             err.code !== "auth/cancelled-popup-request"
@@ -253,6 +312,67 @@
         }
       });
     });
+
+    // #region agent log
+    try {
+      if (/[?&]dbg=1(?:&|$)/.test(String(location.search || ""))) {
+        var box = document.createElement("div");
+        box.setAttribute("data-dbg73", "1");
+        box.style.cssText =
+          "margin:1rem 0;padding:0.75rem;border:1px solid #ccc;border-radius:8px;background:#111;color:#0f0;font:12px/1.4 ui-monospace,monospace;white-space:pre-wrap;word-break:break-word;";
+        function renderDbg() {
+          var rows = [];
+          try {
+            rows = JSON.parse(localStorage.getItem("mytalks-dbg-73d7f6") || "[]");
+          } catch (e) {
+            rows = [];
+          }
+          box.textContent =
+            "DEBUG 73d7f6 (" +
+            rows.length +
+            " events)\n" +
+            rows
+              .map(function (r) {
+                return (
+                  (r.timestamp || "") +
+                  " | " +
+                  (r.hypothesisId || "") +
+                  " | " +
+                  (r.location || "") +
+                  " | " +
+                  (r.message || "") +
+                  " | " +
+                  JSON.stringify(r.data || {})
+                );
+              })
+              .join("\n");
+        }
+        renderDbg();
+        var copyBtn = document.createElement("button");
+        copyBtn.type = "button";
+        copyBtn.textContent = "Copy debug log";
+        copyBtn.className = "btn btn--ghost btn--block";
+        copyBtn.style.marginTop = "0.5rem";
+        copyBtn.addEventListener("click", function () {
+          try {
+            navigator.clipboard.writeText(box.textContent || "");
+            if (window.MyTalksUI) window.MyTalksUI.showToast("Debug log copied");
+          } catch (e) {
+            /* ignore */
+          }
+        });
+        var host =
+          document.querySelector(".auth-panel") ||
+          document.querySelector("main") ||
+          document.body;
+        host.appendChild(box);
+        host.appendChild(copyBtn);
+        setInterval(renderDbg, 1500);
+      }
+    } catch (dbgErr) {
+      /* ignore */
+    }
+    // #endregion
   }
 
   if (document.readyState === "loading") {

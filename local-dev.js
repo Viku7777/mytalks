@@ -17,6 +17,7 @@ const API = {
   "/api/create-order": require("./api/create-order"),
   "/api/verify-payment": require("./api/verify-payment"),
   "/api/send-booking-email": require("./api/send-booking-email"),
+  "/api/debug-ingest": require("./api/debug-ingest"),
 };
 
 const MIME = {

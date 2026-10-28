@@ -573,6 +573,165 @@
     });
   }
 
+  function loadGoogleIdentityServices() {
+    if (
+      typeof window !== "undefined" &&
+      window.google &&
+      window.google.accounts &&
+      window.google.accounts.oauth2
+    ) {
+      return Promise.resolve();
+    }
+    return new Promise(function (resolve, reject) {
+      var existing = document.querySelector('script[data-mytalks-gis="1"]');
+      if (existing) {
+        existing.addEventListener("load", function () {
+          resolve();
+        });
+        existing.addEventListener("error", function () {
+          reject(new Error("gis-script-failed"));
+        });
+        return;
+      }
+      var script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      script.setAttribute("data-mytalks-gis", "1");
+      script.onload = function () {
+        resolve();
+      };
+      script.onerror = function () {
+        reject(new Error("gis-script-failed"));
+      };
+      document.head.appendChild(script);
+    });
+  }
+
+  /** iOS: Google Identity Services access token → Firebase credential (no redirect storage). */
+  function signInWithGoogleGis(auth) {
+    var clientId =
+      (window.MyTalksFirebase && window.MyTalksFirebase.googleClientId) || "";
+    if (!clientId) {
+      return Promise.reject(
+        Object.assign(new Error("missing-google-client-id"), {
+          code: "auth/missing-google-client-id",
+        })
+      );
+    }
+    return loadGoogleIdentityServices().then(function () {
+      return new Promise(function (resolve, reject) {
+        // #region agent log
+        __dbg73({
+            sessionId: "73d7f6",
+            runId: "post-fix-3",
+            hypothesisId: "H",
+            location: "auth.js:signInWithGoogleGis:start",
+            message: "Starting GIS token client",
+            data: { hasClientId: !!clientId },
+            timestamp: Date.now(),
+          });
+        // #endregion
+        try {
+          var client = window.google.accounts.oauth2.initTokenClient({
+            client_id: clientId,
+            scope: "openid email profile",
+            prompt: "select_account",
+            callback: function (tokenResponse) {
+              if (!tokenResponse || tokenResponse.error || !tokenResponse.access_token) {
+                // #region agent log
+                __dbg73({
+                    sessionId: "73d7f6",
+                    runId: "post-fix-3",
+                    hypothesisId: "H",
+                    location: "auth.js:signInWithGoogleGis:tokenError",
+                    message: "GIS token response error",
+                    data: {
+                      error: (tokenResponse && tokenResponse.error) || "no-token",
+                    },
+                    timestamp: Date.now(),
+                  });
+                // #endregion
+                reject(
+                  Object.assign(
+                    new Error(
+                      (tokenResponse && tokenResponse.error) || "gis-token-error"
+                    ),
+                    { code: "auth/gis-token-error" }
+                  )
+                );
+                return;
+              }
+              var credential = firebase.auth.GoogleAuthProvider.credential(
+                null,
+                tokenResponse.access_token
+              );
+              auth
+                .signInWithCredential(credential)
+                .then(function (cred) {
+                  // #region agent log
+                  __dbg73({
+                      sessionId: "73d7f6",
+                      runId: "post-fix-3",
+                      hypothesisId: "H",
+                      location: "auth.js:signInWithGoogleGis:success",
+                      message: "GIS → Firebase credential succeeded",
+                      data: {
+                        hasUser: !!(cred && cred.user),
+                        uidLen:
+                          cred && cred.user && cred.user.uid
+                            ? String(cred.user.uid).length
+                            : 0,
+                      },
+                      timestamp: Date.now(),
+                    });
+                  // #endregion
+                  return finishGoogleCredential(cred).then(function () {
+                    return {
+                      redirected: false,
+                      user: cred && cred.user ? cred.user : null,
+                    };
+                  });
+                })
+                .then(resolve)
+                .catch(reject);
+            },
+            error_callback: function (err) {
+              var typ = (err && err.type) || "";
+              // #region agent log
+              __dbg73({
+                  sessionId: "73d7f6",
+                  runId: "post-fix-3",
+                  hypothesisId: "H",
+                  location: "auth.js:signInWithGoogleGis:error",
+                  message: "GIS token client error_callback",
+                  data: {
+                    type: typ,
+                    errMsg: String((err && err.message) || err || "").slice(0, 160),
+                  },
+                  timestamp: Date.now(),
+                });
+              // #endregion
+              reject(
+                Object.assign(new Error((err && err.message) || typ || "gis-error"), {
+                  code:
+                    typ === "popup_closed"
+                      ? "auth/popup-closed-by-user"
+                      : typ === "popup_failed_to_open"
+                        ? "auth/popup-blocked"
+                        : "auth/gis-error",
+                })
+              );
+            },
+          });
+          client.requestAccessToken();
+        } catch (e) {
+          reject(e);
+        }
+      });
+    });
+  }
+
   function signInWithGoogle(remember) {
     var auth = ensureFirebase();
     var provider = new firebase.auth.GoogleAuthProvider();
@@ -587,8 +746,8 @@
     var _isSafari = /Safari/i.test(_ua) && !/CriOS|FxiOS|EdgiOS|Chrome|Android/i.test(_ua);
     __dbg73({
         sessionId: "73d7f6",
-        runId: "post-fix-2",
-        hypothesisId: "F",
+        runId: "post-fix-3",
+        hypothesisId: "H",
         location: "auth.js:signInWithGoogle:entry",
         message: "Google sign-in started",
         data: {
@@ -606,8 +765,8 @@
       // #region agent log
       __dbg73({
           sessionId: "73d7f6",
-          runId: "post-fix",
-          hypothesisId: "A",
+          runId: "post-fix-3",
+          hypothesisId: "F",
           location: "auth.js:redirectSignIn",
           message: "Using signInWithRedirect",
           data: { isiOS: _isiOS },
@@ -624,7 +783,7 @@
           // #region agent log
           __dbg73({
               sessionId: "73d7f6",
-              runId: "post-fix-2",
+              runId: "post-fix-3",
               hypothesisId: "G",
               location: "auth.js:signInWithRedirect:error",
               message: "signInWithRedirect failed",
@@ -647,21 +806,42 @@
     }
 
     return setPersistence(remember !== false).then(function () {
-      // iPhone/iPad Safari closes the Google popup as auth/popup-closed-by-user
-      // before OAuth finishes — skip popup and use full-page redirect there.
+      // iPhone/iPad: GIS credential flow (Firebase Option 5). Redirect is a
+      // fallback — Safari often returns empty getRedirectResult after OAuth.
       if (_isiOS) {
         // #region agent log
         __dbg73({
             sessionId: "73d7f6",
-            runId: "post-fix",
-            hypothesisId: "A",
-            location: "auth.js:signInWithGoogle:iosRedirect",
-            message: "iOS: using signInWithRedirect (skip popup)",
+            runId: "post-fix-3",
+            hypothesisId: "H",
+            location: "auth.js:signInWithGoogle:iosGis",
+            message: "iOS: trying GIS credential sign-in",
             data: { isiOS: true, isSafari: _isSafari },
             timestamp: Date.now(),
           });
         // #endregion
-        return redirectSignIn();
+        return signInWithGoogleGis(auth).then(
+          function (outcome) {
+            return outcome;
+          },
+          function (gisErr) {
+            // #region agent log
+            __dbg73({
+                sessionId: "73d7f6",
+                runId: "post-fix-3",
+                hypothesisId: "H",
+                location: "auth.js:signInWithGoogle:iosGisFallback",
+                message: "GIS failed; falling back to redirect",
+                data: {
+                  code: (gisErr && gisErr.code) || "",
+                  errMsg: String((gisErr && gisErr.message) || "").slice(0, 160),
+                },
+                timestamp: Date.now(),
+              });
+            // #endregion
+            return redirectSignIn();
+          }
+        );
       }
 
       // Desktop: prefer popup; fall back to redirect if blocked.
@@ -670,7 +850,7 @@
           // #region agent log
           __dbg73({
               sessionId: "73d7f6",
-              runId: "post-fix",
+              runId: "post-fix-3",
               hypothesisId: "A",
               location: "auth.js:signInWithPopup:success",
               message: "Popup Google sign-in succeeded",
@@ -698,7 +878,7 @@
           // #region agent log
           __dbg73({
               sessionId: "73d7f6",
-              runId: "post-fix",
+              runId: "post-fix-3",
               hypothesisId: "A",
               location: "auth.js:signInWithPopup:error",
               message: "Popup Google sign-in failed",

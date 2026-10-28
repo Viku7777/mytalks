@@ -3,24 +3,19 @@
  * Restrict use via Firebase Console → Authentication → Settings → Authorized domains.
  */
 (function () {
-  // Desktop popup works with firebaseapp.com. iPhone Safari redirect needs a
-  // first-party authDomain (mytalk.in → Vercel /__/auth proxy) or ITP clears
-  // the redirect result and getRedirectResult() returns empty.
+  // On mytalk.in use same-origin authDomain + Vercel /__/auth proxy (Firebase
+  // Option 3). firebaseapp.com stays for localhost. iOS also uses GIS credentials.
   var defaultAuthDomain = "location-461df.firebaseapp.com";
   var authDomain = defaultAuthDomain;
+  // Web client (auto created by Google Service) — used by GIS on iPhone.
+  var googleClientId =
+    "376660863165-3qjthut7k64p5d3b9evh3478pgcjq017.apps.googleusercontent.com";
   try {
     var host = typeof location !== "undefined" ? String(location.hostname || "") : "";
-    var ua = typeof navigator !== "undefined" ? String(navigator.userAgent || "") : "";
-    var isiOS =
-      /iPhone|iPad|iPod/i.test(ua) ||
-      (typeof navigator !== "undefined" &&
-        navigator.platform === "MacIntel" &&
-        navigator.maxTouchPoints > 1);
     if (
-      isiOS &&
-      (host === "mytalk.in" ||
-        host === "www.mytalk.in" ||
-        (host && host.indexOf(".vercel.app") !== -1))
+      host === "mytalk.in" ||
+      host === "www.mytalk.in" ||
+      (host && host.indexOf(".vercel.app") !== -1)
     ) {
       authDomain = host;
     }
@@ -39,6 +34,7 @@
       data: {
         authDomain: authDomain,
         host: typeof location !== "undefined" ? String(location.hostname || "") : "",
+        hasGoogleClientId: !!googleClientId,
         isiOS:
           /iPhone|iPad|iPod/i.test(
             typeof navigator !== "undefined" ? String(navigator.userAgent || "") : ""
@@ -304,6 +300,7 @@
       return analyticsReady && !!analytics;
     },
     config: firebaseConfig,
+    googleClientId: googleClientId,
     logEvent: logEvent,
     setUserId: setUserId,
     recordException: recordException,

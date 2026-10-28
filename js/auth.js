@@ -587,8 +587,8 @@
     var _isSafari = /Safari/i.test(_ua) && !/CriOS|FxiOS|EdgiOS|Chrome|Android/i.test(_ua);
     __dbg73({
         sessionId: "73d7f6",
-        runId: "pre-fix",
-        hypothesisId: "A",
+        runId: "post-fix-2",
+        hypothesisId: "F",
         location: "auth.js:signInWithGoogle:entry",
         message: "Google sign-in started",
         data: {
@@ -615,10 +615,35 @@
         });
       // #endregion
       markGoogleRedirectPending(true);
-      return auth.signInWithRedirect(provider).then(function () {
-        // Page will navigate to Google. Do not continue to redirectAfterAuth.
-        return { redirected: true, user: null };
-      });
+      return auth.signInWithRedirect(provider).then(
+        function () {
+          // Page will navigate to Google. Do not continue to redirectAfterAuth.
+          return { redirected: true, user: null };
+        },
+        function (redirectErr) {
+          // #region agent log
+          __dbg73({
+              sessionId: "73d7f6",
+              runId: "post-fix-2",
+              hypothesisId: "G",
+              location: "auth.js:signInWithRedirect:error",
+              message: "signInWithRedirect failed",
+              data: {
+                code: (redirectErr && redirectErr.code) || "",
+                errMsg: String((redirectErr && redirectErr.message) || "").slice(0, 180),
+                authDomain:
+                  (window.MyTalksFirebase &&
+                    window.MyTalksFirebase.config &&
+                    window.MyTalksFirebase.config.authDomain) ||
+                  "",
+              },
+              timestamp: Date.now(),
+            });
+          // #endregion
+          markGoogleRedirectPending(false);
+          throw redirectErr;
+        }
+      );
     }
 
     return setPersistence(remember !== false).then(function () {
@@ -881,8 +906,8 @@
         // #region agent log
         __dbg73({
             sessionId: "73d7f6",
-            runId: "pre-fix",
-            hypothesisId: "B",
+            runId: "post-fix-2",
+            hypothesisId: "F",
             location: "auth.js:getRedirectResult:then",
             message: "getRedirectResult resolved",
             data: {
@@ -890,6 +915,13 @@
               hasResultUser: !!(result && result.user),
               hasCurrentUser: !!auth.currentUser,
               operationType: (result && result.operationType) || "",
+              authDomain:
+                (window.MyTalksFirebase &&
+                  window.MyTalksFirebase.config &&
+                  window.MyTalksFirebase.config.authDomain) ||
+                "",
+              href: typeof location !== "undefined" ? String(location.href || "").slice(0, 180) : "",
+              search: typeof location !== "undefined" ? String(location.search || "").slice(0, 120) : "",
             },
             timestamp: Date.now(),
           });
@@ -904,11 +936,19 @@
           // #region agent log
           __dbg73({
               sessionId: "73d7f6",
-              runId: "pre-fix",
-              hypothesisId: "C",
+              runId: "post-fix-2",
+              hypothesisId: "F",
               location: "auth.js:waitForRedirectUser:done",
               message: "waitForRedirectUser finished",
-              data: { hasUser: !!user, expectedRedirect: true },
+              data: {
+                hasUser: !!user,
+                expectedRedirect: true,
+                authDomain:
+                  (window.MyTalksFirebase &&
+                    window.MyTalksFirebase.config &&
+                    window.MyTalksFirebase.config.authDomain) ||
+                  "",
+              },
               timestamp: Date.now(),
             });
           // #endregion

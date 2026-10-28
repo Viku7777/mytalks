@@ -3,11 +3,72 @@
  * Restrict use via Firebase Console → Authentication → Settings → Authorized domains.
  */
 (function () {
+  // Desktop popup works with firebaseapp.com. iPhone Safari redirect needs a
+  // first-party authDomain (mytalk.in → Vercel /__/auth proxy) or ITP clears
+  // the redirect result and getRedirectResult() returns empty.
+  var defaultAuthDomain = "location-461df.firebaseapp.com";
+  var authDomain = defaultAuthDomain;
+  try {
+    var host = typeof location !== "undefined" ? String(location.hostname || "") : "";
+    var ua = typeof navigator !== "undefined" ? String(navigator.userAgent || "") : "";
+    var isiOS =
+      /iPhone|iPad|iPod/i.test(ua) ||
+      (typeof navigator !== "undefined" &&
+        navigator.platform === "MacIntel" &&
+        navigator.maxTouchPoints > 1);
+    if (
+      isiOS &&
+      (host === "mytalk.in" ||
+        host === "www.mytalk.in" ||
+        (host && host.indexOf(".vercel.app") !== -1))
+    ) {
+      authDomain = host;
+    }
+  } catch (e) {
+    authDomain = defaultAuthDomain;
+  }
+
+  // #region agent log
+  try {
+    var _dbgPayload = {
+      sessionId: "73d7f6",
+      runId: "post-fix-2",
+      hypothesisId: "F",
+      location: "firebase-config.js:authDomain",
+      message: "Resolved Firebase authDomain",
+      data: {
+        authDomain: authDomain,
+        host: typeof location !== "undefined" ? String(location.hostname || "") : "",
+        isiOS:
+          /iPhone|iPad|iPod/i.test(
+            typeof navigator !== "undefined" ? String(navigator.userAgent || "") : ""
+          ),
+      },
+      timestamp: Date.now(),
+    };
+    var _rows = [];
+    try {
+      _rows = JSON.parse(localStorage.getItem("mytalks-dbg-73d7f6") || "[]");
+    } catch (e) {
+      _rows = [];
+    }
+    if (!Array.isArray(_rows)) _rows = [];
+    _rows.push(_dbgPayload);
+    if (_rows.length > 40) _rows = _rows.slice(-40);
+    localStorage.setItem("mytalks-dbg-73d7f6", JSON.stringify(_rows));
+    fetch("/api/debug-ingest", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "73d7f6" },
+      body: JSON.stringify(_dbgPayload),
+    }).catch(function () {});
+  } catch (e) {}
+  // #endregion
+
   var firebaseConfig = {
     apiKey: "AIzaSyBj8PA7Eq04bV3TTL2bC4XmX4a6Ob6F8YQ",
-    // Must match Google OAuth "Authorized redirect URIs"
-    // (https://location-461df.firebaseapp.com/__/auth/handler).
-    authDomain: "location-461df.firebaseapp.com",
+    // iOS: mytalk.in (proxied). Desktop: location-461df.firebaseapp.com.
+    // Google Cloud OAuth client must allow https://mytalk.in/__/auth/handler.
+    authDomain: authDomain,
     databaseURL: "https://location-461df-default-rtdb.firebaseio.com",
     projectId: "location-461df",
     storageBucket: "location-461df.appspot.com",

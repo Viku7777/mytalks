@@ -11,6 +11,7 @@
     users: "users",
     bookingVisits: "booking_visits",
     advisors: "advisors",
+    transactions: "transactions",
   };
 
   function blockedError() {
@@ -456,6 +457,82 @@
     return { id: ref.id };
   }
 
+  async function createTransaction(payload) {
+    var firestore = await waitForDb();
+    if (!firestore) throw new Error("Firestore is not available.");
+    payload = payload || {};
+    var user =
+      window.MyTalksAuth && window.MyTalksAuth.getUser
+        ? window.MyTalksAuth.getUser()
+        : null;
+    var userId = payload.userId || (user && user.uid) || "";
+    if (!userId) throw new Error("Sign in to pay.");
+
+    var now = firebase.firestore.FieldValue.serverTimestamp();
+    var ref = firestore.collection(COL.transactions).doc();
+    await ref.set({
+      userId: userId,
+      name: String(payload.name || (user && user.displayName) || "").trim(),
+      email: String(payload.email || (user && user.email) || "")
+        .trim()
+        .toLowerCase(),
+      phone: String(payload.phone || "").trim(),
+      advisorId: String(payload.advisorId || ""),
+      advisorName: String(payload.advisorName || ""),
+      date: String(payload.date || ""),
+      time: String(payload.time || ""),
+      endTime: String(payload.endTime || ""),
+      durationMinutes: Number(payload.durationMinutes) || 0,
+      mode: payload.mode || "voice",
+      coupon: String(payload.coupon || ""),
+      amount: Number(payload.amount) || 0,
+      status: "pending",
+      failureReason: "",
+      razorpayOrderId: "",
+      razorpayPaymentId: "",
+      bookingId: "",
+      createdAt: now,
+      createdAtClient: new Date().toISOString(),
+      updatedAt: now,
+    });
+    return { id: ref.id };
+  }
+
+  async function updateTransaction(id, fields) {
+    var firestore = await waitForDb();
+    if (!firestore || !id) throw new Error("Missing transaction.");
+    fields = fields || {};
+    var status = String(fields.status || "").toLowerCase();
+    if (status !== "paid" && status !== "failed") {
+      throw new Error("Transaction status must be paid or failed.");
+    }
+    var patch = {
+      status: status,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+    if (fields.failureReason != null) {
+      patch.failureReason = String(fields.failureReason).slice(0, 300);
+    }
+    if (fields.razorpayOrderId != null) {
+      patch.razorpayOrderId = String(fields.razorpayOrderId);
+    }
+    if (fields.razorpayPaymentId != null) {
+      patch.razorpayPaymentId = String(fields.razorpayPaymentId);
+    }
+    if (fields.bookingId != null) patch.bookingId = String(fields.bookingId);
+    await firestore.collection(COL.transactions).doc(String(id)).set(patch, { merge: true });
+  }
+
+  async function listTransactions() {
+    var rows = await listCollection(COL.transactions, 400);
+    rows.sort(function (a, b) {
+      return String(b.createdAtClient || b.createdAt || "").localeCompare(
+        String(a.createdAtClient || a.createdAt || "")
+      );
+    });
+    return rows;
+  }
+
   async function listContacts() {
     var rows = await listCollection(COL.contacts, 400);
     rows.sort(function (a, b) {
@@ -774,6 +851,9 @@
     getBookingsForUser: getBookingsForUser,
     createContact: createContact,
     listContacts: listContacts,
+    createTransaction: createTransaction,
+    updateTransaction: updateTransaction,
+    listTransactions: listTransactions,
     getPricing: getPricing,
     seedPricing: seedPricing,
     getUserProfile: getUserProfile,

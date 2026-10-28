@@ -114,8 +114,8 @@
     function closeMobile() {
       setOpen(false);
     }
-    mobile.querySelectorAll("a").forEach(function (a) {
-      a.addEventListener("click", closeMobile);
+    mobile.querySelectorAll("a, [data-logout]").forEach(function (item) {
+      item.addEventListener("click", closeMobile);
     });
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && mobile.classList.contains("is-open")) {

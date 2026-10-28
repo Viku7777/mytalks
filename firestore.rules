@@ -105,6 +105,36 @@ service cloud.firestore {
       allow update, delete: if false;
     }
 
+    // Payment attempts — written when someone taps pay, then marked paid or failed
+    match /transactions/{txId} {
+      allow create: if isSignedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.advisorId is string
+        && request.resource.data.advisorName is string
+        && request.resource.data.email is string
+        && request.resource.data.amount is number
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.createdAtClient is string;
+
+      allow update: if isSignedIn()
+        && resource.data.userId == request.auth.uid
+        && resource.data.status == 'pending'
+        && (request.resource.data.status == 'paid' || request.resource.data.status == 'failed')
+        && request.resource.data.userId == resource.data.userId
+        && request.resource.data.advisorId == resource.data.advisorId
+        && request.resource.data.advisorName == resource.data.advisorName
+        && request.resource.data.amount == resource.data.amount
+        && request.resource.data.date == resource.data.date
+        && request.resource.data.time == resource.data.time
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.createdAtClient == resource.data.createdAtClient
+        && request.resource.data.email == resource.data.email;
+
+      allow read: if isAdmin();
+      allow delete: if false;
+    }
+
     // Contact / inquiry forms
     match /contacts/{contactId} {
       allow create: if request.resource.data.email is string;

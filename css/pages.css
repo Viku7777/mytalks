@@ -408,6 +408,48 @@
   margin-bottom: var(--space-8);
 }
 
+.tx-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.tx-filters .tabs {
+  margin-bottom: 0;
+  border-bottom: none;
+  flex: 1 1 18rem;
+}
+
+.tx-filters__dates {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+.tx-filters__dates label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.tx-filters__dates .form-control {
+  width: 11rem;
+}
+
+.tx-sub {
+  margin-top: 0.2rem;
+  color: var(--color-text-secondary);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
 .admin-record {
   display: grid;
   gap: var(--space-4);

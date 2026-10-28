@@ -1127,7 +1127,51 @@
         item_name: advisor ? advisor.name : "",
       });
 
+      var txId = null;
+      var paymentSettled = false;
+      var txClosed = false;
+
+      function markTransaction(fields) {
+        if (txClosed || !txId || !window.MyTalksDB || !window.MyTalksDB.updateTransaction) {
+          return Promise.resolve();
+        }
+        txClosed = true;
+        return window.MyTalksDB.updateTransaction(txId, fields).catch(function (txErr) {
+          txClosed = false;
+          console.warn("Transaction update failed:", txErr);
+        });
+      }
+
+      function failureText(err) {
+        var reason = (err && err.reason) || "";
+        if (reason === "dismissed") return "Payment cancelled.";
+        return (err && err.message) || "Payment failed.";
+      }
+
       try {
+        if (window.MyTalksDB && window.MyTalksDB.createTransaction) {
+          try {
+            var createdTx = await window.MyTalksDB.createTransaction({
+              userId: booking.userId,
+              name: sessionUser.displayName || "",
+              email: booking.email,
+              phone: booking.phone,
+              advisorId: booking.advisorId,
+              advisorName: booking.advisorName,
+              date: booking.date,
+              time: booking.time,
+              endTime: booking.endTime,
+              durationMinutes: booking.durationMinutes,
+              mode: booking.mode,
+              coupon: booking.coupon,
+              amount: total,
+            });
+            txId = createdTx && createdTx.id;
+          } catch (txErr) {
+            console.warn("Could not record payment attempt:", txErr);
+          }
+        }
+
         if (!window.MyTalksPay || typeof window.MyTalksPay.checkout !== "function") {
           throw new Error("Payment is not available. Refresh and try again.");
         }
@@ -1151,6 +1195,7 @@
             time: booking.time || "",
           },
         });
+        paymentSettled = true;
 
         booking.paymentStatus = "paid";
         booking.razorpayOrderId = payment.razorpay_order_id || "";
@@ -1165,6 +1210,12 @@
           var saved = await window.MyTalksDB.createBooking(booking);
           booking.bookingId = saved.bookingId || saved.id;
         }
+        await markTransaction({
+          status: "paid",
+          razorpayOrderId: booking.razorpayOrderId || "",
+          razorpayPaymentId: booking.razorpayPaymentId || "",
+          bookingId: booking.bookingId || "",
+        });
         localStorage.setItem("mytalks-last-booking", JSON.stringify(booking));
         rememberPhone(Auth, sessionUser, contact.phone);
         if (window.MyTalksMail && window.MyTalksMail.notify) {
@@ -1188,6 +1239,19 @@
         );
       } catch (err) {
         console.error(err);
+        if (paymentSettled) {
+          await markTransaction({
+            status: "paid",
+            razorpayOrderId: booking.razorpayOrderId || "",
+            razorpayPaymentId: booking.razorpayPaymentId || "",
+            bookingId: booking.bookingId || "",
+          });
+        } else {
+          await markTransaction({
+            status: "failed",
+            failureReason: failureText(err),
+          });
+        }
         var reason = (err && err.reason) || "";
         if (reason === "dismissed") {
           window.MyTalksUI.showToast("Payment cancelled. Your booking was not created.", "error");

@@ -14,6 +14,11 @@
     selectedAdvisorId: null,
     visits: [],
     contacts: [],
+    transactions: [],
+    transactionsError: "",
+    txStatus: "all",
+    txFrom: "",
+    txTo: "",
     rankSaving: "",
   };
 
@@ -50,6 +55,7 @@
 
   async function loadAll() {
     var DB = window.MyTalksDB;
+    state.transactionsError = "";
     var results = await Promise.all([
       DB.listUsers(),
       DB.listTickets(),
@@ -65,6 +71,13 @@
             return [];
           })
         : [],
+      DB.listTransactions
+        ? DB.listTransactions().catch(function (err) {
+            state.transactionsError =
+              (err && err.message) || "Could not load transactions.";
+            return [];
+          })
+        : [],
     ]);
     state.users = results[0];
     state.tickets = results[1];
@@ -72,6 +85,8 @@
     state.advisors = results[3];
     state.visits = results[4] || [];
     state.contacts = results[5] || [];
+    state.transactions = results[6] || [];
+    if (state.transactions.length) state.transactionsError = "";
     if (!state.advisors.length && window.MyTalksData) {
       var sample = await window.MyTalksData.loadJson("advisors.json");
       state.advisors = await DB.seedAdvisors(sample);
@@ -148,7 +163,13 @@
     var label = lower === "cancelled" || lower === "canceled" ? "Cancel" : raw;
     var kind = "badge";
     if (lower === "pending") kind = "badge badge--warning";
-    if (lower === "confirmed" || lower === "completed" || lower === "complete") {
+    if (lower === "failed") kind = "badge badge--danger";
+    if (
+      lower === "paid" ||
+      lower === "confirmed" ||
+      lower === "completed" ||
+      lower === "complete"
+    ) {
       kind = "badge badge--success";
     }
     return '<span class="' + kind + '">' + esc(label) + "</span>";
@@ -446,6 +467,148 @@
             '<button type="button" class="btn btn--ghost btn--sm" data-booking-cancel="' +
             esc(id) +
             '">Cancel</button></div></td></tr>'
+          );
+        })
+        .join("") +
+      "</tbody></table></div>"
+    );
+  }
+
+  function localDayKey(value) {
+    var date = new Date(value);
+    if (isNaN(date.getTime())) return "";
+    var month = String(date.getMonth() + 1).padStart(2, "0");
+    var day = String(date.getDate()).padStart(2, "0");
+    return date.getFullYear() + "-" + month + "-" + day;
+  }
+
+  function txStamp(tx) {
+    return (tx && (tx.createdAtClient || tx.createdAt)) || "";
+  }
+
+  function txInDateRange(tx) {
+    var day = localDayKey(txStamp(tx));
+    if (!day) return !state.txFrom && !state.txTo;
+    if (state.txFrom && day < state.txFrom) return false;
+    if (state.txTo && day > state.txTo) return false;
+    return true;
+  }
+
+  function txStatusLabel(status) {
+    var lower = String(status || "pending").toLowerCase();
+    if (lower === "paid") return "Paid";
+    if (lower === "failed") return "Failed";
+    return "Pending";
+  }
+
+  function renderTransactions() {
+    var dated = (state.transactions || []).filter(txInDateRange);
+    var counts = { all: dated.length, paid: 0, failed: 0, pending: 0 };
+    dated.forEach(function (tx) {
+      var key = String(tx.status || "pending").toLowerCase();
+      if (counts[key] != null) counts[key] += 1;
+    });
+    var rows = dated.filter(function (tx) {
+      if (state.txStatus === "all") return true;
+      return String(tx.status || "pending").toLowerCase() === state.txStatus;
+    });
+    var paidTotal = dated.reduce(function (sum, tx) {
+      return sum + (String(tx.status || "").toLowerCase() === "paid" ? Number(tx.amount) || 0 : 0);
+    }, 0);
+
+    var filters =
+      '<div class="tx-filters">' +
+      '<div class="tabs tabs--sub" role="tablist">' +
+      [
+        ["all", "All"],
+        ["paid", "Paid"],
+        ["failed", "Failed"],
+        ["pending", "Pending"],
+      ]
+        .map(function (item) {
+          return (
+            '<button type="button" class="tab-btn' +
+            (state.txStatus === item[0] ? " is-active" : "") +
+            '" data-tx-status="' +
+            item[0] +
+            '">' +
+            item[1] +
+            " (" +
+            counts[item[0]] +
+            ")</button>"
+          );
+        })
+        .join("") +
+      "</div>" +
+      '<div class="tx-filters__dates">' +
+      '<label>From<input class="form-control" type="date" data-tx-from value="' +
+      esc(state.txFrom) +
+      '"></label>' +
+      '<label>To<input class="form-control" type="date" data-tx-to value="' +
+      esc(state.txTo) +
+      '"></label>' +
+      (state.txFrom || state.txTo
+        ? '<button type="button" class="btn btn--ghost btn--sm" data-tx-clear>Clear dates</button>'
+        : "") +
+      "</div></div>" +
+      '<p class="hint">' +
+      dated.length +
+      " in this range · " +
+      counts.paid +
+      " paid · " +
+      money(paidTotal) +
+      "</p>";
+
+    if (state.transactionsError && !(state.transactions || []).length) {
+      return (
+        filters +
+        '<div class="card"><p>Could not load transactions.</p><p class="mt-4">' +
+        esc(state.transactionsError) +
+        "</p><p class=\"mt-4\">Deploy <code>firestore.rules</code> so admins can read the transactions collection.</p></div>"
+      );
+    }
+    if (!(state.transactions || []).length) {
+      return filters + '<p class="empty-state">No payment attempts yet.</p>';
+    }
+    if (!rows.length) {
+      return filters + '<p class="empty-state">No transactions match this filter.</p>';
+    }
+
+    return (
+      filters +
+      '<div class="table-wrap card"><table><thead><tr><th>When</th><th>User</th><th>Advisor</th><th>Session</th><th>Amount</th><th>Status</th></tr></thead><tbody>' +
+      rows
+        .map(function (tx) {
+          var session =
+            (tx.date || "—") +
+            (tx.time ? " · " + bookingClock(tx) : "") +
+            (tx.durationMinutes ? " · " + tx.durationMinutes + " min" : "");
+          var user =
+            esc(tx.name || "—") +
+            (tx.email ? '<div class="tx-sub">' + esc(tx.email) + "</div>" : "") +
+            (tx.phone ? '<div class="tx-sub">' + esc(tx.phone) + "</div>" : "");
+          var status =
+            statusBadge(txStatusLabel(tx.status)) +
+            (String(tx.status || "").toLowerCase() === "failed" && tx.failureReason
+              ? '<div class="tx-sub">' + esc(tx.failureReason) + "</div>"
+              : "") +
+            (tx.bookingId
+              ? '<div class="tx-sub">' + esc(tx.bookingId) + "</div>"
+              : "");
+          return (
+            "<tr><td data-label=\"When\">" +
+            prettyWhen(txStamp(tx)) +
+            '</td><td data-label="User">' +
+            user +
+            '</td><td data-label="Advisor">' +
+            esc(tx.advisorName || tx.advisorId || "—") +
+            '</td><td data-label="Session">' +
+            esc(session) +
+            '</td><td data-label="Amount">' +
+            money(tx.amount) +
+            '</td><td data-label="Status">' +
+            status +
+            "</td></tr>"
           );
         })
         .join("") +
@@ -1207,6 +1370,7 @@
       users: "Users",
       tickets: "Tickets",
       payments: "Payments",
+      transactions: "Transactions",
       bookings: "Bookings",
       advisors: "Advisors",
       inquiries: "Contact Us",
@@ -1217,7 +1381,9 @@
         ? renderTickets()
         : state.tab === "payments"
           ? renderPayments()
-          : state.tab === "bookings"
+          : state.tab === "transactions"
+            ? renderTransactions()
+            : state.tab === "bookings"
             ? renderBookings()
             : state.tab === "advisors"
               ? renderAdvisors()
@@ -1228,7 +1394,7 @@
                   : renderUsers();
     root.innerHTML =
       '<div class="tabs" role="tablist">' +
-      ["users", "tickets", "payments", "bookings", "advisors", "inquiries", "applications"]
+      ["users", "tickets", "payments", "transactions", "bookings", "advisors", "inquiries", "applications"]
         .map(function (tab) {
           var label = labels[tab] || tab;
           return (
@@ -1381,6 +1547,18 @@
     hoursDrag = null;
   });
 
+  root.addEventListener("change", function (e) {
+    if (e.target.matches("[data-tx-from]")) {
+      state.txFrom = e.target.value || "";
+      render();
+      return;
+    }
+    if (e.target.matches("[data-tx-to]")) {
+      state.txTo = e.target.value || "";
+      render();
+    }
+  });
+
   root.addEventListener("click", async function (e) {
     var saveTime = e.target.closest("[data-booking-save]");
     if (saveTime) {
@@ -1511,6 +1689,18 @@
         clearBookingBusy(cancelBooking);
         toast((err && err.message) || "Could not cancel the booking.", "error");
       }
+      return;
+    }
+    var txStatus = e.target.closest("[data-tx-status]");
+    if (txStatus) {
+      state.txStatus = txStatus.getAttribute("data-tx-status") || "all";
+      render();
+      return;
+    }
+    if (e.target.closest("[data-tx-clear]")) {
+      state.txFrom = "";
+      state.txTo = "";
+      render();
       return;
     }
     var bookingView = e.target.closest("[data-booking-view]");

@@ -138,14 +138,22 @@ html[data-auth-state="guest"] [data-auth-user] {
   animation: fadeIn 0.2s ease;
 }
 
-.mobile-nav a:not([hidden]) {
+.mobile-nav a:not([hidden]),
+.mobile-nav__logout:not([hidden]) {
   display: flex;
   align-items: center;
+  width: 100%;
   min-height: var(--tap-min);
   padding: var(--space-3) 0;
   color: var(--color-text);
   font-weight: 500;
+  text-align: left;
   border-bottom: 1px solid var(--color-border);
+}
+
+.mobile-nav__logout:not([hidden]) {
+  color: var(--color-error);
+  font-weight: 600;
 }
 
 .mobile-nav .btn {

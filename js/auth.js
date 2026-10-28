@@ -606,10 +606,10 @@
       // #region agent log
       __dbg73({
           sessionId: "73d7f6",
-          runId: "pre-fix",
+          runId: "post-fix",
           hypothesisId: "A",
           location: "auth.js:redirectSignIn",
-          message: "Falling back to signInWithRedirect",
+          message: "Using signInWithRedirect",
           data: { isiOS: _isiOS },
           timestamp: Date.now(),
         });
@@ -622,14 +622,30 @@
     }
 
     return setPersistence(remember !== false).then(function () {
-      // Prefer popup (works with the existing Google redirect URI). Fall back
-      // to full-page redirect if the popup is blocked (common on some phones).
+      // iPhone/iPad Safari closes the Google popup as auth/popup-closed-by-user
+      // before OAuth finishes — skip popup and use full-page redirect there.
+      if (_isiOS) {
+        // #region agent log
+        __dbg73({
+            sessionId: "73d7f6",
+            runId: "post-fix",
+            hypothesisId: "A",
+            location: "auth.js:signInWithGoogle:iosRedirect",
+            message: "iOS: using signInWithRedirect (skip popup)",
+            data: { isiOS: true, isSafari: _isSafari },
+            timestamp: Date.now(),
+          });
+        // #endregion
+        return redirectSignIn();
+      }
+
+      // Desktop: prefer popup; fall back to redirect if blocked.
       return auth.signInWithPopup(provider).then(
         function (cred) {
           // #region agent log
           __dbg73({
               sessionId: "73d7f6",
-              runId: "pre-fix",
+              runId: "post-fix",
               hypothesisId: "A",
               location: "auth.js:signInWithPopup:success",
               message: "Popup Google sign-in succeeded",
@@ -651,11 +667,13 @@
             code === "auth/popup-blocked" ||
             code === "auth/cancelled-popup-request" ||
             code === "auth/web-storage-unsupported" ||
-            code === "auth/operation-not-supported-in-this-environment";
+            code === "auth/operation-not-supported-in-this-environment" ||
+            // Safari sometimes reports a closed popup instead of blocked.
+            code === "auth/popup-closed-by-user";
           // #region agent log
           __dbg73({
               sessionId: "73d7f6",
-              runId: "pre-fix",
+              runId: "post-fix",
               hypothesisId: "A",
               location: "auth.js:signInWithPopup:error",
               message: "Popup Google sign-in failed",

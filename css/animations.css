@@ -11,7 +11,7 @@
 }
 
 /* Skip continuous hero/ambient motion on small screens and touch-first devices */
-@media (max-width: 899px), (hover: none) and (pointer: coarse) {
+@media (max-width: 767px), (hover: none) and (pointer: coarse) {
   .home-hero__media img {
     animation: none !important;
     will-change: auto;

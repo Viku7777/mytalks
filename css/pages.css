@@ -38,8 +38,7 @@
 
 @media (max-width: 899px) {
   .home-hero__media img {
-    /* Portrait is already framed. Keep her face in the upper half when the screen is taller. */
-    object-position: center 30%;
+    object-position: 78% 12%;
   }
 }
 
@@ -69,9 +68,9 @@
     background:
       linear-gradient(
         180deg,
-        rgba(248, 250, 252, 0.02) 0%,
-        rgba(248, 250, 252, 0.08) 42%,
-        rgba(248, 250, 252, 0.9) 68%,
+        rgba(248, 250, 252, 0.12) 0%,
+        rgba(248, 250, 252, 0.28) 32%,
+        rgba(248, 250, 252, 0.92) 62%,
         rgba(248, 250, 252, 0.98) 100%
       );
   }

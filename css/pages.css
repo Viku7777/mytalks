@@ -1522,6 +1522,7 @@ tr.is-saving {
 .date-picker__day:disabled {
   color: var(--color-border);
   cursor: default;
+  opacity: 0.4;
 }
 
 .start-picker {
@@ -1586,6 +1587,13 @@ tr.is-saving {
   margin: 0;
   font-size: 0.9375rem;
   color: var(--color-text-secondary);
+}
+
+.start-picker__period.is-set {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-text);
 }
 
 .start-picker__body {

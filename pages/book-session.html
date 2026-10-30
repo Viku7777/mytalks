@@ -67,7 +67,7 @@
               </div>
             </fieldset>
 
-            <fieldset class="booking-group">
+            <fieldset class="booking-group" hidden>
               <legend class="booking-group__title">How to talk</legend>
               <p class="hint">Choose what feels easiest. Your advisor uses this when they confirm the session.</p>
               <div class="duration-options mode-options" data-mode-options role="radiogroup" aria-label="How to talk">
@@ -96,7 +96,7 @@
 
             <fieldset class="booking-group">
               <legend class="booking-group__title">Date &amp; time</legend>
-              <p class="hint">Choose the date and the start time you prefer. A session must begin at least 2 hours from now.</p>
+              <p class="hint">Only this advisor’s open days can be selected. A session must begin at least 2 hours from now.</p>
               <div class="form-group">
                 <label id="date-label">Date</label>
                 <div class="date-picker" data-date-picker>
@@ -118,6 +118,7 @@
               <p class="hint" data-date-note hidden></p>
               <div class="form-group" data-start-block hidden>
                 <label id="start-time-label">Start time</label>
+                <p class="hint" data-hours-note hidden></p>
                 <div class="start-picker" data-start-picker>
                   <input type="hidden" id="start-time" name="startTime" value="" />
                   <div class="start-picker__stage">
@@ -138,7 +139,7 @@
                       <div class="start-picker__slider is-idle">
                         <input type="range" min="0" max="1439" value="0" step="1" aria-label="Start time" data-time-range />
                       </div>
-                      <div class="start-picker__scale" aria-hidden="true"><span>12 AM</span><span>6 AM</span><span>12 PM</span><span>6 PM</span><span>11 PM</span></div>
+                      <div class="start-picker__scale" data-time-scale aria-hidden="true"><span>12 AM</span><span>12 PM</span><span>11 PM</span></div>
                     </div>
                   </div>
                   <p class="start-picker__status" data-start-status>Select your preferred start time.</p>

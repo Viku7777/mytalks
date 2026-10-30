@@ -319,6 +319,38 @@
       });
     }
 
+    function minutesToSlot(mins) {
+      var capped = Math.max(0, Math.min(24 * 60, mins));
+      return pad2(Math.floor(capped / 60) % 24) + ":" + pad2(capped % 60);
+    }
+
+    function startWindow(advisor, day) {
+      if (!advisor || !day || !advisorAvailableOn(advisor, day)) return null;
+      var earliest = earliestStart(new Date());
+      var minDay = new Date(earliest.getFullYear(), earliest.getMonth(), earliest.getDate());
+      var dayStart = new Date(day.getFullYear(), day.getMonth(), day.getDate());
+      if (dayStart < minDay) return null;
+      var open = 0;
+      var close = 24 * 60;
+      if (advisor.hoursStart && advisor.hoursEnd) {
+        open = slotMinutes(advisor.hoursStart);
+        close = slotMinutes(advisor.hoursEnd);
+        if (!(close > open)) return null;
+      }
+      var latestStart = close - selectedDuration();
+      var earliestMin = 0;
+      if (toLocalDateString(dayStart) === toLocalDateString(earliest)) {
+        earliestMin = earliest.getHours() * 60 + earliest.getMinutes();
+      }
+      var min = Math.max(open, earliestMin);
+      if (min > latestStart) return null;
+      return { min: min, max: latestStart, open: open, close: close };
+    }
+
+    function dayIsBookable(advisor, day) {
+      return !!startWindow(advisor, day);
+    }
+
     function nextOpenDate(advisor, from) {
       var earliest = earliestStart(new Date());
       var start = from
@@ -327,18 +359,18 @@
       var earliestDay = new Date(earliest.getFullYear(), earliest.getMonth(), earliest.getDate());
       if (start < earliestDay) start = earliestDay;
       var i;
-      for (i = 0; i < 21; i++) {
+      for (i = 0; i < 62; i++) {
         var day = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
-        if (advisorAvailableOn(advisor, day)) return toLocalDateString(day);
+        if (dayIsBookable(advisor, day)) return toLocalDateString(day);
       }
-      return toLocalDateString(start);
+      return "";
     }
 
     function ensureOpenDate() {
       if (!dateInput || !selectedAdvisorId()) return;
       var advisor = currentAdvisor();
       var selected = dateInput.value ? parseLocalDate(dateInput.value) : null;
-      if (selected && advisorAvailableOn(advisor, selected)) return;
+      if (selected && dayIsBookable(advisor, selected)) return;
       dateInput.value = nextOpenDate(advisor, selected || new Date());
       if (typeof paintDatePicker === "function") paintDatePicker();
     }
@@ -413,7 +445,7 @@
 
     function formatEndLabel(start, end) {
       if (!end) return "—";
-      var label = formatTime(end);
+      var label = friendlyTime(formatTime(end));
       if (start && toLocalDateString(end) !== toLocalDateString(start)) {
         label += " next day";
       }
@@ -610,6 +642,7 @@
     }
 
     var resetStartPicker = function () {};
+    var syncStartWindow = function () {};
 
     function syncStartVisibility() {
       var block = form.querySelector("[data-start-block]");
@@ -630,7 +663,9 @@
       } else if (!date) {
         note.hidden = false;
         note.classList.remove("hint--error");
-        note.textContent = "Choose a date first.";
+        note.textContent = advisor
+          ? "Choose an open day. Available " + whenAdvisorWorks(advisor) + "."
+          : "Choose a date first.";
       } else if (!open) {
         note.hidden = false;
         note.classList.add("hint--error");
@@ -645,6 +680,7 @@
       var now = new Date();
       syncTimeLimits(now);
       syncStartVisibility();
+      syncStartWindow();
       var minutes = selectedDuration();
       var start = selectedStart();
       var issue = startProblem(now);
@@ -698,6 +734,7 @@
         .join("");
       durationHost.querySelectorAll("[name=duration]").forEach(function (input) {
         input.addEventListener("change", function () {
+          ensureOpenDate();
           refreshTimer();
           updateSummary();
         });
@@ -760,10 +797,9 @@
       var end = start ? endFromStart(start, selectedDuration()) : null;
       const rows =
         summaryRow("Advisor", window.MyTalksData.escapeHtml(a.name)) +
-        summaryRow("How", modeLabel(selectedMode())) +
         summaryRow("Length", selectedDuration() + " min") +
         summaryRow("Date", dateInput.value || "") +
-        summaryRow("Starts", start ? formatTime(start) : "") +
+        summaryRow("Starts", start ? friendlyTime(formatTime(start)) : "") +
         summaryRow("Ends", end ? formatEndLabel(start, end) : "") +
         summaryRow("Contact", contactParts.join(" · "));
 
@@ -905,15 +941,16 @@
         for (i = 1; i <= daysInMonth; i++) {
           var day = new Date(view.getFullYear(), view.getMonth(), i);
           var iso = toLocalDateString(day);
-          var disabled = day < minDay;
-          var isSelected = current && toLocalDateString(current) === iso;
+          var bookable = dayIsBookable(currentAdvisor(), day);
+          var isSelected = bookable && current && toLocalDateString(current) === iso;
+          var reason = bookable ? "" : day < minDay ? "Too soon" : "Not available";
           html +=
             '<button type="button" class="date-picker__day' +
             (isSelected ? " is-selected" : "") +
             '" data-date-value="' +
             iso +
             '"' +
-            (disabled ? " disabled" : "") +
+            (bookable ? "" : ' disabled title="' + reason + '"') +
             ">" +
             i +
             "</button>";
@@ -966,19 +1003,6 @@
     var pickedHour = null;
     var pickedMinute = null;
 
-    function hourPart(hour) {
-      if (hour >= 6 && hour < 12) return "morning";
-      if (hour >= 12 && hour < 17) return "afternoon";
-      if (hour >= 17 && hour < 21) return "evening";
-      return "night";
-    }
-
-    function partLabel(hour) {
-      return { morning: "Morning", afternoon: "Afternoon", evening: "Evening", night: "Night" }[
-        hourPart(hour)
-      ];
-    }
-
     function buildStartPicker() {
       var root = form.querySelector("[data-start-picker]");
       var timeRange = root && root.querySelector("[data-time-range]");
@@ -990,16 +1014,85 @@
       var chosen = false;
 
       function paintSlider() {
-        var max = Number(timeRange.max) || 1;
+        var min = Number(timeRange.min) || 0;
+        var max = Number(timeRange.max);
+        if (!isFinite(max) || max <= min) max = min + 1;
         var wrap = timeRange.closest(".start-picker__slider");
-        timeRange.style.setProperty("--fill", (Number(timeRange.value) / max) * 100 + "%");
+        timeRange.style.setProperty(
+          "--fill",
+          ((Number(timeRange.value) - min) / (max - min)) * 100 + "%"
+        );
         if (wrap) wrap.classList.toggle("is-idle", !chosen);
       }
 
+      syncStartWindow = function () {
+        var advisor = currentAdvisor();
+        var date = dateInput && dateInput.value ? parseLocalDate(dateInput.value) : null;
+        var bounds = startWindow(advisor, date);
+        var note = form.querySelector("[data-hours-note]");
+        var scale = root.querySelector("[data-time-scale]");
+        if (!bounds) {
+          if (note) {
+            note.hidden = true;
+            note.textContent = "";
+          }
+          return;
+        }
+        timeRange.min = String(bounds.min);
+        timeRange.max = String(Math.max(bounds.min, bounds.max));
+        var value = Number(timeRange.value);
+        if (!chosen) {
+          timeRange.value = String(bounds.min);
+        } else if (value < bounds.min || value > bounds.max) {
+          var clamped = Math.min(bounds.max, Math.max(bounds.min, value));
+          timeRange.value = String(clamped);
+          pickedHour = Math.floor(clamped / 60);
+          pickedMinute = clamped % 60;
+          timeInput.value = pad2(pickedHour) + ":" + pad2(pickedMinute);
+          paintFace();
+        }
+        if (scale) {
+          var mid = Math.round((bounds.min + bounds.max) / 2);
+          scale.innerHTML =
+            "<span>" +
+            friendlyTime(minutesToSlot(bounds.min)) +
+            "</span><span>" +
+            friendlyTime(minutesToSlot(mid)) +
+            "</span><span>" +
+            friendlyTime(minutesToSlot(bounds.max)) +
+            "</span>";
+        }
+        if (note) {
+          note.hidden = false;
+          if (advisor && advisor.hoursStart && advisor.hoursEnd) {
+            note.textContent =
+              "This advisor is available between " +
+              friendlyTime(advisor.hoursStart) +
+              " and " +
+              friendlyTime(advisor.hoursEnd) +
+              ".";
+          } else {
+            note.textContent = "This advisor is available all day.";
+          }
+          if (bounds.min !== bounds.open || bounds.max !== bounds.close - selectedDuration()) {
+            note.textContent +=
+              " For this session you can start between " +
+              friendlyTime(minutesToSlot(bounds.min)) +
+              " and " +
+              friendlyTime(minutesToSlot(bounds.max)) +
+              ".";
+          }
+        }
+        paintSlider();
+      };
+
       function paintFace() {
         var ready = pickedHour != null && pickedMinute != null;
+        var hour12 = ready ? pickedHour % 12 || 12 : null;
+        var suffix = ready ? (pickedHour >= 12 ? "PM" : "AM") : "";
+        var spoken = ready ? friendlyTime(pad2(pickedHour) + ":" + pad2(pickedMinute)) : "";
         if (hourTile) {
-          hourTile.textContent = ready ? pad2(pickedHour) : "–";
+          hourTile.textContent = ready ? String(hour12) : "–";
           hourTile.classList.toggle("is-set", ready);
         }
         if (minuteTile) {
@@ -1007,13 +1100,12 @@
           minuteTile.classList.toggle("is-set", ready);
         }
         if (readout) {
-          readout.textContent = ready ? pad2(pickedHour) + ":" + pad2(pickedMinute) : "Slide";
+          readout.textContent = ready ? spoken : "Slide";
           readout.classList.toggle("is-set", ready);
         }
         if (periodEl) {
-          periodEl.textContent = ready
-            ? partLabel(pickedHour)
-            : "Slide to choose the hour and minute";
+          periodEl.textContent = ready ? suffix : "Slide to choose the hour and minute";
+          periodEl.classList.toggle("is-set", ready);
         }
         paintSlider();
       }
@@ -1065,7 +1157,8 @@
         else clearContactError();
       });
     }
-    var presetMode = requestedMode();
+    var modeChoice = form.querySelector("[data-mode-options]");
+    var presetMode = modeChoice && !modeChoice.closest("[hidden]") ? requestedMode() : "";
     if (presetMode) {
       var modeInput = form.querySelector('[name=mode][value="' + presetMode + '"]');
       if (modeInput) modeInput.checked = true;

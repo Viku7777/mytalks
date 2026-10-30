@@ -9,7 +9,7 @@
     "id": "2",
     "category": "Booking",
     "question": "How do I book a session?",
-    "answer": "Choose an advisor, select a date and time, pick chat, voice, or video, apply a coupon if you have one, and complete payment to receive confirmation."
+    "answer": "Choose an advisor, select a date and time, apply a coupon if you have one, and complete payment to receive confirmation."
   },
   {
     "id": "3",
@@ -27,7 +27,7 @@
     "id": "5",
     "category": "Sessions",
     "question": "Can I choose chat, voice, or video?",
-    "answer": "Yes. Every booking lets you select the communication mode that feels most comfortable for you."
+    "answer": "Not while booking. Your advisor confirms how the session will happen."
   },
   {
     "id": "6",

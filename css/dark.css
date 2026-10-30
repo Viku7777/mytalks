@@ -26,14 +26,14 @@
     );
 }
 
-@media (max-width: 767px) {
+@media (max-width: 899px) {
   [data-theme="dark"] .home-hero__overlay {
     background:
       linear-gradient(
         180deg,
-        rgba(17, 24, 39, 0.25) 0%,
-        rgba(17, 24, 39, 0.45) 30%,
-        rgba(17, 24, 39, 0.88) 60%,
+        rgba(17, 24, 39, 0.05) 0%,
+        rgba(17, 24, 39, 0.12) 40%,
+        rgba(17, 24, 39, 0.86) 66%,
         rgba(17, 24, 39, 0.96) 100%
       );
   }
@@ -51,7 +51,8 @@
   color: rgba(249, 250, 251, 0.95);
 }
 
-[data-theme="dark"] .home-hero__sub {
+[data-theme="dark"] .home-hero__sub,
+[data-theme="dark"] .home-hero__note {
   color: #9ca3af;
 }
 

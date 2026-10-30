@@ -1,418 +1,146 @@
 [
   {
     "id": "1",
-    "name": "Neha S.",
-    "role": "Marketing professional, Bengaluru",
-    "photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
+    "name": "Priya Nair",
+    "role": "Software engineer, Bengaluru",
+    "photo": "https://images.unsplash.com/photo-1548142813-c348350df52b?w=200&h=200&fit=crop&crop=faces",
     "rating": 5,
-    "quote": "I booked a late-night chat when everything felt heavy. My advisor listened without rushing me. I left feeling lighter and clearer."
+    "quote": "I booked a voice call close to 11pm after a fight at home. I was switching between Hindi and English, and the advisor just let me talk. No ‘think positive’ lecture. I could sleep after that."
   },
   {
     "id": "2",
-    "name": "Rahul K.",
-    "role": "Software engineer, Pune",
-    "photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop",
+    "name": "Rohan Mehta",
+    "role": "Chartered accountant, Mumbai",
+    "photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=faces",
     "rating": 5,
-    "quote": "MyTalk never felt like a dating app or a cold clinic. It felt private, adult, and genuinely supportive."
+    "quote": "I don’t usually talk about this stuff. Chat was easier than a call. We spoke about my parents and the marriage pressure, not some generic advice. Paid ₹499 on UPI and it went through in one shot."
   },
   {
     "id": "3",
-    "name": "Ananya M.",
-    "role": "MBA student, Mumbai",
-    "photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop",
-    "rating": 4.9,
-    "quote": "Family pressure about marriage was eating me. One video session helped me find words I couldn't say at home."
+    "name": "Anjali Sharma",
+    "role": "School teacher, Delhi",
+    "photo": "https://images.unsplash.com/photo-1614283233556-f35b0c801ef1?w=200&h=200&fit=crop&crop=faces",
+    "rating": 4,
+    "quote": "Got a same-evening slot, which I needed. The session was kind and private. I’m giving 4 because my first time was already taken, so I had to move it by an hour. Still glad I booked."
   },
   {
     "id": "4",
-    "name": "Vikram R.",
-    "role": "Product manager, Hyderabad",
-    "photo": "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=200&h=200&fit=crop",
+    "name": "Karthik Iyer",
+    "role": "Product designer, Chennai",
+    "photo": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces",
     "rating": 5,
-    "quote": "Career burnout and relationship fights were mixing. My session gave me a practical reset for the week."
+    "quote": "My partner is in Singapore and every WhatsApp reply was turning into a fight. One 45-minute call helped me slow down. Straight talk, no drama."
   },
   {
     "id": "5",
-    "name": "Priya D.",
-    "role": "Teacher, Delhi NCR",
-    "photo": "https://images.unsplash.com/photo-1487412720507-e7ab68c7b277?w=200&h=200&fit=crop",
-    "rating": 4.8,
-    "quote": "After my breakup I couldn't sleep. Chat mode felt safer than facing friends who take sides."
+    "name": "Fatima Qureshi",
+    "role": "Nurse, Hyderabad",
+    "photo": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop&crop=faces",
+    "rating": 5,
+    "quote": "After night duty the family calls start, always about a rishta. I didn’t have the energy to explain this to friends. I spoke mostly in Hindi. Felt respected, not rushed."
   },
   {
     "id": "6",
-    "name": "Arjun P.",
-    "role": "Designer, Chennai",
-    "photo": "https://images.unsplash.com/photo-1463453091185-61582044d556?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "Anonymous enough to open up, structured enough to feel premium. Best decision I made that month."
+    "name": "Amit Joshi",
+    "role": "Bank officer, Pune",
+    "photo": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=faces",
+    "rating": 4,
+    "quote": "We talked about money arguments after marriage. I wanted a quick fix and the advisor kept saying slow down and actually talk, which irritated me at first. Later I realised that was the useful part."
   },
   {
     "id": "7",
-    "name": "Sneha T.",
-    "role": "CA article, Ahmedabad",
-    "photo": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop",
-    "rating": 4.9,
-    "quote": "I used Hindi mixed with English and the advisor never made me feel awkward. That comfort mattered."
+    "name": "Sneha Reddy",
+    "role": "MBA student, Hyderabad",
+    "photo": "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=200&h=200&fit=crop&crop=faces",
+    "rating": 5,
+    "quote": "Placements and a breakup landed in the same month. I cried in the first ten minutes and nobody told me to wrap it up. They are clear this is not a clinic. That honesty helped."
   },
   {
     "id": "8",
-    "name": "Karan J.",
-    "role": "Startup founder, Gurgaon",
-    "photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop",
+    "name": "Harpreet Singh",
+    "role": "Operations manager, Chandigarh",
+    "photo": "https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=200&h=200&fit=crop&crop=faces",
     "rating": 5,
-    "quote": "Booked between investor calls. Short, sharp, human. UPI payment and done."
+    "quote": "Booked between two site visits. Short call, but I walked out with what I would actually say to my father. I had been postponing that conversation for weeks. Site was simple, no confusion."
   },
   {
     "id": "9",
-    "name": "Meera L.",
-    "role": "Nurse, Kochi",
-    "photo": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "Night shifts leave no energy for long therapy search. MyTalk was simple when I needed someone kind."
+    "name": "Meera Krishnan",
+    "role": "Architect, Kochi",
+    "photo": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=faces",
+    "rating": 4,
+    "quote": "Video froze once on office wifi. We switched to voice and carried on. Advisor didn’t make it awkward. The talk itself was worth it — I just wouldn’t start on video if the network is weak."
   },
   {
     "id": "10",
-    "name": "Aditya S.",
-    "role": "Civil servant aspirant, Jaipur",
-    "photo": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop",
-    "rating": 4.7,
-    "quote": "Exam stress and family comparisons. Talking privately reduced the panic before my mock interview."
+    "name": "Arvind Menon",
+    "role": "Civil engineer, Coimbatore",
+    "photo": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop&crop=faces",
+    "rating": 5,
+    "quote": "New city, no friends yet, and I was overthinking someone I met at work. Didn’t want this in the office WhatsApp group. Private chat during lunch felt like a normal conversation."
   },
   {
     "id": "11",
-    "name": "Isha V.",
-    "role": "Journalist, Kolkata",
-    "photo": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&h=200&fit=crop",
+    "name": "Pooja Patel",
+    "role": "Homemaker, Ahmedabad",
+    "photo": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200&h=200&fit=crop&crop=faces",
     "rating": 5,
-    "quote": "I was stuck in an almost-relationship. My advisor helped me name my boundaries without guilt."
+    "quote": "I don’t have a circle I can tell everything. In-laws, the quiet at home, all of it. I mixed Gujarati and Hindi and the advisor stayed with me. I booked again the next week."
   },
   {
     "id": "12",
-    "name": "Rohit N.",
-    "role": "Banker, Mumbai",
-    "photo": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop",
-    "rating": 4.8,
-    "quote": "Marriage talks were stuck on money. The session structure kept us from looping the same fight."
+    "name": "Nikhil Kulkarni",
+    "role": "Data analyst, Pune",
+    "photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=faces",
+    "rating": 4,
+    "quote": "A situationship was messing with my sleep. 30 minutes was a bit short — I should have taken 45. The person was sharp though, and didn’t judge me for being on dating apps."
   },
   {
     "id": "13",
-    "name": "Divya K.",
-    "role": "UX researcher, Bengaluru",
-    "photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
+    "name": "Ishita Banerjee",
+    "role": "Journalist, Kolkata",
+    "photo": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&h=200&fit=crop&crop=faces",
     "rating": 5,
-    "quote": "Soft, non-judgmental listening. I cried, then laughed, then had a clear next step."
+    "quote": "I talk to people all day for work and still had nobody for this. Family wants a wedding date. I’m not ready. The session helped me decide what I will actually say at home, without sounding angry."
   },
   {
     "id": "14",
-    "name": "Sanjay M.",
-    "role": "Sales lead, Indore",
-    "photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop",
-    "rating": 4.9,
-    "quote": "Travel job, lonely hotels. Voice call on MyTalk felt like talking to a steady older sibling."
+    "name": "Sandeep Yadav",
+    "role": "Sales lead, Lucknow",
+    "photo": "https://images.unsplash.com/photo-1463453091185-61582044d556?w=200&h=200&fit=crop&crop=faces",
+    "rating": 5,
+    "quote": "Too many hotel rooms and targets. I was snapping at my wife on the phone. One session, practical, not a lecture. I called her after and the conversation went better."
   },
   {
     "id": "15",
-    "name": "Pooja R.",
-    "role": "Homemaker, Lucknow",
-    "photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop",
+    "name": "Ayesha Siddiqui",
+    "role": "Content writer, Noida",
+    "photo": "https://images.unsplash.com/photo-1487412720507-e7ab68c7b277?w=200&h=200&fit=crop&crop=faces",
     "rating": 5,
-    "quote": "I don't have friends I can tell everything. Confidential chat restored my sense of self."
+    "quote": "I live with family and I was worried about privacy. Used my own email, paid myself, and the call was quiet enough. Nobody asked for extra personal details I didn’t want to give."
   },
   {
     "id": "16",
-    "name": "Nikhil A.",
-    "role": "Data analyst, Noida",
-    "photo": "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=200&h=200&fit=crop",
-    "rating": 4.8,
-    "quote": "Situationship confusion sorted in 30 minutes. No lectures, just clarity."
+    "name": "Rahul Deshmukh",
+    "role": "Startup founder, Nagpur",
+    "photo": "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=200&h=200&fit=crop&crop=faces",
+    "rating": 4,
+    "quote": "Work stress was leaking into my relationship. The advisor understood the odd hours. Confirmation email came the next morning, so not a full 5, but the session itself was solid."
   },
   {
     "id": "17",
-    "name": "Kavya B.",
-    "role": "Law student, Bengaluru",
-    "photo": "https://images.unsplash.com/photo-1487412720507-e7ab68c7b277?w=200&h=200&fit=crop",
+    "name": "Kavya Pillai",
+    "role": "Law student, Thiruvananthapuram",
+    "photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=faces",
     "rating": 5,
-    "quote": "Intercaste relationship stress at home. Advisor helped me prepare a calm conversation with parents."
+    "quote": "Inter-caste relationship, and I was panicking before telling my parents. We practised the conversation. I still said it in my own words, but I was less shaky."
   },
   {
     "id": "18",
-    "name": "Aman G.",
-    "role": "Gym trainer, Chandigarh",
-    "photo": "https://images.unsplash.com/photo-1463453091185-61582044d556?w=200&h=200&fit=crop",
-    "rating": 4.7,
-    "quote": "Breakup anger was spoiling my work. One session cooled me down without toxic advice."
-  },
-  {
-    "id": "19",
-    "name": "Ritika S.",
-    "role": "HR executive, Pune",
-    "photo": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop",
+    "name": "Imran Shaikh",
+    "role": "Delivery partner, Mumbai",
+    "photo": "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=200&h=200&fit=crop&crop=faces",
     "rating": 5,
-    "quote": "Office crush ethics—needed a neutral take. Got it, privately."
-  },
-  {
-    "id": "20",
-    "name": "Harsh P.",
-    "role": "Freelance editor, Delhi",
-    "photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop",
-    "rating": 4.9,
-    "quote": "Ghosting wrecked my confidence. MyTalk reminded me silence isn't a report card on my worth."
-  },
-  {
-    "id": "21",
-    "name": "Shreya C.",
-    "role": "Architect, Surat",
-    "photo": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "Long-distance with my partner in Canada. Weekly check-ins through MyTalk keep us kinder."
-  },
-  {
-    "id": "22",
-    "name": "Manish T.",
-    "role": "Ops manager, Nagpur",
-    "photo": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop",
-    "rating": 4.8,
-    "quote": "Father-son tension after moving back home. Advising felt practical, not preachy."
-  },
-  {
-    "id": "23",
-    "name": "Tanvi J.",
-    "role": "Content creator, Mumbai",
-    "photo": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "Online hate + relationship paranoia. Private video helped me separate anxiety from facts."
-  },
-  {
-    "id": "24",
-    "name": "Yash D.",
-    "role": "Consulting analyst, Gurgaon",
-    "photo": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop",
-    "rating": 4.9,
-    "quote": "Sunday evening slot after a brutal week. Worth every rupee."
-  },
-  {
-    "id": "25",
-    "name": "Nisha F.",
-    "role": "Pharmacist, Hyderabad",
-    "photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "In-laws conflict without dramatising my marriage. Felt heard in my language."
-  },
-  {
-    "id": "26",
-    "name": "Ravi Q.",
-    "role": "Truck logistics, Ludhiana",
-    "photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop",
-    "rating": 4.7,
-    "quote": "I'm not a 'talk about feelings' guy. Chat made it easier to start."
-  },
-  {
-    "id": "27",
-    "name": "Aarohi M.",
-    "role": "PhD scholar, Delhi",
-    "photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "Research loneliness is real. MyTalk filled a gap friends couldn't."
-  },
-  {
-    "id": "28",
-    "name": "Kunal V.",
-    "role": "Airline crew, Mumbai",
-    "photo": "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=200&h=200&fit=crop",
-    "rating": 4.8,
-    "quote": "Timezone chaos and jealousy. Advisor gave communication scripts that actually worked."
-  },
-  {
-    "id": "29",
-    "name": "Pallavi H.",
-    "role": "School counsellor, Bhopal",
-    "photo": "https://images.unsplash.com/photo-1487412720507-e7ab68c7b277?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "Even helpers need help. Booking for myself felt oddly healing."
-  },
-  {
-    "id": "30",
-    "name": "Sameer Z.",
-    "role": "Cafe owner, Goa",
-    "photo": "https://images.unsplash.com/photo-1463453091185-61582044d556?w=200&h=200&fit=crop",
-    "rating": 4.9,
-    "quote": "Seasonal business stress + partner arguments. Clearer head after 15 minutes."
-  },
-  {
-    "id": "31",
-    "name": "Jaya N.",
-    "role": "Govt teacher, Patna",
-    "photo": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "I worried about privacy in a small city. The confidentiality note reassured me."
-  },
-  {
-    "id": "32",
-    "name": "Farhan I.",
-    "role": "App developer, Bengaluru",
-    "photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop",
-    "rating": 4.8,
-    "quote": "Dating app fatigue. Talked through what I actually want before another swipe streak."
-  },
-  {
-    "id": "33",
-    "name": "Lavanya P.",
-    "role": "Medical resident, Chennai",
-    "photo": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "Residency hours destroy friendships. A midnight voice session kept me from burning out emotionally."
-  },
-  {
-    "id": "34",
-    "name": "Deepak U.",
-    "role": "Factory supervisor, Coimbatore",
-    "photo": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop",
-    "rating": 4.7,
-    "quote": "Simple Hindi support. No English pressure. Felt respected."
-  },
-  {
-    "id": "35",
-    "name": "Anika Y.",
-    "role": "Wedding planner, Jaipur",
-    "photo": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "Ironic—I plan weddings and feared marriage. MyTalk helped me untangle family vs choice."
-  },
-  {
-    "id": "36",
-    "name": "Mohit E.",
-    "role": "Policeman (off duty talk), Pune",
-    "photo": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop",
-    "rating": 4.9,
-    "quote": "Couldn't discuss home stress at work. Private booking was a relief."
-  },
-  {
-    "id": "37",
-    "name": "Sara W.",
-    "role": "Boutique owner, Kochi",
-    "photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "Affair suspicion anxiety. Advisor helped me ask questions without becoming a detective."
-  },
-  {
-    "id": "38",
-    "name": "Pranav L.",
-    "role": "MBA, Ahmedabad",
-    "photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop",
-    "rating": 4.8,
-    "quote": "First salary, first serious relationship budget fights. Practical and kind."
-  },
-  {
-    "id": "39",
-    "name": "Chitra O.",
-    "role": "Classical dancer, Chennai",
-    "photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "Creative blocks linked to heartbreak. Session gently reopened joy."
-  },
-  {
-    "id": "40",
-    "name": "Gaurav B.",
-    "role": "Civil engineer, Ranchi",
-    "photo": "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=200&h=200&fit=crop",
-    "rating": 4.7,
-    "quote": "Migration loneliness after posting to a new city. Felt less alone the same night."
-  },
-  {
-    "id": "41",
-    "name": "Heena K.",
-    "role": "Dietician, Delhi",
-    "photo": "https://images.unsplash.com/photo-1487412720507-e7ab68c7b277?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "Body image + dating shame. No judgment, only grounded talk."
-  },
-  {
-    "id": "42",
-    "name": "Imran S.",
-    "role": "Ride-share driver, Hyderabad",
-    "photo": "https://images.unsplash.com/photo-1463453091185-61582044d556?w=200&h=200&fit=crop",
-    "rating": 4.8,
-    "quote": "Affordable 15-min chat between shifts. That accessibility matters."
-  },
-  {
-    "id": "43",
-    "name": "Jhanvi R.",
-    "role": "Interior designer, Mumbai",
-    "photo": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "Family WhatsApp groups amplify pressure. Advisor helped me mute the noise mentally."
-  },
-  {
-    "id": "44",
-    "name": "Omkar T.",
-    "role": "Cricket coach, Nashik",
-    "photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop",
-    "rating": 4.9,
-    "quote": "Spoke about anger after a bad tournament and a fight at home. Walked out calmer."
-  },
-  {
-    "id": "45",
-    "name": "Nandini C.",
-    "role": "NGO worker, Guwahati",
-    "photo": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "Queer-friendly tone without me having to explain basics. Felt safe."
-  },
-  {
-    "id": "46",
-    "name": "Parth M.",
-    "role": "Chartered accountant, Vadodara",
-    "photo": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop",
-    "rating": 4.8,
-    "quote": "Tax season + marriage counselling vibes somehow. Short session, big clarity."
-  },
-  {
-    "id": "47",
-    "name": "Reema A.",
-    "role": "Makeup artist, Delhi",
-    "photo": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "Client ghosting + boyfriend silence same week. Needed one steady voice—got it."
-  },
-  {
-    "id": "48",
-    "name": "Siddharth J.",
-    "role": "Defence family, Pune",
-    "photo": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop",
-    "rating": 4.9,
-    "quote": "Postings strain relationships. MyTalk understood without needing army jargon."
-  },
-  {
-    "id": "49",
-    "name": "Trisha V.",
-    "role": "Podcast host, Bengaluru",
-    "photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "I talk for a living and still needed someone to talk to. Private. Human."
-  },
-  {
-    "id": "50",
-    "name": "Uday H.",
-    "role": "Retail manager, Indore",
-    "photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop",
-    "rating": 4.7,
-    "quote": "Shift hours made regular therapists impossible. Flexible slots saved me."
-  },
-  {
-    "id": "51",
-    "name": "Varsha G.",
-    "role": "University lecturer, Mysuru",
-    "photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "Colleague boundaries and crush ethics—handled with maturity."
-  },
-  {
-    "id": "52",
-    "name": "Zoya I.",
-    "role": "Content strategist, Noida",
-    "photo": "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=200&h=200&fit=crop",
-    "rating": 5,
-    "quote": "Healing after a toxic situationship. I finally feel picky in a healthy way."
+    "quote": "I only get a short gap between shifts. Chat worked on my phone, and the price was less than the clinics I had checked. Spoke in Hindi. That mattered."
   }
 ]

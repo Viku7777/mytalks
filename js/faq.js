@@ -87,6 +87,12 @@
           if (!open) {
             item.classList.add("is-open");
             btn.setAttribute("aria-expanded", "true");
+            if (window.MyTalksAnalytics) {
+              window.MyTalksAnalytics.track("select_content", {
+                content_type: "faq",
+                item_name: (btn.textContent || "").replace(/\s+/g, " ").trim().slice(0, 80),
+              });
+            }
           }
         });
       });

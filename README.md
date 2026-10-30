@@ -38,24 +38,23 @@ Book a Session uses Razorpay Standard Checkout.
 
 1. Copy `.env.example` → `.env` and set `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET`
 2. On Vercel: Project → Settings → Environment Variables → add the same keys → Redeploy
-3. Local API testing needs Vercel Functions (static `serve.py` alone cannot create orders):
-
-```bash
-npx vercel dev
-```
+3. Local API testing: `npm run dev` (or `npx vercel dev`)
 
 Then open the printed URL, book a session, and use [Razorpay test cards](https://razorpay.com/docs/payments/payments/test-card-upi-details/).
 
 API routes: `POST /api/create-order`, `POST /api/verify-payment`, `POST /api/razorpay-webhook`
 
-### Razorpay webhook
+### Webhook (recommended)
+
+Checkout already verifies the payment signature in the browser. The webhook is a server-side backup if the tab closes after pay.
 
 1. Deploy so `https://mytalk.in/api/razorpay-webhook` is live
-2. [Razorpay Dashboard → Webhooks](https://dashboard.razorpay.com/app/webhooks) → **+ Create Webhook**
-3. URL: `https://mytalk.in/api/razorpay-webhook`
-4. Secret: generate/copy → set as `RAZORPAY_WEBHOOK_SECRET` in Vercel (and local `.env`) → Redeploy
-5. Enable events: `payment.captured`, `payment.failed`, `order.paid`
-6. Active = on → Save. Use **Send test webhook** to confirm `ok: true`
+2. Razorpay Dashboard → **Account & Settings** → **Webhooks** → **+ Add New Webhook**
+3. **Webhook URL:** `https://mytalk.in/api/razorpay-webhook`
+4. **Secret:** create one, copy it
+5. Enable events: `payment.authorized`, `payment.captured`, `payment.failed`, `order.paid`
+6. Set `RAZORPAY_WEBHOOK_SECRET` in `.env` and in Vercel → Environment Variables → Redeploy
+7. Use **Send Test Webhook** in the Dashboard; Vercel logs should show `[razorpay-webhook]`
 
 ## Email (Titan SMTP)
 

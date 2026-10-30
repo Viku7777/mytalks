@@ -809,6 +809,7 @@
   }
 
   function signOut() {
+    trackEvent("logout");
     saveSessionHint(null);
     setAuthStateAttr("guest");
     return ensureFirebase().signOut();

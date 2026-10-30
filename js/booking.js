@@ -91,10 +91,15 @@
     return phoneDigits(value).length === 10;
   }
 
-  function displayPhone(value) {
+  function normalizePhoneDigits(value) {
     var digits = phoneDigits(value);
-    if (digits.length === 12 && digits.slice(0, 2) === "91") digits = digits.slice(2);
+    if (digits.length > 10 && digits.slice(0, 2) === "91") digits = digits.slice(2);
+    if (digits.length > 10 && digits.charAt(0) === "0") digits = digits.slice(1);
     return digits.slice(0, 10);
+  }
+
+  function displayPhone(value) {
+    return normalizePhoneDigits(value);
   }
 
   function prefillContact(form, Auth) {
@@ -370,6 +375,25 @@
         })
         .filter(Boolean);
       return fromPlans.length ? fromPlans : FALLBACK_DURATIONS.slice();
+    }
+
+    function requestedMode() {
+      var mode = String(new URLSearchParams(window.location.search).get("mode") || "").toLowerCase();
+      if (mode === "chat" || mode === "voice" || mode === "video") return mode;
+      return "";
+    }
+
+    function selectedMode() {
+      var picked = form.querySelector("[name=mode]:checked");
+      var value = picked ? String(picked.value) : "voice";
+      if (value === "chat" || value === "voice" || value === "video") return value;
+      return "voice";
+    }
+
+    function modeLabel(mode) {
+      if (mode === "chat") return "Chat";
+      if (mode === "video") return "Video";
+      return "Voice";
     }
 
     function selectedDuration() {
@@ -736,6 +760,7 @@
       var end = start ? endFromStart(start, selectedDuration()) : null;
       const rows =
         summaryRow("Advisor", window.MyTalksData.escapeHtml(a.name)) +
+        summaryRow("How", modeLabel(selectedMode())) +
         summaryRow("Length", selectedDuration() + " min") +
         summaryRow("Date", dateInput.value || "") +
         summaryRow("Starts", start ? formatTime(start) : "") +
@@ -1040,9 +1065,18 @@
         else clearContactError();
       });
     }
+    var presetMode = requestedMode();
+    if (presetMode) {
+      var modeInput = form.querySelector('[name=mode][value="' + presetMode + '"]');
+      if (modeInput) modeInput.checked = true;
+    }
+    form.querySelectorAll("[name=mode]").forEach(function (input) {
+      input.addEventListener("change", updateSummary);
+    });
+
     if (phoneInput) {
       phoneInput.addEventListener("input", function () {
-        var digits = phoneDigits(phoneInput.value).slice(0, 10);
+        var digits = normalizePhoneDigits(phoneInput.value);
         if (phoneInput.value !== digits) phoneInput.value = digits;
         if (digits && digits.length !== 10) {
           phoneInput.classList.add("is-invalid");
@@ -1100,7 +1134,7 @@
         time: formatTime(start),
         endTime: formatTime(end),
         durationMinutes: minutes,
-        mode: "voice",
+        mode: selectedMode(),
         coupon: coupon,
         email: contact.email,
         phone: contact.phone,
@@ -1124,7 +1158,15 @@
       trackEvent("begin_checkout", {
         currency: "INR",
         value: total,
-        item_name: advisor ? advisor.name : "",
+        items: [
+          {
+            item_id: booking.advisorId || "session",
+            item_name: advisor ? advisor.name : "Session",
+            item_category: "session",
+            price: total,
+            quantity: 1,
+          },
+        ],
       });
 
       var txId = null;
@@ -1181,6 +1223,12 @@
           throw new Error("Session total is too low to charge.");
         }
 
+        trackEvent("add_payment_info", {
+          currency: "INR",
+          value: total,
+          payment_type: "razorpay",
+        });
+
         var payment = await window.MyTalksPay.checkout({
           amountPaise: amountPaise,
           currency: "INR",
@@ -1222,9 +1270,18 @@
           window.MyTalksMail.notify("pending", booking).catch(function () {});
         }
         trackEvent("purchase", {
-          transaction_id: booking.razorpayPaymentId || "",
+          transaction_id: booking.razorpayPaymentId || booking.bookingId || "",
           currency: "INR",
           value: total,
+          items: [
+            {
+              item_id: booking.advisorId || "session",
+              item_name: booking.advisorName || "Session",
+              item_category: "session",
+              price: total,
+              quantity: 1,
+            },
+          ],
         });
         trackEvent("book_session_complete", {
           advisor_id: booking.advisorId || "",
@@ -1254,13 +1311,24 @@
         }
         var reason = (err && err.reason) || "";
         if (reason === "dismissed") {
+          trackEvent("checkout_cancel", { currency: "INR", value: total });
           window.MyTalksUI.showToast("Payment cancelled. Your booking was not created.", "error");
         } else if (reason === "payment_failed" || reason === "verify_failed") {
+          trackEvent("payment_failed", {
+            currency: "INR",
+            value: total,
+            failure_reason: reason,
+          });
           window.MyTalksUI.showToast(
             (err && err.message) || "Payment failed. Please try again.",
             "error"
           );
         } else {
+          trackEvent("payment_failed", {
+            currency: "INR",
+            value: total,
+            failure_reason: reason || "error",
+          });
           try {
             if (window.MyTalksErrors && typeof window.MyTalksErrors.report === "function") {
               window.MyTalksErrors.report(

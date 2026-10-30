@@ -46,7 +46,17 @@
         .join("");
     }
 
-    if (filter) filter.addEventListener("change", render);
+    if (filter) {
+      filter.addEventListener("change", function () {
+        render();
+        if (filter.value && window.MyTalksAnalytics) {
+          window.MyTalksAnalytics.track("search", {
+            search_term: filter.value,
+            content_type: "blog",
+          });
+        }
+      });
+    }
     render();
   }
 
@@ -62,6 +72,13 @@
       return;
     }
     document.title = post.title + " | MyTalk Blog";
+    if (window.MyTalksAnalytics) {
+      window.MyTalksAnalytics.track("view_item", {
+        item_id: post.slug || "",
+        item_name: post.title || "",
+        item_category: "blog",
+      });
+    }
     const desc = document.querySelector('meta[name="description"]');
     if (desc) desc.setAttribute("content", post.excerpt);
 

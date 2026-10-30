@@ -158,6 +158,15 @@
     }
     if (!next) return;
 
+    if (/book-session/.test(next)) {
+      document.querySelectorAll("[data-auth-lead]").forEach(function (lead) {
+        var onRegister = /register/.test(window.location.pathname);
+        lead.textContent = onRegister
+          ? "Create a free account to finish booking. It takes about a minute."
+          : "Log in to finish booking. New here? Create a free account below.";
+      });
+    }
+
     if (window.MyTalksAuth && window.MyTalksAuth.storeAuthNext) {
       window.MyTalksAuth.storeAuthNext(next);
     }

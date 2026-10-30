@@ -38,7 +38,8 @@
 
 @media (max-width: 899px) {
   .home-hero__media img {
-    object-position: 78% 12%;
+    /* Portrait is already framed. Keep her face in the upper half when the screen is taller. */
+    object-position: center 30%;
   }
 }
 
@@ -68,9 +69,9 @@
     background:
       linear-gradient(
         180deg,
-        rgba(248, 250, 252, 0.12) 0%,
-        rgba(248, 250, 252, 0.28) 32%,
-        rgba(248, 250, 252, 0.92) 62%,
+        rgba(248, 250, 252, 0.02) 0%,
+        rgba(248, 250, 252, 0.08) 42%,
+        rgba(248, 250, 252, 0.9) 68%,
         rgba(248, 250, 252, 0.98) 100%
       );
   }
@@ -133,10 +134,18 @@
 .home-hero__sub {
   color: #525252;
   font-size: 1.0625rem;
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-3);
   max-width: 28rem;
   line-height: 1.65;
   font-weight: 400;
+}
+
+.home-hero__note {
+  color: #525252;
+  font-size: 0.9375rem;
+  margin-bottom: var(--space-8);
+  max-width: 28rem;
+  line-height: 1.5;
 }
 
 @media (min-width: 640px) {
@@ -1367,6 +1376,10 @@ tr.is-saving {
   gap: var(--space-2);
 }
 
+.mode-options {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 @media (min-width: 640px) {
   .duration-options {
     grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -1919,16 +1932,53 @@ tr.is-saving {
   margin-bottom: var(--space-1);
 }
 
+.team-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+.team-grid article {
+  width: min(100%, 280px);
+  text-align: center;
+}
+
+.team-card__photo {
+  position: relative;
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
+}
+
+.team-card__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 32%, rgba(255, 255, 255, 0.42) 50%, transparent 68%);
+  transform: translateX(-130%);
+  pointer-events: none;
+}
+
+.team-card h3 {
+  transition: color 0.3s ease;
+}
+
 .team-photo {
+  display: block;
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
   border-radius: var(--radius-xl);
-  margin-bottom: var(--space-4);
 }
 
 .team-photo--founder {
   object-position: center 18%;
+}
+
+.team-photo--content {
+  object-position: center 22%;
 }
 
 .values-list li {
@@ -2032,6 +2082,12 @@ tr.is-saving {
   display: flex;
   gap: var(--space-3);
   margin-bottom: var(--space-5);
+}
+
+.contact-info-item a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
 }
 
 .contact-info-item i {

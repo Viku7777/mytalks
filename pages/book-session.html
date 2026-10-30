@@ -68,6 +68,28 @@
             </fieldset>
 
             <fieldset class="booking-group">
+              <legend class="booking-group__title">How to talk</legend>
+              <p class="hint">Choose what feels easiest. Your advisor uses this when they confirm the session.</p>
+              <div class="duration-options mode-options" data-mode-options role="radiogroup" aria-label="How to talk">
+                <label class="duration-option">
+                  <input type="radio" name="mode" value="chat" />
+                  <span class="duration-option__mins">Chat</span>
+                  <span class="duration-option__price">Text</span>
+                </label>
+                <label class="duration-option">
+                  <input type="radio" name="mode" value="voice" checked />
+                  <span class="duration-option__mins">Voice</span>
+                  <span class="duration-option__price">Call</span>
+                </label>
+                <label class="duration-option">
+                  <input type="radio" name="mode" value="video" />
+                  <span class="duration-option__mins">Video</span>
+                  <span class="duration-option__price">Camera</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="booking-group">
               <legend class="booking-group__title">Session length</legend>
               <div class="duration-options" data-duration-options role="radiogroup" aria-label="Session length"></div>
             </fieldset>

@@ -83,6 +83,12 @@
           if (!window.MyTalksDB) throw new Error("Support storage is still loading. Try again.");
           var result = await window.MyTalksDB.createTicket(payload);
           saveLocalForm("ticket", Object.assign({}, payload, { ticketId: result.ticketId }));
+          if (window.MyTalksAnalytics) {
+            window.MyTalksAnalytics.track("generate_lead", {
+              form_name: "support_ticket",
+              page_path: location.pathname,
+            });
+          }
           if (window.MyTalksUI) {
             window.MyTalksUI.showToast(
               "Ticket submitted. Your reference is " + result.ticketId + "."
@@ -222,6 +228,15 @@
         }
 
         saveLocalForm(name, payload);
+        if (
+          window.MyTalksAnalytics &&
+          (name === "contact" || name === "advisor-apply" || name === "career")
+        ) {
+          window.MyTalksAnalytics.track("generate_lead", {
+            form_name: name,
+            page_path: location.pathname,
+          });
+        }
         var msg =
           form.getAttribute("data-success") ||
           (storedInFirebase

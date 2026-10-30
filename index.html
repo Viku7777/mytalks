@@ -46,19 +46,23 @@
   <main id="main" class="page-main">
     <section class="home-hero" aria-label="Hero">
       <div class="home-hero__media">
-        <img
-          src="assets/images/hero.jpg"
-          alt="Happy young Indian woman smiling during a private video conversation on her phone"
-          width="1536"
-          height="1024"
-          fetchpriority="high"
-        />
+        <picture>
+          <source media="(max-width: 899px)" srcset="assets/images/hero-mobile.jpg?v=3" width="1800" height="2160" />
+          <img
+            src="assets/images/hero.jpg"
+            alt="Young woman sitting on a terrace at sunset"
+            width="1920"
+            height="1080"
+            fetchpriority="high"
+          />
+        </picture>
         <div class="home-hero__overlay" aria-hidden="true"></div>
       </div>
       <div class="container home-hero__content">
         <p class="home-hero__brand">My<span>Talk</span></p>
         <h1>Someone to Talk.<br />Someone to Understand.</h1>
         <p class="home-hero__sub">Your safe space to talk—private, respectful, and judgment-free. Talk freely. Feel better.</p>
+        <p class="home-hero__note">Sessions from ₹499. A private listener, not a clinic or an emergency service.</p>
         <div class="btn-group">
           <a class="btn btn--accent" href="pages/book-session">Book a Session</a>
           <a class="btn btn--primary" href="pages/find-advisor">Find an Advisor</a>
@@ -69,10 +73,10 @@
     <section class="trust-bar" aria-label="Trust indicators">
       <div class="container">
         <ul class="trust-bar__list">
-          <li><strong>10,000+</strong><span>Conversations</span></li>
-          <li><strong>4.9/5</strong><span>Average rating</span></li>
-          <li><strong>100%</strong><span>Confidential</span></li>
-          <li><strong>Every day</strong><span>Available to book</span></li>
+          <li><strong>From ₹499</strong><span>30-minute session</span></li>
+          <li><strong>Hindi &amp; more</strong><span>Talk in your language</span></li>
+          <li><strong>Private</strong><span>Just you and your advisor</span></li>
+          <li><strong>UPI &amp; cards</strong><span>Pay the usual way</span></li>
         </ul>
       </div>
     </section>
@@ -190,6 +194,9 @@
           <h2>Stories from people who felt heard</h2>
         </div>
         <div class="grid-3" data-testimonials data-limit="3"></div>
+        <div class="text-center mt-8">
+          <a class="btn btn--ghost" href="pages/testimonials">Read all stories</a>
+        </div>
       </div>
     </section>
 

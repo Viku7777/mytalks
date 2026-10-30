@@ -140,6 +140,22 @@
       }
       if (typeof value === "string") {
         clean[key] = value.length > 100 ? value.slice(0, 99) + "…" : value;
+        return;
+      }
+      if (key === "items" && Array.isArray(value)) {
+        clean.items = value.slice(0, 5).map(function (item) {
+          var row = {};
+          if (!item || typeof item !== "object") return null;
+          ["item_id", "item_name", "item_category", "item_list_name"].forEach(function (field) {
+            if (typeof item[field] === "string" && item[field]) {
+              row[field] = item[field].length > 100 ? item[field].slice(0, 99) + "…" : item[field];
+            }
+          });
+          ["price", "quantity"].forEach(function (field) {
+            if (typeof item[field] === "number" && isFinite(item[field])) row[field] = item[field];
+          });
+          return Object.keys(row).length ? row : null;
+        }).filter(Boolean);
       }
     });
     return clean;

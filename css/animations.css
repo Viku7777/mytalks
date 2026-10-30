@@ -11,7 +11,7 @@
 }
 
 /* Skip continuous hero/ambient motion on small screens and touch-first devices */
-@media (max-width: 767px), (hover: none) and (pointer: coarse) {
+@media (max-width: 899px), (hover: none) and (pointer: coarse) {
   .home-hero__media img {
     animation: none !important;
     will-change: auto;
@@ -116,6 +116,36 @@
     transition: padding-left 0.3s ease, background 0.3s ease;
   }
 
+  .team-card__photo,
+  .team-photo {
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease;
+  }
+
+  .team-card:hover .team-card__photo,
+  .team-card:focus-within .team-card__photo {
+    transform: translateY(-10px);
+    box-shadow: 0 22px 40px rgba(91, 108, 255, 0.22);
+  }
+
+  .team-card:hover .team-photo,
+  .team-card:focus-within .team-photo {
+    transform: scale(1.07);
+  }
+
+  .team-card:hover h3,
+  .team-card:focus-within h3 {
+    color: var(--color-primary);
+  }
+
+  .team-card.is-visible .team-card__photo::after {
+    animation: teamShine 1.15s ease 0.35s both;
+  }
+
+  .team-card:hover .team-card__photo::after,
+  .team-card:focus-within .team-card__photo::after {
+    animation: teamShine 0.85s ease;
+  }
+
   .topic-list li:hover {
     padding-left: 0.35rem;
   }
@@ -181,6 +211,15 @@
   }
   100% {
     transform: scale(1.08) translate3d(-0.8%, -0.5%, 0);
+  }
+}
+
+@keyframes teamShine {
+  from {
+    transform: translateX(-130%);
+  }
+  to {
+    transform: translateX(130%);
   }
 }
 

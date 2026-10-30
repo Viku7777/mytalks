@@ -15,6 +15,52 @@
 
   const BASE = getBasePath();
 
+  // Queues Analytics hits until cookie consent starts Firebase Analytics.
+  // Every public page loads this file, so page views and actions share one pipe.
+  window.MyTalksAnalytics = (function () {
+    var queue = [];
+    var MAX = 40;
+
+    function declined() {
+      try {
+        return localStorage.getItem("mytalks-cookies") === "declined";
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function sendNow(name, params) {
+      var fb = window.MyTalksFirebase;
+      if (!fb || typeof fb.logEvent !== "function") return false;
+      if (typeof fb.analyticsReady === "function" && !fb.analyticsReady()) return false;
+      fb.logEvent(name, params || {});
+      return true;
+    }
+
+    function track(name, params) {
+      if (!name || declined()) return;
+      if (sendNow(name, params)) return;
+      if (queue.length < MAX) queue.push({ name: name, params: params || {} });
+    }
+
+    function flush() {
+      var items = queue.slice();
+      queue = [];
+      items.forEach(function (item) {
+        track(item.name, item.params);
+      });
+    }
+
+    document.addEventListener("mytalks:analytics-ready", flush);
+
+    return {
+      track: track,
+      clear: function () {
+        queue = [];
+      },
+    };
+  })();
+
   function pageUrl(path) {
     // Extensionless public URLs: /pages/about (not about.html)
     return BASE + "/" + String(path || "").replace(/^\//, "").replace(/\.html$/i, "");
@@ -135,14 +181,83 @@
         localStorage.setItem("mytalks-cookies", "accepted");
         banner.classList.remove("is-visible");
         document.dispatchEvent(new CustomEvent("mytalks:cookies-accepted"));
+        if (window.MyTalksAnalytics) {
+          window.MyTalksAnalytics.track("cookie_consent", { status: "accepted" });
+        }
       });
     });
     root.querySelectorAll("[data-cookie-decline]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         localStorage.setItem("mytalks-cookies", "declined");
         banner.classList.remove("is-visible");
+        if (window.MyTalksAnalytics) window.MyTalksAnalytics.clear();
       });
     });
+  }
+
+  function trackClick(event) {
+    if (!window.MyTalksAnalytics) return;
+    var el = event.target && event.target.closest ? event.target.closest("a, button") : null;
+    if (!el) return;
+    var href = el.getAttribute("href") || "";
+    var text = (el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 80);
+    var pagePath = window.location.pathname || "/";
+    var share = el.closest("[data-share]");
+    if (share) {
+      window.MyTalksAnalytics.track("share", {
+        method: share.getAttribute("data-share") || "copy",
+        content_type: "blog",
+        page_path: pagePath,
+      });
+      return;
+    }
+    if (/twitter\.com\/intent|x\.com\/intent/i.test(href)) {
+      window.MyTalksAnalytics.track("share", {
+        method: "twitter",
+        content_type: "blog",
+        page_path: pagePath,
+      });
+      return;
+    }
+    var cta = "";
+    if (/book-session/i.test(href)) cta = "book_session";
+    else if (/find-advisor/i.test(href)) cta = "find_advisor";
+    else if (/become-advisor/i.test(href)) cta = "become_advisor";
+    else if (/\/register/i.test(href) || /pages\/register/i.test(href)) cta = "register";
+    else if (/\/login/i.test(href) || /pages\/login/i.test(href)) cta = "login";
+    else if (/\/contact/i.test(href) || /pages\/contact/i.test(href)) cta = "contact";
+    else if (/\/pricing/i.test(href) || /pages\/pricing/i.test(href)) cta = "pricing";
+    else if (/advisor-profile/i.test(href)) cta = "advisor_profile";
+    if (!cta) return;
+    var advisorId = "";
+    var planId = "";
+    try {
+      var query = href.split("?")[1] || "";
+      var params = new URLSearchParams(query);
+      advisorId = params.get("advisor") || "";
+      planId = params.get("duration") || params.get("id") || "";
+    } catch (e) {
+      advisorId = "";
+    }
+    window.MyTalksAnalytics.track("cta_click", {
+      cta_name: cta,
+      link_text: text,
+      page_path: pagePath,
+    });
+    if (cta === "book_session" && advisorId) {
+      window.MyTalksAnalytics.track("select_item", {
+        item_id: advisorId,
+        item_list_name: "advisors",
+        page_path: pagePath,
+      });
+    }
+    if (cta === "book_session" && planId) {
+      window.MyTalksAnalytics.track("select_item", {
+        item_id: planId,
+        item_list_name: "pricing",
+        page_path: pagePath,
+      });
+    }
   }
 
   function loadScript(src) {
@@ -239,8 +354,16 @@
     initCookieBanner(cookie);
     document.dispatchEvent(new CustomEvent("mytalks:layout-ready"));
     await firebaseStack;
+    try {
+      if (localStorage.getItem("mytalks-cookies") === "accepted") {
+        document.dispatchEvent(new CustomEvent("mytalks:cookies-accepted"));
+      }
+    } catch (e) {
+      /* storage unavailable */
+    }
   }
 
+  document.addEventListener("click", trackClick, true);
   window.MyTalksBase = BASE;
   init();
 })();

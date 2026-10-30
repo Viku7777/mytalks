@@ -176,6 +176,12 @@
         e.preventDefault();
         var email = form.querySelector('input[type="email"]');
         if (!email || !email.value) return;
+        if (window.MyTalksAnalytics) {
+          window.MyTalksAnalytics.track("generate_lead", {
+            form_name: "newsletter",
+            page_path: location.pathname,
+          });
+        }
         showToast("Thanks for subscribing! We'll be in touch.");
         form.reset();
       });

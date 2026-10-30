@@ -168,6 +168,35 @@
       advisors = event.detail;
       render();
     });
+    if (window.MyTalksAnalytics) {
+      window.MyTalksAnalytics.track("view_item_list", {
+        item_list_id: "advisors",
+        item_list_name: "Advisors",
+      });
+    }
+    var searchTimer = null;
+    function trackSearch() {
+      var term = (search && search.value.trim()) || "";
+      var filters = [];
+      if (gender && gender.value) filters.push(gender.value);
+      if (language && language.value) filters.push(language.value);
+      if (specialty && specialty.value) filters.push(specialty.value);
+      if (rating && rating.value) filters.push("rating " + rating.value);
+      if (!term && !filters.length) return;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(function () {
+        if (!window.MyTalksAnalytics) return;
+        window.MyTalksAnalytics.track("search", {
+          search_term: (term || filters.join(", ")).slice(0, 80),
+          content_type: "advisor",
+        });
+      }, 700);
+    }
+    [search, gender, language, specialty, rating].forEach(function (el) {
+      if (!el) return;
+      el.addEventListener("input", trackSearch);
+      el.addEventListener("change", trackSearch);
+    });
   }
 
   async function initProfile() {
@@ -182,6 +211,13 @@
       return;
     }
     document.title = a.name + " | MyTalk Advisor";
+    if (window.MyTalksAnalytics) {
+      window.MyTalksAnalytics.track("view_item", {
+        item_id: String(a.id || id),
+        item_name: a.name || "",
+        item_category: "advisor",
+      });
+    }
     const skills = (a.skills || [])
       .map(function (s) {
         return '<span class="tag">' + esc(s) + "</span>";

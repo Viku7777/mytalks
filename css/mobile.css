@@ -79,8 +79,11 @@
   }
 
   .home-hero__brand {
-    font-size: 2.25rem;
     margin-bottom: var(--space-3);
+  }
+
+  .home-hero__brand .logo__img {
+    height: 2.35rem;
   }
 
   .home-hero h1 {
@@ -242,8 +245,8 @@
 }
 
 @media (max-width: 380px) {
-  .logo {
-    font-size: 1.2rem;
+  .logo__img {
+    height: 1.85rem;
   }
 
   .header-actions > .btn[data-link="admin"] {

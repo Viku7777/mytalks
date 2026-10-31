@@ -102,6 +102,9 @@
       };
       if (map[key]) el.setAttribute("href", map[key]);
     });
+    root.querySelectorAll("[data-brand]").forEach(function (img) {
+      img.src = BASE + "/assets/brand/" + img.getAttribute("data-brand");
+    });
   }
 
   function pageKey(pathOrHref) {
@@ -171,6 +174,7 @@
   }
 
   var GTM_ID = "GTM-KJ9864MH";
+  var GOOGLE_ADS_ID = "AW-18546580616";
 
   function loadGoogleTagManager() {
     if (window.__mytalksGtmLoaded) return;
@@ -186,10 +190,15 @@
     };
     window.dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
     window.gtag("js", new Date());
-    var script = document.createElement("script");
-    script.async = true;
-    script.src = "https://www.googletagmanager.com/gtm.js?id=" + GTM_ID;
-    document.head.appendChild(script);
+    window.gtag("config", GOOGLE_ADS_ID);
+    var gtm = document.createElement("script");
+    gtm.async = true;
+    gtm.src = "https://www.googletagmanager.com/gtm.js?id=" + GTM_ID;
+    document.head.appendChild(gtm);
+    var ads = document.createElement("script");
+    ads.async = true;
+    ads.src = "https://www.googletagmanager.com/gtag/js?id=" + GOOGLE_ADS_ID;
+    document.head.appendChild(ads);
   }
 
   document.addEventListener("mytalks:cookies-accepted", loadGoogleTagManager);

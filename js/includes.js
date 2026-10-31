@@ -170,6 +170,30 @@
     });
   }
 
+  var GTM_ID = "GTM-KJ9864MH";
+
+  function loadGoogleTagManager() {
+    if (window.__mytalksGtmLoaded) return;
+    try {
+      if (localStorage.getItem("mytalks-cookies") !== "accepted") return;
+    } catch (e) {
+      return;
+    }
+    window.__mytalksGtmLoaded = true;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function () {
+      window.dataLayer.push(arguments);
+    };
+    window.dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+    window.gtag("js", new Date());
+    var script = document.createElement("script");
+    script.async = true;
+    script.src = "https://www.googletagmanager.com/gtm.js?id=" + GTM_ID;
+    document.head.appendChild(script);
+  }
+
+  document.addEventListener("mytalks:cookies-accepted", loadGoogleTagManager);
+
   function initCookieBanner(root) {
     if (!root) return;
     const banner = root.querySelector(".cookie-banner");

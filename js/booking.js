@@ -79,6 +79,20 @@
     }
   }
 
+  function trackAdsPurchase(value, transactionId) {
+    try {
+      if (typeof window.gtag !== "function") return;
+      window.gtag("event", "conversion", {
+        send_to: "AW-18546580616/BTzkCOWI_64dEIi52YtF",
+        value: value,
+        currency: "INR",
+        transaction_id: transactionId || "",
+      });
+    } catch (e) {
+      /* Ads must never break booking */
+    }
+  }
+
   function isValidEmail(value) {
     return /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(value);
   }
@@ -1264,6 +1278,12 @@
 
       var txId = null;
       var paymentSettled = false;
+      var adsPurchaseTracked = false;
+      function reportAdsPurchase() {
+        if (adsPurchaseTracked) return;
+        adsPurchaseTracked = true;
+        trackAdsPurchase(total, booking.razorpayPaymentId || booking.bookingId || "");
+      }
       var txClosed = false;
 
       function markTransaction(fields) {
@@ -1382,6 +1402,7 @@
           value: total,
           currency: "INR",
         });
+        reportAdsPurchase();
         const modal = document.querySelector("[data-booking-modal]");
         if (modal) modal.classList.add("is-open");
         window.MyTalksUI.showToast(
@@ -1390,6 +1411,7 @@
       } catch (err) {
         console.error(err);
         if (paymentSettled) {
+          reportAdsPurchase();
           await markTransaction({
             status: "paid",
             razorpayOrderId: booking.razorpayOrderId || "",

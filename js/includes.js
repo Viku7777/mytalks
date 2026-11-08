@@ -175,6 +175,7 @@
 
   var GTM_ID = "GTM-KJ9864MH";
   var GOOGLE_ADS_ID = "AW-18546580616";
+  var META_PIXEL_ID = "2605677083229760";
 
   function loadGoogleTagManager() {
     if (window.__mytalksGtmLoaded) return;
@@ -201,7 +202,36 @@
     document.head.appendChild(ads);
   }
 
+  function loadMetaPixel() {
+    if (window.__mytalksMetaPixelLoaded) return;
+    try {
+      if (localStorage.getItem("mytalks-cookies") !== "accepted") return;
+    } catch (e) {
+      return;
+    }
+    window.__mytalksMetaPixelLoaded = true;
+    !(function (f, b, e, v, n, t, s) {
+      if (f.fbq) return;
+      n = f.fbq = function () {
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+      };
+      if (!f._fbq) f._fbq = n;
+      n.push = n;
+      n.loaded = !0;
+      n.version = "2.0";
+      n.queue = [];
+      t = b.createElement(e);
+      t.async = !0;
+      t.src = v;
+      s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s);
+    })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+    window.fbq("init", META_PIXEL_ID);
+    window.fbq("track", "PageView");
+  }
+
   document.addEventListener("mytalks:cookies-accepted", loadGoogleTagManager);
+  document.addEventListener("mytalks:cookies-accepted", loadMetaPixel);
 
   function initCookieBanner(root) {
     if (!root) return;

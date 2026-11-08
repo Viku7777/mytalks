@@ -54,6 +54,12 @@
             search_term: filter.value,
             content_type: "blog",
           });
+          if (window.MyTalksPixel) {
+            window.MyTalksPixel.track("Search", {
+              search_string: filter.value,
+              content_category: "blog",
+            });
+          }
         }
       });
     }

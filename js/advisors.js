@@ -190,6 +190,12 @@
           search_term: (term || filters.join(", ")).slice(0, 80),
           content_type: "advisor",
         });
+        if (window.MyTalksPixel) {
+          window.MyTalksPixel.track("Search", {
+            search_string: (term || filters.join(", ")).slice(0, 100),
+            content_category: "advisor",
+          });
+        }
       }, 700);
     }
     [search, gender, language, specialty, rating].forEach(function (el) {
@@ -217,6 +223,16 @@
         item_name: a.name || "",
         item_category: "advisor",
       });
+      if (window.MyTalksPixel) {
+        window.MyTalksPixel.track("ViewContent", {
+          content_ids: [String(a.id || id)],
+          content_name: a.name || "Advisor",
+          content_type: "product",
+          content_category: "advisor",
+          value: Number(a.price) || 0,
+          currency: "INR",
+        });
+      }
     }
     const skills = (a.skills || [])
       .map(function (s) {

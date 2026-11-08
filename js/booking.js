@@ -79,6 +79,27 @@
     }
   }
 
+  function trackMetaCommerce(eventName, advisorId, advisorName, amount, extra) {
+    if (!window.MyTalksPixel) return;
+    var id = String(advisorId || "session");
+    var payload = {
+      content_ids: [id],
+      content_name: advisorName || "Session",
+      content_type: "product",
+      content_category: "session",
+      contents: [{ id: id, quantity: 1 }],
+      value: Number(amount) || 0,
+      currency: "INR",
+      num_items: 1,
+    };
+    if (extra) {
+      Object.keys(extra).forEach(function (key) {
+        payload[key] = extra[key];
+      });
+    }
+    window.MyTalksPixel.track(eventName, payload);
+  }
+
   function trackAdsPurchase(value, transactionId) {
     try {
       if (typeof window.gtag !== "function") return;
@@ -295,6 +316,23 @@
     trackEvent("book_session_start", {
       advisor_id: preselect || "",
     });
+    var metaCartSent = false;
+    function trackMetaCart(advisor, amount) {
+      if (metaCartSent) return;
+      metaCartSent = true;
+      trackMetaCommerce(
+        "AddToCart",
+        advisor && advisor.id,
+        advisor && advisor.name,
+        amount
+      );
+    }
+    if (preselect) {
+      var presetAdvisor = advisors.find(function (item) {
+        return String(item.id) === String(preselect);
+      });
+      if (presetAdvisor) trackMetaCart(presetAdvisor, presetAdvisor.price);
+    }
 
     function selectedAdvisorId() {
       return advisorPicker ? advisorPicker.value : "";
@@ -1262,6 +1300,8 @@
           '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Opening payment…';
       }
 
+      trackMetaCart(advisor, total);
+      trackMetaCommerce("InitiateCheckout", booking.advisorId, booking.advisorName, total);
       trackEvent("begin_checkout", {
         currency: "INR",
         value: total,
@@ -1283,6 +1323,16 @@
         if (adsPurchaseTracked) return;
         adsPurchaseTracked = true;
         trackAdsPurchase(total, booking.razorpayPaymentId || booking.bookingId || "");
+        trackMetaCommerce("Purchase", booking.advisorId, booking.advisorName, total, {
+          order_id: booking.razorpayPaymentId || booking.bookingId || "",
+        });
+        if (window.MyTalksPixel) {
+          window.MyTalksPixel.track("Schedule", {
+            content_name: booking.advisorName || "Session",
+            value: Number(total) || 0,
+            currency: "INR",
+          });
+        }
       }
       var txClosed = false;
 
@@ -1336,6 +1386,7 @@
           throw new Error("Session total is too low to charge.");
         }
 
+        trackMetaCommerce("AddPaymentInfo", booking.advisorId, booking.advisorName, total);
         trackEvent("add_payment_info", {
           currency: "INR",
           value: total,

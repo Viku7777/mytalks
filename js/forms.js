@@ -89,6 +89,12 @@
               page_path: location.pathname,
             });
           }
+          if (window.MyTalksPixel) {
+            window.MyTalksPixel.track("Lead", {
+              content_name: "support_ticket",
+              content_category: payload.category || "support",
+            });
+          }
           if (window.MyTalksUI) {
             window.MyTalksUI.showToast(
               "Ticket submitted. Your reference is " + result.ticketId + "."
@@ -236,6 +242,19 @@
             form_name: name,
             page_path: location.pathname,
           });
+          if (window.MyTalksPixel) {
+            if (name === "contact") {
+              window.MyTalksPixel.track("Lead", {
+                content_name: "contact",
+                content_category: "contact",
+              });
+            } else {
+              window.MyTalksPixel.track("SubmitApplication", {
+                content_name: name,
+                content_category: name,
+              });
+            }
+          }
         }
         var msg =
           form.getAttribute("data-success") ||

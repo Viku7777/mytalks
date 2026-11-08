@@ -509,6 +509,12 @@
           phone: phone || "",
         });
         trackEvent("sign_up", { method: "email" });
+        if (window.MyTalksPixel) {
+          window.MyTalksPixel.track("CompleteRegistration", {
+            content_name: "MyTalk account",
+            status: "email",
+          });
+        }
         return Promise.all(tasks)
           .then(function () {
             return syncUserToFirestore(user, {
@@ -533,6 +539,12 @@
       cred.additionalUserInfo && cred.additionalUserInfo.isNewUser;
     if (isNew) {
       trackEvent("sign_up", { method: "google" });
+      if (window.MyTalksPixel) {
+        window.MyTalksPixel.track("CompleteRegistration", {
+          content_name: "MyTalk account",
+          status: "google",
+        });
+      }
     } else {
       trackEvent("login", { method: "google" });
     }

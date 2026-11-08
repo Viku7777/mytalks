@@ -177,6 +177,17 @@
   var GOOGLE_ADS_ID = "AW-18546580616";
   var META_PIXEL_ID = "2605677083229760";
 
+  function trackMeta(eventName, params) {
+    try {
+      if (typeof window.fbq !== "function") return;
+      window.fbq("track", eventName, params || {});
+    } catch (e) {
+      /* Marketing pixels must never break the page */
+    }
+  }
+
+  window.MyTalksPixel = { track: trackMeta };
+
   function loadGoogleTagManager() {
     if (window.__mytalksGtmLoaded) return;
     try {

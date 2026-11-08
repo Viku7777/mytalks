@@ -38,7 +38,7 @@
 
   var advisorsCache = null;
   var remoteAdvisorsStarted = false;
-  var ADVISOR_CACHE_KEY = "mytalks-advisors-v2";
+  var ADVISOR_CACHE_KEY = "mytalks-advisors-v3";
 
   function waitForAdvisorDb(timeoutMs) {
     if (window.MyTalksDB && window.MyTalksDB.listAdvisors) {

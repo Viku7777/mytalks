@@ -2,463 +2,939 @@
   {
     "id": "meera-sharma",
     "name": "Meera Sharma",
-    "photo": "/assets/images/advisors/advisor-meera-sharma.jpg",
+    "photo": "/assets/images/advisors/advisor-meera-sharma.jpg?v=2",
     "gender": "Female",
-    "languages": ["English", "Hindi"],
+    "languages": [
+      "English",
+      "Hindi"
+    ],
     "experience": 8,
-    "specialties": ["Relationship Guidance", "Breakup Support", "Marriage Discussions"],
+    "specialties": [
+      "Relationship Guidance",
+      "Breakup Support",
+      "Marriage Discussions"
+    ],
     "rating": 4.9,
     "reviewsCount": 86,
     "price": 499,
     "currency": "INR",
     "bio": "Meera listens with warmth when relationships feel confusing. She helps people talk through communication, breakups, and marriage check-ins without judgment.",
     "education": "M.A. Psychology",
-    "skills": ["Active Listening", "Conflict Resolution", "Emotional Validation"],
-    "availability": ["Mon", "Tue", "Wed", "Thu", "Fri"],
+    "skills": [
+      "Active Listening",
+      "Conflict Resolution",
+      "Emotional Validation"
+    ],
+    "availability": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri"
+    ],
     "hoursStart": "10:00",
     "hoursEnd": "19:00",
     "rank": 1,
-    "sessionPrices": { "chat": 399, "voice": 499, "video": 599 }
-  },
-  {
-    "id": "kavya-iyer",
-    "name": "Kavya Iyer",
-    "photo": "/assets/images/advisors/advisor-kavya-iyer.jpg",
-    "gender": "Female",
-    "languages": ["English", "Tamil", "Hindi"],
-    "experience": 7,
-    "specialties": ["Family Problems", "Friendship Issues", "Emotional Support"],
-    "rating": 4.8,
-    "reviewsCount": 64,
-    "price": 549,
-    "currency": "INR",
-    "bio": "Kavya offers a calm space for family tension, friendship ruptures, and days that feel heavier than they should.",
-    "education": "M.Sc. Psychology",
-    "skills": ["Family Dialogue", "Empathic Listening", "Boundary Setting"],
-    "availability": ["Tue", "Wed", "Thu", "Fri", "Sat"],
-    "hoursStart": "11:00",
-    "hoursEnd": "20:00",
-    "rank": 2,
-    "sessionPrices": { "chat": 449, "voice": 549, "video": 649 }
-  },
-  {
-    "id": "anjali-deshmukh",
-    "name": "Anjali Deshmukh",
-    "photo": "/assets/images/advisors/advisor-anjali-deshmukh.jpg",
-    "gender": "Female",
-    "languages": ["English", "Marathi", "Hindi"],
-    "experience": 9,
-    "specialties": ["Career Stress", "Life Decisions", "Stress Support"],
-    "rating": 4.9,
-    "reviewsCount": 72,
-    "price": 599,
-    "currency": "INR",
-    "bio": "Anjali helps people slow down when work pressure and big choices start to crowd everything else out.",
-    "education": "M.A. Counselling Psychology",
-    "skills": ["Career Listening", "Values Clarification", "Stress Support"],
-    "availability": ["Mon", "Wed", "Thu", "Fri", "Sat"],
-    "hoursStart": "09:00",
-    "hoursEnd": "18:00",
-    "rank": 3,
-    "sessionPrices": { "chat": 499, "voice": 599, "video": 699 }
-  },
-  {
-    "id": "sneha-reddy",
-    "name": "Sneha Reddy",
-    "photo": "/assets/images/advisors/advisor-sneha-reddy.jpg",
-    "gender": "Female",
-    "languages": ["English", "Telugu", "Hindi"],
-    "experience": 6,
-    "specialties": ["Marriage Discussions", "Stress Support", "Breakup Recovery"],
-    "rating": 4.8,
-    "reviewsCount": 51,
-    "price": 499,
-    "currency": "INR",
-    "bio": "Sneha talks with couples and individuals about trust, stress, and the quiet stretch after a breakup.",
-    "education": "M.A. Psychology",
-    "skills": ["Couples Dialogue", "Stress Management", "Reflective Listening"],
-    "availability": ["Mon", "Tue", "Wed", "Thu", "Fri"],
-    "hoursStart": "12:00",
-    "hoursEnd": "21:00",
-    "rank": 4,
-    "sessionPrices": { "chat": 399, "voice": 499, "video": 599 }
-  },
-  {
-    "id": "fatima-khan",
-    "name": "Fatima Khan",
-    "photo": "/assets/images/advisors/advisor-fatima-khan.jpg",
-    "gender": "Female",
-    "languages": ["English", "Hindi", "Urdu"],
-    "experience": 8,
-    "specialties": ["Family Problems", "Emotional Support", "Loneliness"],
-    "rating": 4.9,
-    "reviewsCount": 68,
-    "price": 549,
-    "currency": "INR",
-    "bio": "Fatima is a steady listener for family worries, loneliness, and feelings that are hard to say out loud at home.",
-    "education": "M.A. Psychology",
-    "skills": ["Warm Presence", "Cultural Sensitivity", "Emotional Validation"],
-    "availability": ["Mon", "Tue", "Thu", "Fri", "Sun"],
-    "hoursStart": "10:00",
-    "hoursEnd": "18:00",
-    "rank": 5,
-    "sessionPrices": { "chat": 449, "voice": 549, "video": 649 }
-  },
-  {
-    "id": "neha-kapoor",
-    "name": "Neha Kapoor",
-    "photo": "/assets/images/advisors/advisor-neha-kapoor.jpg",
-    "gender": "Female",
-    "languages": ["English", "Hindi", "Punjabi"],
-    "experience": 5,
-    "specialties": ["Dating Advice", "Loneliness", "General Conversation"],
-    "rating": 4.7,
-    "reviewsCount": 41,
-    "price": 399,
-    "currency": "INR",
-    "bio": "Neha keeps conversations easy when you want to talk about dating, loneliness, or a day that simply needs company.",
-    "education": "B.A. Psychology",
-    "skills": ["Peer Support", "Communication Skills", "Self-esteem"],
-    "availability": ["Wed", "Thu", "Fri", "Sat", "Sun"],
-    "hoursStart": "14:00",
-    "hoursEnd": "22:00",
-    "rank": 6,
-    "sessionPrices": { "chat": 299, "voice": 399, "video": 499 }
-  },
-  {
-    "id": "divya-menon",
-    "name": "Divya Menon",
-    "photo": "/assets/images/advisors/advisor-divya-menon.jpg",
-    "gender": "Female",
-    "languages": ["English", "Malayalam"],
-    "experience": 4,
-    "specialties": ["Friendship Issues", "Loneliness", "General Conversation"],
-    "rating": 4.8,
-    "reviewsCount": 33,
-    "price": 349,
-    "currency": "INR",
-    "bio": "Divya is a gentle listener for friendship changes, homesickness, and the ordinary moments that feel heavy alone.",
-    "education": "B.Sc. Psychology",
-    "skills": ["Warm Presence", "Reflective Listening", "Hope Building"],
-    "availability": ["Mon", "Tue", "Thu", "Sat", "Sun"],
-    "hoursStart": "11:00",
-    "hoursEnd": "19:00",
-    "rank": 7,
-    "sessionPrices": { "chat": 249, "voice": 349, "video": 449 }
-  },
-  {
-    "id": "ishita-banerjee",
-    "name": "Ishita Banerjee",
-    "photo": "/assets/images/advisors/advisor-ishita-banerjee.jpg",
-    "gender": "Female",
-    "languages": ["English", "Bengali", "Hindi"],
-    "experience": 10,
-    "specialties": ["Relationship Guidance", "Family Problems", "Marriage Discussions"],
-    "rating": 4.9,
-    "reviewsCount": 91,
-    "price": 649,
-    "currency": "INR",
-    "bio": "Ishita guides difficult family and relationship talks with patience, so people can say what they have been holding back.",
-    "education": "M.Phil. Psychology",
-    "skills": ["Family Systems", "Mediation Style Dialogue", "Trust Repair"],
-    "availability": ["Mon", "Tue", "Wed", "Thu", "Fri"],
-    "hoursStart": "10:00",
-    "hoursEnd": "18:00",
-    "rank": 8,
-    "sessionPrices": { "chat": 549, "voice": 649, "video": 749 }
-  },
-  {
-    "id": "pooja-joshi",
-    "name": "Pooja Joshi",
-    "photo": "/assets/images/advisors/advisor-pooja-joshi.jpg",
-    "gender": "Female",
-    "languages": ["English", "Hindi"],
-    "experience": 6,
-    "specialties": ["Career Stress", "Stress Support", "Life Decisions"],
-    "rating": 4.8,
-    "reviewsCount": 47,
-    "price": 449,
-    "currency": "INR",
-    "bio": "Pooja helps working people sort through burnout, study pressure, and decisions that feel too big to make alone.",
-    "education": "M.A. Applied Psychology",
-    "skills": ["Goal Setting", "Mindfulness", "Career Listening"],
-    "availability": ["Tue", "Wed", "Thu", "Fri", "Sat"],
-    "hoursStart": "09:00",
-    "hoursEnd": "17:00",
-    "rank": 9,
-    "sessionPrices": { "chat": 349, "voice": 449, "video": 549 }
-  },
-  {
-    "id": "lakshmi-rao",
-    "name": "Lakshmi Rao",
-    "photo": "/assets/images/advisors/advisor-lakshmi-rao.jpg",
-    "gender": "Female",
-    "languages": ["English", "Telugu", "Hindi"],
-    "experience": 11,
-    "specialties": ["Marriage Discussions", "Family Problems", "Emotional Support"],
-    "rating": 4.9,
-    "reviewsCount": 78,
-    "price": 599,
-    "currency": "INR",
-    "bio": "Lakshmi has spent years sitting with marriage stress, in-law tension, and the emotions people usually keep private.",
-    "education": "M.A. Psychology",
-    "skills": ["Couples Dialogue", "Parenting Stress", "Boundary Setting"],
-    "availability": ["Mon", "Wed", "Thu", "Fri", "Sat"],
-    "hoursStart": "10:00",
-    "hoursEnd": "19:00",
-    "rank": 10,
-    "sessionPrices": { "chat": 499, "voice": 599, "video": 699 }
-  },
-  {
-    "id": "harpreet-kaur",
-    "name": "Harpreet Kaur",
-    "photo": "/assets/images/advisors/advisor-harpreet-kaur.jpg",
-    "gender": "Female",
-    "languages": ["English", "Punjabi", "Hindi"],
-    "experience": 7,
-    "specialties": ["Relationship Guidance", "Breakup Support", "Dating Advice"],
-    "rating": 4.8,
-    "reviewsCount": 55,
-    "price": 499,
-    "currency": "INR",
-    "bio": "Harpreet talks straight and kindly about dating, breakups, and relationships that need a clearer next step.",
-    "education": "M.A. Psychology",
-    "skills": ["Direct Listening", "Self-esteem", "Conflict Resolution"],
-    "availability": ["Mon", "Tue", "Thu", "Fri", "Sun"],
-    "hoursStart": "12:00",
-    "hoursEnd": "21:00",
-    "rank": 11,
-    "sessionPrices": { "chat": 399, "voice": 499, "video": 599 }
-  },
-  {
-    "id": "riya-chatterjee",
-    "name": "Riya Chatterjee",
-    "photo": "/assets/images/advisors/advisor-riya-chatterjee.jpg",
-    "gender": "Female",
-    "languages": ["English", "Bengali"],
-    "experience": 4,
-    "specialties": ["Loneliness", "Friendship Issues", "General Conversation"],
-    "rating": 4.7,
-    "reviewsCount": 29,
-    "price": 349,
-    "currency": "INR",
-    "bio": "Riya is an easy person to talk to when evenings feel quiet, friendships shift, or you just want someone attentive.",
-    "education": "B.A. Psychology",
-    "skills": ["Warm Presence", "Reflective Listening", "Hope Building"],
-    "availability": ["Tue", "Wed", "Fri", "Sat", "Sun"],
-    "hoursStart": "15:00",
-    "hoursEnd": "22:00",
-    "rank": 12,
-    "sessionPrices": { "chat": 249, "voice": 349, "video": 449 }
+    "sessionPrices": {
+      "chat": 399,
+      "voice": 499,
+      "video": 599
+    }
   },
   {
     "id": "arjun-singh",
     "name": "Arjun Singh",
-    "photo": "/assets/images/advisors/advisor-arjun-singh.jpg",
+    "photo": "/assets/images/advisors/advisor-arjun-singh.jpg?v=2",
     "gender": "Male",
-    "languages": ["English", "Hindi"],
+    "languages": [
+      "English",
+      "Hindi"
+    ],
     "experience": 8,
-    "specialties": ["Career Stress", "Life Decisions", "Stress Support"],
+    "specialties": [
+      "Career Stress",
+      "Life Decisions",
+      "Stress Support"
+    ],
     "rating": 4.8,
     "reviewsCount": 62,
     "price": 499,
     "currency": "INR",
     "bio": "Arjun supports people dealing with work pressure, isolation, and choices about what comes next.",
     "education": "M.A. Psychology",
-    "skills": ["Career Listening", "Goal Setting", "Resilience"],
-    "availability": ["Mon", "Tue", "Wed", "Thu", "Fri"],
+    "skills": [
+      "Career Listening",
+      "Goal Setting",
+      "Resilience"
+    ],
+    "availability": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri"
+    ],
     "hoursStart": "10:00",
     "hoursEnd": "19:00",
-    "rank": 13,
-    "sessionPrices": { "chat": 399, "voice": 499, "video": 599 }
+    "rank": 2,
+    "sessionPrices": {
+      "chat": 399,
+      "voice": 499,
+      "video": 599
+    }
+  },
+  {
+    "id": "kavya-iyer",
+    "name": "Kavya Iyer",
+    "photo": "/assets/images/advisors/advisor-kavya-iyer.jpg?v=2",
+    "gender": "Female",
+    "languages": [
+      "English",
+      "Tamil",
+      "Hindi"
+    ],
+    "experience": 7,
+    "specialties": [
+      "Family Problems",
+      "Friendship Issues",
+      "Emotional Support"
+    ],
+    "rating": 4.8,
+    "reviewsCount": 64,
+    "price": 549,
+    "currency": "INR",
+    "bio": "Kavya offers a calm space for family tension, friendship ruptures, and days that feel heavier than they should.",
+    "education": "M.Sc. Psychology",
+    "skills": [
+      "Family Dialogue",
+      "Empathic Listening",
+      "Boundary Setting"
+    ],
+    "availability": [
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
+    "hoursStart": "11:00",
+    "hoursEnd": "20:00",
+    "rank": 3,
+    "sessionPrices": {
+      "chat": 449,
+      "voice": 549,
+      "video": 649
+    }
   },
   {
     "id": "aditya-kulkarni",
     "name": "Aditya Kulkarni",
-    "photo": "/assets/images/advisors/advisor-aditya-kulkarni.jpg",
+    "photo": "/assets/images/advisors/advisor-aditya-kulkarni.jpg?v=2",
     "gender": "Male",
-    "languages": ["English", "Marathi", "Hindi"],
+    "languages": [
+      "English",
+      "Marathi",
+      "Hindi"
+    ],
     "experience": 9,
-    "specialties": ["Family Problems", "Marriage Discussions", "Relationship Guidance"],
+    "specialties": [
+      "Family Problems",
+      "Marriage Discussions",
+      "Relationship Guidance"
+    ],
     "rating": 4.9,
     "reviewsCount": 70,
     "price": 549,
     "currency": "INR",
     "bio": "Aditya helps families and partners have hard conversations with dignity, especially when everyone is talking past each other.",
     "education": "M.A. Counselling Psychology",
-    "skills": ["Family Dialogue", "Trust Repair", "Conflict Resolution"],
-    "availability": ["Mon", "Tue", "Wed", "Fri", "Sat"],
+    "skills": [
+      "Family Dialogue",
+      "Trust Repair",
+      "Conflict Resolution"
+    ],
+    "availability": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Fri",
+      "Sat"
+    ],
     "hoursStart": "09:00",
     "hoursEnd": "18:00",
-    "rank": 14,
-    "sessionPrices": { "chat": 449, "voice": 549, "video": 649 }
+    "rank": 4,
+    "sessionPrices": {
+      "chat": 449,
+      "voice": 549,
+      "video": 649
+    }
+  },
+  {
+    "id": "anjali-deshmukh",
+    "name": "Anjali Deshmukh",
+    "photo": "/assets/images/advisors/advisor-anjali-deshmukh.jpg?v=2",
+    "gender": "Female",
+    "languages": [
+      "English",
+      "Marathi",
+      "Hindi"
+    ],
+    "experience": 9,
+    "specialties": [
+      "Career Stress",
+      "Life Decisions",
+      "Stress Support"
+    ],
+    "rating": 4.9,
+    "reviewsCount": 72,
+    "price": 599,
+    "currency": "INR",
+    "bio": "Anjali helps people slow down when work pressure and big choices start to crowd everything else out.",
+    "education": "M.A. Counselling Psychology",
+    "skills": [
+      "Career Listening",
+      "Values Clarification",
+      "Stress Support"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
+    "hoursStart": "09:00",
+    "hoursEnd": "18:00",
+    "rank": 5,
+    "sessionPrices": {
+      "chat": 499,
+      "voice": 599,
+      "video": 699
+    }
   },
   {
     "id": "karthik-subramanian",
     "name": "Karthik Subramanian",
-    "photo": "/assets/images/advisors/advisor-karthik-subramanian.jpg",
+    "photo": "/assets/images/advisors/advisor-karthik-subramanian.jpg?v=2",
     "gender": "Male",
-    "languages": ["English", "Tamil"],
+    "languages": [
+      "English",
+      "Tamil"
+    ],
     "experience": 5,
-    "specialties": ["Loneliness", "Emotional Support", "General Conversation"],
+    "specialties": [
+      "Loneliness",
+      "Emotional Support",
+      "General Conversation"
+    ],
     "rating": 4.7,
     "reviewsCount": 36,
     "price": 399,
     "currency": "INR",
     "bio": "Karthik is a calm listener for loneliness, homesickness, and the days when you need to talk without being fixed.",
     "education": "B.Sc. Psychology",
-    "skills": ["Peer Support", "Reflective Listening", "Warm Presence"],
-    "availability": ["Wed", "Thu", "Fri", "Sat", "Sun"],
+    "skills": [
+      "Peer Support",
+      "Reflective Listening",
+      "Warm Presence"
+    ],
+    "availability": [
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ],
     "hoursStart": "11:00",
     "hoursEnd": "20:00",
-    "rank": 15,
-    "sessionPrices": { "chat": 299, "voice": 399, "video": 499 }
+    "rank": 6,
+    "sessionPrices": {
+      "chat": 299,
+      "voice": 399,
+      "video": 499
+    }
+  },
+  {
+    "id": "sneha-reddy",
+    "name": "Sneha Reddy",
+    "photo": "/assets/images/advisors/advisor-sneha-reddy.jpg?v=2",
+    "gender": "Female",
+    "languages": [
+      "English",
+      "Telugu",
+      "Hindi"
+    ],
+    "experience": 6,
+    "specialties": [
+      "Marriage Discussions",
+      "Stress Support",
+      "Breakup Recovery"
+    ],
+    "rating": 4.8,
+    "reviewsCount": 51,
+    "price": 499,
+    "currency": "INR",
+    "bio": "Sneha talks with couples and individuals about trust, stress, and the quiet stretch after a breakup.",
+    "education": "M.A. Psychology",
+    "skills": [
+      "Couples Dialogue",
+      "Stress Management",
+      "Reflective Listening"
+    ],
+    "availability": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri"
+    ],
+    "hoursStart": "12:00",
+    "hoursEnd": "21:00",
+    "rank": 7,
+    "sessionPrices": {
+      "chat": 399,
+      "voice": 499,
+      "video": 599
+    }
   },
   {
     "id": "rahul-verma",
     "name": "Rahul Verma",
-    "photo": "/assets/images/advisors/advisor-rahul-verma.jpg",
+    "photo": "/assets/images/advisors/advisor-rahul-verma.jpg?v=2",
     "gender": "Male",
-    "languages": ["English", "Hindi"],
+    "languages": [
+      "English",
+      "Hindi"
+    ],
     "experience": 6,
-    "specialties": ["Dating Advice", "Breakup Support", "Relationship Guidance"],
+    "specialties": [
+      "Dating Advice",
+      "Breakup Support",
+      "Relationship Guidance"
+    ],
     "rating": 4.8,
     "reviewsCount": 44,
     "price": 449,
     "currency": "INR",
     "bio": "Rahul talks with people about dating confidence, breakups, and relationships that have gone quiet or confusing.",
     "education": "M.A. Psychology",
-    "skills": ["Communication Skills", "Self-esteem", "Emotional Validation"],
-    "availability": ["Mon", "Tue", "Thu", "Fri", "Sat"],
+    "skills": [
+      "Communication Skills",
+      "Self-esteem",
+      "Emotional Validation"
+    ],
+    "availability": [
+      "Mon",
+      "Tue",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
     "hoursStart": "12:00",
     "hoursEnd": "21:00",
-    "rank": 16,
-    "sessionPrices": { "chat": 349, "voice": 449, "video": 549 }
+    "rank": 8,
+    "sessionPrices": {
+      "chat": 349,
+      "voice": 449,
+      "video": 549
+    }
+  },
+  {
+    "id": "fatima-khan",
+    "name": "Fatima Khan",
+    "photo": "/assets/images/advisors/advisor-fatima-khan.jpg?v=2",
+    "gender": "Female",
+    "languages": [
+      "English",
+      "Hindi",
+      "Urdu"
+    ],
+    "experience": 8,
+    "specialties": [
+      "Family Problems",
+      "Emotional Support",
+      "Loneliness"
+    ],
+    "rating": 4.9,
+    "reviewsCount": 68,
+    "price": 549,
+    "currency": "INR",
+    "bio": "Fatima is a steady listener for family worries, loneliness, and feelings that are hard to say out loud at home.",
+    "education": "M.A. Psychology",
+    "skills": [
+      "Warm Presence",
+      "Cultural Sensitivity",
+      "Emotional Validation"
+    ],
+    "availability": [
+      "Mon",
+      "Tue",
+      "Thu",
+      "Fri",
+      "Sun"
+    ],
+    "hoursStart": "10:00",
+    "hoursEnd": "18:00",
+    "rank": 9,
+    "sessionPrices": {
+      "chat": 449,
+      "voice": 549,
+      "video": 649
+    }
   },
   {
     "id": "imran-qureshi",
     "name": "Imran Qureshi",
-    "photo": "/assets/images/advisors/advisor-imran-qureshi.jpg",
+    "photo": "/assets/images/advisors/advisor-imran-qureshi.jpg?v=2",
     "gender": "Male",
-    "languages": ["English", "Hindi", "Urdu"],
+    "languages": [
+      "English",
+      "Hindi",
+      "Urdu"
+    ],
     "experience": 7,
-    "specialties": ["Family Problems", "Emotional Support", "Stress Support"],
+    "specialties": [
+      "Family Problems",
+      "Emotional Support",
+      "Stress Support"
+    ],
     "rating": 4.8,
     "reviewsCount": 58,
     "price": 499,
     "currency": "INR",
     "bio": "Imran sits with family pressure, faith and home expectations, and the stress of holding too much for other people.",
     "education": "M.A. Psychology",
-    "skills": ["Cultural Sensitivity", "Stress Support", "Empathic Listening"],
-    "availability": ["Mon", "Wed", "Thu", "Fri", "Sun"],
+    "skills": [
+      "Cultural Sensitivity",
+      "Stress Support",
+      "Empathic Listening"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sun"
+    ],
     "hoursStart": "10:00",
     "hoursEnd": "18:00",
-    "rank": 17,
-    "sessionPrices": { "chat": 399, "voice": 499, "video": 599 }
+    "rank": 10,
+    "sessionPrices": {
+      "chat": 399,
+      "voice": 499,
+      "video": 599
+    }
+  },
+  {
+    "id": "neha-kapoor",
+    "name": "Neha Kapoor",
+    "photo": "/assets/images/advisors/advisor-neha-kapoor.jpg?v=2",
+    "gender": "Female",
+    "languages": [
+      "English",
+      "Hindi",
+      "Punjabi"
+    ],
+    "experience": 5,
+    "specialties": [
+      "Dating Advice",
+      "Loneliness",
+      "General Conversation"
+    ],
+    "rating": 4.7,
+    "reviewsCount": 41,
+    "price": 399,
+    "currency": "INR",
+    "bio": "Neha keeps conversations easy when you want to talk about dating, loneliness, or a day that simply needs company.",
+    "education": "B.A. Psychology",
+    "skills": [
+      "Peer Support",
+      "Communication Skills",
+      "Self-esteem"
+    ],
+    "availability": [
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ],
+    "hoursStart": "14:00",
+    "hoursEnd": "22:00",
+    "rank": 11,
+    "sessionPrices": {
+      "chat": 299,
+      "voice": 399,
+      "video": 499
+    }
+  },
+  {
+    "id": "riya-chatterjee",
+    "name": "Riya Chatterjee",
+    "photo": "/assets/images/advisors/advisor-riya-chatterjee.jpg?v=2",
+    "gender": "Female",
+    "languages": [
+      "English",
+      "Bengali"
+    ],
+    "experience": 4,
+    "specialties": [
+      "Loneliness",
+      "Friendship Issues",
+      "General Conversation"
+    ],
+    "rating": 4.7,
+    "reviewsCount": 29,
+    "price": 349,
+    "currency": "INR",
+    "bio": "Riya is an easy person to talk to when evenings feel quiet, friendships shift, or you just want someone attentive.",
+    "education": "B.A. Psychology",
+    "skills": [
+      "Warm Presence",
+      "Reflective Listening",
+      "Hope Building"
+    ],
+    "availability": [
+      "Tue",
+      "Wed",
+      "Fri",
+      "Sat",
+      "Sun"
+    ],
+    "hoursStart": "15:00",
+    "hoursEnd": "22:00",
+    "rank": 12,
+    "sessionPrices": {
+      "chat": 249,
+      "voice": 349,
+      "video": 449
+    }
   },
   {
     "id": "sandeep-yadav",
     "name": "Sandeep Yadav",
-    "photo": "/assets/images/advisors/advisor-sandeep-yadav.jpg",
+    "photo": "/assets/images/advisors/advisor-sandeep-yadav.jpg?v=2",
     "gender": "Male",
-    "languages": ["English", "Hindi"],
+    "languages": [
+      "English",
+      "Hindi"
+    ],
     "experience": 12,
-    "specialties": ["Career Stress", "Life Decisions", "Loneliness"],
+    "specialties": [
+      "Career Stress",
+      "Life Decisions",
+      "Loneliness"
+    ],
     "rating": 4.9,
     "reviewsCount": 84,
     "price": 599,
     "currency": "INR",
     "bio": "Sandeep helps people who have been carrying work and family expectations for a long time find a steadier pace.",
     "education": "M.A. Psychology",
-    "skills": ["Executive Listening", "Values Clarification", "Resilience"],
-    "availability": ["Mon", "Tue", "Wed", "Thu", "Fri"],
+    "skills": [
+      "Executive Listening",
+      "Values Clarification",
+      "Resilience"
+    ],
+    "availability": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri"
+    ],
     "hoursStart": "09:00",
     "hoursEnd": "18:00",
-    "rank": 18,
-    "sessionPrices": { "chat": 499, "voice": 599, "video": 699 }
+    "rank": 13,
+    "sessionPrices": {
+      "chat": 499,
+      "voice": 599,
+      "video": 699
+    }
+  },
+  {
+    "id": "divya-menon",
+    "name": "Divya Menon",
+    "photo": "/assets/images/advisors/advisor-divya-menon.jpg?v=2",
+    "gender": "Female",
+    "languages": [
+      "English",
+      "Malayalam"
+    ],
+    "experience": 4,
+    "specialties": [
+      "Friendship Issues",
+      "Loneliness",
+      "General Conversation"
+    ],
+    "rating": 4.8,
+    "reviewsCount": 33,
+    "price": 349,
+    "currency": "INR",
+    "bio": "Divya is a gentle listener for friendship changes, homesickness, and the ordinary moments that feel heavy alone.",
+    "education": "B.Sc. Psychology",
+    "skills": [
+      "Warm Presence",
+      "Reflective Listening",
+      "Hope Building"
+    ],
+    "availability": [
+      "Mon",
+      "Tue",
+      "Thu",
+      "Sat",
+      "Sun"
+    ],
+    "hoursStart": "11:00",
+    "hoursEnd": "19:00",
+    "rank": 14,
+    "sessionPrices": {
+      "chat": 249,
+      "voice": 349,
+      "video": 449
+    }
   },
   {
     "id": "nikhil-bose",
     "name": "Nikhil Bose",
-    "photo": "/assets/images/advisors/advisor-nikhil-bose.jpg",
+    "photo": "/assets/images/advisors/advisor-nikhil-bose.jpg?v=2",
     "gender": "Male",
-    "languages": ["English", "Bengali", "Hindi"],
+    "languages": [
+      "English",
+      "Bengali",
+      "Hindi"
+    ],
     "experience": 6,
-    "specialties": ["Friendship Issues", "Emotional Support", "General Conversation"],
+    "specialties": [
+      "Friendship Issues",
+      "Emotional Support",
+      "General Conversation"
+    ],
     "rating": 4.8,
     "reviewsCount": 39,
     "price": 449,
     "currency": "INR",
     "bio": "Nikhil is unhurried and practical when friendships change, feelings pile up, or you want an ordinary conversation that still matters.",
     "education": "M.Sc. Psychology",
-    "skills": ["Reflective Listening", "Hope Building", "Communication Skills"],
-    "availability": ["Tue", "Wed", "Thu", "Sat", "Sun"],
+    "skills": [
+      "Reflective Listening",
+      "Hope Building",
+      "Communication Skills"
+    ],
+    "availability": [
+      "Tue",
+      "Wed",
+      "Thu",
+      "Sat",
+      "Sun"
+    ],
     "hoursStart": "14:00",
     "hoursEnd": "22:00",
-    "rank": 19,
-    "sessionPrices": { "chat": 349, "voice": 449, "video": 549 }
+    "rank": 15,
+    "sessionPrices": {
+      "chat": 349,
+      "voice": 449,
+      "video": 549
+    }
+  },
+  {
+    "id": "ishita-banerjee",
+    "name": "Ishita Banerjee",
+    "photo": "/assets/images/advisors/advisor-ishita-banerjee.jpg?v=2",
+    "gender": "Female",
+    "languages": [
+      "English",
+      "Bengali",
+      "Hindi"
+    ],
+    "experience": 10,
+    "specialties": [
+      "Relationship Guidance",
+      "Family Problems",
+      "Marriage Discussions"
+    ],
+    "rating": 4.9,
+    "reviewsCount": 91,
+    "price": 649,
+    "currency": "INR",
+    "bio": "Ishita guides difficult family and relationship talks with patience, so people can say what they have been holding back.",
+    "education": "M.Phil. Psychology",
+    "skills": [
+      "Family Systems",
+      "Mediation Style Dialogue",
+      "Trust Repair"
+    ],
+    "availability": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri"
+    ],
+    "hoursStart": "10:00",
+    "hoursEnd": "18:00",
+    "rank": 16,
+    "sessionPrices": {
+      "chat": 549,
+      "voice": 649,
+      "video": 749
+    }
   },
   {
     "id": "harsh-patel",
     "name": "Harsh Patel",
-    "photo": "/assets/images/advisors/advisor-harsh-patel.jpg",
+    "photo": "/assets/images/advisors/advisor-harsh-patel.jpg?v=2",
     "gender": "Male",
-    "languages": ["English", "Gujarati", "Hindi"],
+    "languages": [
+      "English",
+      "Gujarati",
+      "Hindi"
+    ],
     "experience": 5,
-    "specialties": ["Career Stress", "Stress Support", "Life Decisions"],
+    "specialties": [
+      "Career Stress",
+      "Stress Support",
+      "Life Decisions"
+    ],
     "rating": 4.7,
     "reviewsCount": 31,
     "price": 399,
     "currency": "INR",
     "bio": "Harsh talks with students and young professionals about exams, first jobs, family expectations, and what to do next.",
     "education": "B.A. Psychology",
-    "skills": ["Goal Setting", "Career Listening", "Stress Support"],
-    "availability": ["Mon", "Tue", "Thu", "Fri", "Sat"],
+    "skills": [
+      "Goal Setting",
+      "Career Listening",
+      "Stress Support"
+    ],
+    "availability": [
+      "Mon",
+      "Tue",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
     "hoursStart": "10:00",
     "hoursEnd": "19:00",
-    "rank": 20,
-    "sessionPrices": { "chat": 299, "voice": 399, "video": 499 }
+    "rank": 17,
+    "sessionPrices": {
+      "chat": 299,
+      "voice": 399,
+      "video": 499
+    }
+  },
+  {
+    "id": "pooja-joshi",
+    "name": "Pooja Joshi",
+    "photo": "/assets/images/advisors/advisor-pooja-joshi.jpg?v=2",
+    "gender": "Female",
+    "languages": [
+      "English",
+      "Hindi"
+    ],
+    "experience": 6,
+    "specialties": [
+      "Career Stress",
+      "Stress Support",
+      "Life Decisions"
+    ],
+    "rating": 4.8,
+    "reviewsCount": 47,
+    "price": 449,
+    "currency": "INR",
+    "bio": "Pooja helps working people sort through burnout, study pressure, and decisions that feel too big to make alone.",
+    "education": "M.A. Applied Psychology",
+    "skills": [
+      "Goal Setting",
+      "Mindfulness",
+      "Career Listening"
+    ],
+    "availability": [
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
+    "hoursStart": "09:00",
+    "hoursEnd": "17:00",
+    "rank": 18,
+    "sessionPrices": {
+      "chat": 349,
+      "voice": 449,
+      "video": 549
+    }
   },
   {
     "id": "manish-reddy",
     "name": "Manish Reddy",
-    "photo": "/assets/images/advisors/advisor-manish-reddy.jpg",
+    "photo": "/assets/images/advisors/advisor-manish-reddy.jpg?v=2",
     "gender": "Male",
-    "languages": ["English", "Telugu", "Hindi"],
+    "languages": [
+      "English",
+      "Telugu",
+      "Hindi"
+    ],
     "experience": 8,
-    "specialties": ["Marriage Discussions", "Family Problems", "Relationship Guidance"],
+    "specialties": [
+      "Marriage Discussions",
+      "Family Problems",
+      "Relationship Guidance"
+    ],
     "rating": 4.9,
     "reviewsCount": 66,
     "price": 549,
     "currency": "INR",
     "bio": "Manish helps couples and families talk about marriage stress, distance, and the small fights that keep repeating.",
     "education": "M.A. Psychology",
-    "skills": ["Couples Dialogue", "Conflict Resolution", "Trust Repair"],
-    "availability": ["Mon", "Wed", "Thu", "Fri", "Sat"],
+    "skills": [
+      "Couples Dialogue",
+      "Conflict Resolution",
+      "Trust Repair"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
     "hoursStart": "11:00",
     "hoursEnd": "20:00",
-    "rank": 21,
-    "sessionPrices": { "chat": 449, "voice": 549, "video": 649 }
+    "rank": 19,
+    "sessionPrices": {
+      "chat": 449,
+      "voice": 549,
+      "video": 649
+    }
+  },
+  {
+    "id": "lakshmi-rao",
+    "name": "Lakshmi Rao",
+    "photo": "/assets/images/advisors/advisor-lakshmi-rao.jpg?v=2",
+    "gender": "Female",
+    "languages": [
+      "English",
+      "Telugu",
+      "Hindi"
+    ],
+    "experience": 11,
+    "specialties": [
+      "Marriage Discussions",
+      "Family Problems",
+      "Emotional Support"
+    ],
+    "rating": 4.9,
+    "reviewsCount": 78,
+    "price": 599,
+    "currency": "INR",
+    "bio": "Lakshmi has spent years sitting with marriage stress, in-law tension, and the emotions people usually keep private.",
+    "education": "M.A. Psychology",
+    "skills": [
+      "Couples Dialogue",
+      "Parenting Stress",
+      "Boundary Setting"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
+    "hoursStart": "10:00",
+    "hoursEnd": "19:00",
+    "rank": 20,
+    "sessionPrices": {
+      "chat": 499,
+      "voice": 599,
+      "video": 699
+    }
   },
   {
     "id": "siddharth-nair",
     "name": "Siddharth Nair",
-    "photo": "/assets/images/advisors/advisor-siddharth-nair.jpg",
+    "photo": "/assets/images/advisors/advisor-siddharth-nair.jpg?v=2",
     "gender": "Male",
-    "languages": ["English", "Malayalam", "Hindi"],
+    "languages": [
+      "English",
+      "Malayalam",
+      "Hindi"
+    ],
     "experience": 7,
-    "specialties": ["Breakup Support", "Loneliness", "Emotional Support"],
+    "specialties": [
+      "Breakup Support",
+      "Loneliness",
+      "Emotional Support"
+    ],
     "rating": 4.8,
     "reviewsCount": 52,
     "price": 499,
     "currency": "INR",
     "bio": "Siddharth stays with people through breakups, late-night loneliness, and the stretch of starting over.",
     "education": "M.A. Psychology",
-    "skills": ["Empathic Listening", "Hope Building", "Boundary Setting"],
-    "availability": ["Tue", "Wed", "Thu", "Fri", "Sat"],
+    "skills": [
+      "Empathic Listening",
+      "Hope Building",
+      "Boundary Setting"
+    ],
+    "availability": [
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
+    "hoursStart": "12:00",
+    "hoursEnd": "21:00",
+    "rank": 21,
+    "sessionPrices": {
+      "chat": 399,
+      "voice": 499,
+      "video": 599
+    }
+  },
+  {
+    "id": "harpreet-kaur",
+    "name": "Harpreet Kaur",
+    "photo": "/assets/images/advisors/advisor-harpreet-kaur.jpg?v=2",
+    "gender": "Female",
+    "languages": [
+      "English",
+      "Punjabi",
+      "Hindi"
+    ],
+    "experience": 7,
+    "specialties": [
+      "Relationship Guidance",
+      "Breakup Support",
+      "Dating Advice"
+    ],
+    "rating": 4.8,
+    "reviewsCount": 55,
+    "price": 499,
+    "currency": "INR",
+    "bio": "Harpreet talks straight and kindly about dating, breakups, and relationships that need a clearer next step.",
+    "education": "M.A. Psychology",
+    "skills": [
+      "Direct Listening",
+      "Self-esteem",
+      "Conflict Resolution"
+    ],
+    "availability": [
+      "Mon",
+      "Tue",
+      "Thu",
+      "Fri",
+      "Sun"
+    ],
     "hoursStart": "12:00",
     "hoursEnd": "21:00",
     "rank": 22,
-    "sessionPrices": { "chat": 399, "voice": 499, "video": 599 }
+    "sessionPrices": {
+      "chat": 399,
+      "voice": 499,
+      "video": 599
+    }
   }
 ]

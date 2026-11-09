@@ -320,6 +320,19 @@
       link_text: text,
       page_path: pagePath,
     });
+    if (cta === "book_session") {
+      try {
+        if (typeof window.gtag === "function") {
+          window.gtag("event", "book_session", {
+            send_to: GOOGLE_ADS_ID,
+            advisor_id: advisorId || "",
+            page_path: pagePath,
+          });
+        }
+      } catch (e) {
+        /* Ads must never block the booking link */
+      }
+    }
     if (cta === "book_session" && advisorId) {
       window.MyTalksAnalytics.track("select_item", {
         item_id: advisorId,

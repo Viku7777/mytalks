@@ -201,16 +201,18 @@
       window.dataLayer.push(arguments);
     };
     window.dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-    window.gtag("js", new Date());
-    window.gtag("config", GOOGLE_ADS_ID);
+    if (!document.querySelector('script[src*="id=' + GOOGLE_ADS_ID + '"]')) {
+      window.gtag("js", new Date());
+      window.gtag("config", GOOGLE_ADS_ID);
+      var ads = document.createElement("script");
+      ads.async = true;
+      ads.src = "https://www.googletagmanager.com/gtag/js?id=" + GOOGLE_ADS_ID;
+      document.head.appendChild(ads);
+    }
     var gtm = document.createElement("script");
     gtm.async = true;
     gtm.src = "https://www.googletagmanager.com/gtm.js?id=" + GTM_ID;
     document.head.appendChild(gtm);
-    var ads = document.createElement("script");
-    ads.async = true;
-    ads.src = "https://www.googletagmanager.com/gtag/js?id=" + GOOGLE_ADS_ID;
-    document.head.appendChild(ads);
   }
 
   function loadMetaPixel() {

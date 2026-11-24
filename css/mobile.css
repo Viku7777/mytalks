@@ -234,11 +234,8 @@
     max-width: 100%;
   }
 
-  .booking-actions {
-    width: 100%;
-  }
-
-  .booking-actions .btn {
+  .admin-body .booking-actions,
+  .admin-body .booking-actions .btn {
     width: 100%;
   }
 }

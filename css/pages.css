@@ -564,7 +564,7 @@
   min-height: 2.5rem;
 }
 
-.booking-actions {
+.admin-body .booking-actions {
   display: grid;
   grid-template-columns: repeat(2, minmax(6.4rem, 1fr));
   gap: 0.4rem;
@@ -577,14 +577,14 @@
   min-width: 16.5rem;
 }
 
-.booking-actions .btn {
+.admin-body .booking-actions .btn {
   width: 100%;
   min-height: 2.25rem;
   padding: 0.4rem 0.5rem;
   white-space: nowrap;
 }
 
-.booking-actions .btn:disabled {
+.admin-body .booking-actions .btn:disabled {
   opacity: 1;
   background: rgba(22, 163, 74, 0.14);
   color: var(--color-success);
@@ -592,10 +592,24 @@
   cursor: default;
 }
 
-.booking-actions .btn:disabled:hover {
+.admin-body .booking-actions .btn:disabled:hover {
   transform: none;
   background: rgba(22, 163, 74, 0.14);
   color: var(--color-success);
+}
+
+.booking-form .booking-actions {
+  display: block;
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+.booking-form .booking-actions .btn {
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 1rem 1.5rem;
+  font-size: 1.0625rem;
+  border-radius: var(--radius-lg);
 }
 
 tr.is-saving {
@@ -1938,7 +1952,7 @@ a.blog-card:hover h3 {
     font-size: 0.8125rem;
   }
 
-  .booking-actions .btn {
+  .booking-form .booking-actions .btn {
     white-space: normal;
     text-align: center;
     line-height: 1.35;

@@ -414,6 +414,19 @@
       return !!startWindow(advisor, day);
     }
 
+    function todayBookingNotice(advisor) {
+      if (!advisor || !advisor.name) return "";
+      var now = new Date();
+      var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      if (!advisorAvailableOn(advisor, today) || dayIsBookable(advisor, today)) return "";
+      var earliest = earliestStart(now);
+      var when = friendlyTime(formatTime(earliest));
+      if (toLocalDateString(earliest) !== toLocalDateString(today)) {
+        when += " (after midnight)";
+      }
+      return advisor.name + " is available today. The earliest session can start at " + when + ".";
+    }
+
     function nextOpenDate(advisor, from) {
       var earliest = earliestStart(new Date());
       var start = from
@@ -734,8 +747,10 @@
         note.classList.add("hint--error");
         note.textContent = "Not available on this day. Choose " + whenAdvisorWorks(advisor) + ".";
       } else {
-        note.hidden = true;
-        note.textContent = "";
+        var notice = todayBookingNotice(advisor);
+        note.hidden = !notice;
+        note.classList.remove("hint--error");
+        note.textContent = notice;
       }
     }
 

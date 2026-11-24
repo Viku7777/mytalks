@@ -23,14 +23,6 @@
     });
   }
 
-  function durationLine(a) {
-    return durationPrices(a)
-      .map(function (tier) {
-        return tier.minutes + " min ₹" + tier.price;
-      })
-      .join(" · ");
-  }
-
   function shownRank(a, index) {
     var rank = Number(a && a.rank);
     return rank > 0 ? rank : index + 1;
@@ -234,25 +226,114 @@
         });
       }
     }
-    const skills = (a.skills || [])
+    function paintProfile(person) {
+      root.innerHTML = profileHtml(person, base);
+    }
+
+    paintProfile(a);
+    document.addEventListener("mytalks:advisors-updated", function (event) {
+      var next = (event.detail || []).find(function (item) {
+        return String(item.id) === String(id);
+      });
+      if (next) paintProfile(next);
+    });
+  }
+
+  function dayCode(value) {
+    var text = String(value || "").trim().toLowerCase();
+    if (text.indexOf("thur") === 0) return "Thu";
+    var key = text.slice(0, 3);
+    var map = { sun: "Sun", mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu", fri: "Fri", sat: "Sat" };
+    return map[key] || "";
+  }
+
+  function slotMinutes(slot) {
+    var parts = String(slot || "").split(":");
+    var hours = Number(parts[0]);
+    var mins = Number(parts[1] || 0);
+    if (!isFinite(hours) || !isFinite(mins)) return NaN;
+    return hours * 60 + mins;
+  }
+
+  function prettyClock(value) {
+    var mins = slotMinutes(value);
+    if (!isFinite(mins)) return "";
+    if (mins >= 24 * 60) return "midnight";
+    var h = Math.floor(mins / 60) % 24;
+    var m = mins % 60;
+    var suffix = h >= 12 ? "PM" : "AM";
+    var hour12 = h % 12 || 12;
+    return hour12 + (m ? ":" + String(m).padStart(2, "0") : "") + " " + suffix;
+  }
+
+  function availabilityHtml(person) {
+    var order = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    var todayCode = order[new Date().getDay()];
+    var selected = {};
+    (person.availability || []).forEach(function (day) {
+      var code = dayCode(day);
+      if (code) selected[code] = true;
+    });
+    var listed = Object.keys(selected).length > 0;
+    var cells = order
+      .map(function (code) {
+        var open = !listed || !!selected[code];
+        var isToday = code === todayCode;
+        return (
+          '<span class="week-day' +
+          (open ? " is-open" : "") +
+          (isToday ? " is-today" : "") +
+          '"><small>' +
+          code +
+          "</small><strong>" +
+          (isToday ? "Today" : open ? "Open" : "Off") +
+          "</strong></span>"
+        );
+      })
+      .join("");
+    var openMin = slotMinutes(person.hoursStart);
+    var closeMin = slotMinutes(person.hoursEnd);
+    var hours = "";
+    if (person.hoursStart && person.hoursEnd && isFinite(openMin) && isFinite(closeMin)) {
+      hours =
+        openMin <= 0 && closeMin >= 24 * 60
+          ? "Open all day"
+          : "Open " + prettyClock(person.hoursStart) + " – " + prettyClock(person.hoursEnd);
+    }
+    var nowMins = new Date().getHours() * 60 + new Date().getMinutes();
+    var withinHours =
+      (!isFinite(openMin) || nowMins >= openMin) && (!isFinite(closeMin) || nowMins < closeMin);
+    var todayOpen = !listed || !!selected[todayCode];
+    var status =
+      (todayOpen && withinHours
+        ? "Available today"
+        : todayOpen
+          ? "Finished for today"
+          : "Not scheduled today") + (hours ? " · " + hours : "");
+    return (
+      '<h2 class="mt-8">Availability</h2><div class="calendar-placeholder mt-4">' +
+      '<p class="week-status">' +
+      esc(status) +
+      "</p>" +
+      '<div class="week-days" aria-label="Weekly availability">' +
+      cells +
+      "</div></div>"
+    );
+  }
+
+  function profileHtml(a, base) {
+    var skills = (a.skills || [])
       .map(function (s) {
         return '<span class="tag">' + esc(s) + "</span>";
       })
       .join("");
-    const specs = (a.specialties || [])
+    var specs = (a.specialties || [])
       .map(function (s) {
         return "<li>" + esc(s) + "</li>";
       })
       .join("");
-    const days = (a.availability || [])
-      .map(function (d) {
-        return '<span class="available">' + esc(d) + "</span>";
-      })
-      .join("");
-
-    root.innerHTML =
+    return (
       '<div class="profile-layout">' +
-      "<div>" +
       '<div class="profile-header">' +
       '<img src="' +
       esc(a.photo) +
@@ -277,7 +358,21 @@
       esc(a.reviewsCount) +
       " reviews)</span></div>" +
       "</div></div>" +
-      "<h2>Biography</h2><p class=\"mt-4\">" +
+      '<aside class="card profile-sidebar">' +
+      '<p class="profile-price__label">Starting at</p>' +
+      '<p class="profile-price"><span class="profile-price__amount">₹' +
+      esc((a.durationPrices && (a.durationPrices["30"] || a.durationPrices[30])) || a.price30 || a.price) +
+      '</span><span class="profile-price__unit">30 minute session</span></p>' +
+      '<a class="btn btn--primary btn--block profile-price__book" href="' +
+      base +
+      "/pages/book-session?advisor=" +
+      esc(a.id) +
+      '">Book Session</a>' +
+      '<ul class="profile-price__notes">' +
+      '<li><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Verified advisor</li>' +
+      '<li><i class="fa-solid fa-lock" aria-hidden="true"></i> Confidential sessions</li>' +
+      "</ul></aside>" +
+      '<div class="profile-body"><h2>Biography</h2><p class="mt-4">' +
       esc(a.bio) +
       "</p>" +
       '<h2 class="mt-8">Education</h2><p class="mt-4">' +
@@ -289,28 +384,9 @@
       '<h2 class="mt-8">Skills</h2><div class="advisor-card__tags mt-4">' +
       skills +
       "</div>" +
-      '<h2 class="mt-8">Availability</h2><div class="calendar-placeholder mt-4"><div class="calendar-days">' +
-      days +
-      "</div><p class=\"hint mt-4\">" +
-      (a.hoursStart && a.hoursEnd
-        ? "Available " + esc(a.hoursStart) + "–" + esc(a.hoursEnd) + "."
-        : "Select a time on the booking page.") +
-      "</p></div>" +
-      "</div>" +
-      '<aside class="card profile-sidebar">' +
-      '<div class="price">₹' +
-      esc((a.durationPrices && (a.durationPrices["30"] || a.durationPrices[30])) || a.price30 || a.price) +
-      " <small>/ 30 min</small></div>" +
-      "<p class=\"mt-4\">" +
-      durationLine(a) +
-      "</p>" +
-      '<a class="btn btn--primary btn--block mt-6" href="' +
-      base +
-      "/pages/book-session?advisor=" +
-      esc(a.id) +
-      '">Book Session</a>' +
-      '<p class="hint mt-4">Verified advisor · Confidential sessions</p>' +
-      "</aside></div>";
+      availabilityHtml(a) +
+      "</div></div>"
+    );
   }
 
   async function initHomePreview() {

@@ -1502,6 +1502,18 @@
     );
   }
 
+  function tabCount(tab) {
+    if (tab === "users") return state.users.length;
+    if (tab === "tickets") return state.tickets.length;
+    if (tab === "payments" || tab === "bookings") return state.bookings.length;
+    if (tab === "transactions") return (state.transactions || []).length;
+    if (tab === "advisors") return state.advisors.length;
+    if (tab === "coupons") return (state.coupons || []).length;
+    if (tab === "inquiries") return contactRows("contact").length;
+    if (tab === "applications") return contactRows("advisor-apply").length;
+    return 0;
+  }
+
   function render() {
     var labels = {
       users: "Users",
@@ -1510,10 +1522,38 @@
       transactions: "Transactions",
       bookings: "Bookings",
       advisors: "Advisors",
-      inquiries: "Contact Us",
-      applications: "Become an Advisor",
+      inquiries: "Contact",
+      applications: "Applications",
       coupons: "Coupons",
     };
+    var icons = {
+      users: "fa-users",
+      tickets: "fa-headset",
+      payments: "fa-indian-rupee-sign",
+      transactions: "fa-receipt",
+      bookings: "fa-calendar-check",
+      advisors: "fa-user-tie",
+      inquiries: "fa-envelope",
+      applications: "fa-user-plus",
+      coupons: "fa-ticket",
+    };
+    var blurbs = {
+      users: "Open any account to see bookings, visits, and tickets.",
+      tickets: "Support requests and the status of each one.",
+      payments: "Daily totals and the advisor on each session.",
+      transactions: "Move a payment between pending, success, and failed.",
+      bookings: "Confirm, reschedule, complete, or cancel a session.",
+      advisors: "Profiles, hours, rates, and the order visitors see.",
+      inquiries: "Messages sent from the contact form.",
+      applications: "People who asked to become an advisor.",
+      coupons: "Create a code, set the limit, and see who used it.",
+    };
+    var groups = [
+      { label: "People", tabs: ["users", "advisors"] },
+      { label: "Sessions", tabs: ["bookings", "tickets"] },
+      { label: "Money", tabs: ["payments", "transactions", "coupons"] },
+      { label: "Inbox", tabs: ["inquiries", "applications"] },
+    ];
     var panel =
       state.tab === "tickets"
         ? renderTickets()
@@ -1532,28 +1572,55 @@
                 : state.tab === "coupons"
                   ? renderCoupons()
                   : renderUsers();
+    var count = tabCount(state.tab);
+    var nav = groups
+      .map(function (group) {
+        return (
+          '<p class="admin-nav__label">' +
+          group.label +
+          "</p>" +
+          group.tabs
+            .map(function (tab) {
+              return (
+                '<button type="button" class="admin-nav__btn' +
+                (state.tab === tab ? " is-active" : "") +
+                '" data-admin-tab="' +
+                tab +
+                '"><i class="fa-solid ' +
+                icons[tab] +
+                '" aria-hidden="true"></i><span>' +
+                labels[tab] +
+                "</span></button>"
+              );
+            })
+            .join("")
+        );
+      })
+      .join("");
     root.innerHTML =
-      '<div class="tabs" role="tablist">' +
-      ["users", "tickets", "payments", "transactions", "bookings", "advisors", "coupons", "inquiries", "applications"]
-        .map(function (tab) {
-          var label = labels[tab] || tab;
-          return (
-            '<button type="button" class="tab-btn' +
-            (state.tab === tab ? " is-active" : "") +
-            '" data-admin-tab="' +
-            tab +
-            '">' +
-            label +
-            "</button>"
-          );
-        })
-        .join("") +
-      "</div>" +
-      panel;
+      '<div class="admin-shell">' +
+      '<aside class="admin-side">' +
+      '<div class="admin-side__brand"><span class="admin-side__mark" aria-hidden="true">M</span><div><strong>MyTalk</strong><span>Control room</span></div></div>' +
+      '<nav class="admin-nav" aria-label="Admin sections">' +
+      nav +
+      "</nav></aside>" +
+      '<div class="admin-main">' +
+      '<header class="admin-head"><div><p class="admin-kicker">Admin</p><h2>' +
+      esc(labels[state.tab] || "Admin") +
+      "</h2><p>" +
+      esc(blurbs[state.tab] || "") +
+      '</p></div><p class="admin-count"><strong>' +
+      esc(count) +
+      "</strong><span>" +
+      (Number(count) === 1 ? "record" : "records") +
+      "</span></p></header>" +
+      '<div class="admin-panel">' +
+      panel +
+      "</div></div></div>";
   }
 
   function showGate(html) {
-    root.innerHTML = html;
+    root.innerHTML = '<div class="admin-gate">' + html + "</div>";
   }
 
   function storedAdminUid() {
@@ -1585,7 +1652,7 @@
   var knownAdminUid = storedAdminUid();
   var knownAdmin = !!(knownAdminUid && sessionUid() === knownAdminUid);
   if (knownAdmin) {
-    root.innerHTML = '<p class="empty-state">Loading admin…</p>';
+    root.innerHTML = '<div class="admin-gate"><p class="empty-state">Loading admin…</p></div>';
   }
 
   function waitForKnownAdmin(Auth) {

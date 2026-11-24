@@ -37,8 +37,7 @@
   }
 
   var advisorsCache = null;
-  var remoteAdvisorsStarted = false;
-  var ADVISOR_CACHE_KEY = "mytalks-advisors-v3";
+  var ADVISOR_CACHE_KEY = "mytalks-advisors-v4";
 
   function waitForAdvisorDb(timeoutMs) {
     if (window.MyTalksDB && window.MyTalksDB.listAdvisors) {
@@ -46,17 +45,18 @@
     }
     return new Promise(function (resolve) {
       var done = false;
+      var timer = null;
       function finish(db) {
         if (done) return;
         done = true;
+        if (timer) clearInterval(timer);
         resolve(db || null);
       }
       function onReady() {
-        if (window.MyTalksDB && window.MyTalksDB.listAdvisors) {
-          finish(window.MyTalksDB);
-        }
+        if (window.MyTalksDB && window.MyTalksDB.listAdvisors) finish(window.MyTalksDB);
       }
       document.addEventListener("mytalks:firestore-ready", onReady);
+      timer = setInterval(onReady, 100);
       setTimeout(function () {
         finish((window.MyTalksDB && window.MyTalksDB.listAdvisors && window.MyTalksDB) || null);
       }, timeoutMs == null ? 8000 : timeoutMs);
@@ -85,28 +85,31 @@
     );
   }
 
-  function kickRemoteAdvisors() {
-    if (remoteAdvisorsStarted) return;
-    remoteAdvisorsStarted = true;
-    waitForAdvisorDb(8000)
+  var remoteAdvisorsPromise = null;
+
+  function fetchRemoteAdvisors() {
+    if (remoteAdvisorsPromise) return remoteAdvisorsPromise;
+    remoteAdvisorsPromise = waitForAdvisorDb(8000)
       .then(async function (DB) {
         if (!DB || !DB.listAdvisors) return null;
         if (DB.ready) await DB.ready;
         return DB.listAdvisors();
       })
       .then(function (remote) {
-        if (!remote || !remote.length) return;
+        if (!remote || !remote.length) return null;
         var sorted = sortAdvisors(remote);
-        if (JSON.stringify(sorted) === JSON.stringify(advisorsCache || [])) return;
         publishAdvisors(sorted);
+        return sorted;
       })
       .catch(function (err) {
         console.warn("Using local advisors fallback:", err);
+        remoteAdvisorsPromise = null;
+        return null;
       });
+    return remoteAdvisorsPromise;
   }
 
-  async function getAdvisors() {
-    kickRemoteAdvisors();
+  async function localAdvisors() {
     if (advisorsCache && advisorsCache.length) return advisorsCache.slice();
     var stored = readAdvisorCache();
     if (stored && stored.length) {
@@ -114,8 +117,14 @@
       return stored.slice();
     }
     var local = sortAdvisors(await loadJson("advisors.json"));
-    if (!advisorsCache || !advisorsCache.length) advisorsCache = local;
-    return advisorsCache.slice();
+    advisorsCache = local;
+    return local.slice();
+  }
+
+  async function getAdvisors() {
+    var remote = await fetchRemoteAdvisors();
+    if (remote && remote.length) return remote.slice();
+    return localAdvisors();
   }
 
   async function getAdvisorById(id) {

@@ -72,10 +72,12 @@
       "Tue",
       "Wed",
       "Thu",
-      "Fri"
+      "Fri",
+      "Sat",
+      "Sun"
     ],
-    "hoursStart": "10:00",
-    "hoursEnd": "19:00",
+    "hoursStart": "00:00",
+    "hoursEnd": "24:00",
     "rank": 2,
     "sessionPrices": {
       "chat": 399,

@@ -323,18 +323,48 @@
     return when.getTime();
   }
 
-  function isCompleteBooking(b) {
-    var status = String(b.status || "").toLowerCase();
+  function bookingBucket(b) {
+    var status = String((b && b.status) || "").toLowerCase();
     if (status === "completed" || status === "complete" || status === "cancelled" || status === "canceled") {
-      return true;
+      return "complete";
     }
     var end = bookingEnd(b);
-    return end > 0 && end < Date.now();
+    if (end > 0 && end < Date.now()) return "pending";
+    return "upcoming";
+  }
+
+  function isCompleteBooking(b) {
+    return bookingBucket(b) === "complete";
   }
 
   function notifyBookingMail(event, booking, extras) {
     if (!window.MyTalksMail || !window.MyTalksMail.notify || !booking) return;
     window.MyTalksMail.notify(event, booking, extras || {}).catch(function () {});
+  }
+
+  async function markBookingCompleted(id) {
+    var row = bookingById(id);
+    await window.MyTalksDB.updateBooking(id, { status: "Completed" });
+    var payload = Object.assign({}, row || {}, {
+      bookingId: id,
+      status: "Completed",
+    });
+    var mailed = window.MyTalksMail
+      ? await window.MyTalksMail.notify("completed", payload)
+      : { ok: false, error: "Email is not available." };
+    await loadAll();
+    state.bookingView = "complete";
+    historyMode = "replace";
+    render();
+    if (!payload.email || !mailed || !mailed.ok) {
+      toast(
+        "Marked complete, but the email was not sent." +
+          (mailed && mailed.error ? " " + mailed.error : ""),
+        "error"
+      );
+      return;
+    }
+    toast("Booking completed. Email sent to " + payload.email + ".");
   }
 
   function setBookingBusy(button, label) {
@@ -383,38 +413,50 @@
   }
 
   function renderBookings() {
-    var complete = state.bookingView === "complete";
-    var upcomingCount = 0;
-    var completeCount = 0;
+    var view =
+      state.bookingView === "pending" || state.bookingView === "complete"
+        ? state.bookingView
+        : "upcoming";
+    var counts = { upcoming: 0, pending: 0, complete: 0 };
     state.bookings.forEach(function (b) {
-      if (isCompleteBooking(b)) completeCount += 1;
-      else upcomingCount += 1;
+      counts[bookingBucket(b)] += 1;
     });
     var rows = state.bookings.filter(function (b) {
-      return isCompleteBooking(b) === complete;
+      return bookingBucket(b) === view;
     });
     rows.sort(function (a, b) {
       var diff = bookingEnd(a) - bookingEnd(b);
-      return complete ? -diff : diff;
+      return view === "upcoming" ? diff : -diff;
     });
+    function viewTab(key, label) {
+      return (
+        '<button type="button" class="tab-btn' +
+        (view === key ? " is-active" : "") +
+        '" data-booking-view="' +
+        key +
+        '">' +
+        label +
+        " (" +
+        counts[key] +
+        ")</button>"
+      );
+    }
     var sub =
       '<div class="tabs tabs--sub" role="tablist">' +
-      '<button type="button" class="tab-btn' +
-      (complete ? "" : " is-active") +
-      '" data-booking-view="upcoming">Upcoming bookings (' +
-      upcomingCount +
-      ")</button>" +
-      '<button type="button" class="tab-btn' +
-      (complete ? " is-active" : "") +
-      '" data-booking-view="complete">Complete bookings (' +
-      completeCount +
-      ")</button></div>";
-    if (!rows.length) {
-      return sub + '<p class="empty-state">' + (complete ? "No complete bookings." : "No upcoming bookings.") + "</p>";
-    }
-    var head = complete
-      ? "<th>Advisor</th><th>User</th><th>Date</th><th>Time</th><th>Mode</th><th>Status</th><th>Amount</th>"
-      : "<th>User</th><th>Date and time</th><th>Advisor</th><th>Mode</th><th>Status</th><th>Amount</th><th>Actions</th>";
+      viewTab("upcoming", "Upcoming bookings") +
+      viewTab("pending", "Pending bookings") +
+      viewTab("complete", "Complete bookings") +
+      "</div>";
+    var empty = {
+      upcoming: "No upcoming bookings.",
+      pending: "No bookings are waiting to be marked complete.",
+      complete: "No complete bookings.",
+    };
+    if (!rows.length) return sub + '<p class="empty-state">' + empty[view] + "</p>";
+    var head =
+      view === "complete"
+        ? "<th>Advisor</th><th>User</th><th>Date</th><th>Time</th><th>Mode</th><th>Status</th><th>Amount</th>"
+        : "<th>User</th><th>Date and time</th><th>Advisor</th><th>Mode</th><th>Status</th><th>Amount</th><th>Actions</th>";
     return (
       sub +
       '<div class="table-wrap card"><table><thead><tr>' +
@@ -424,7 +466,7 @@
         .map(function (b) {
           var id = b.bookingId || b.id;
           var confirmed = String(b.status || "").toLowerCase() === "confirmed";
-          if (complete) {
+          if (view === "complete") {
             return (
               "<tr><td data-label=\"Advisor\">" +
               esc(b.advisorName || b.advisorId || "—") +
@@ -1273,14 +1315,21 @@
     });
     var upcoming = mine
       .filter(function (booking) {
-        return !isCompleteBooking(booking);
+        return bookingBucket(booking) === "upcoming";
       })
       .sort(function (a, b) {
         return bookingEnd(a) - bookingEnd(b);
       });
+    var pending = mine
+      .filter(function (booking) {
+        return bookingBucket(booking) === "pending";
+      })
+      .sort(function (a, b) {
+        return bookingEnd(b) - bookingEnd(a);
+      });
     var complete = mine
       .filter(function (booking) {
-        return isCompleteBooking(booking);
+        return bookingBucket(booking) === "complete";
       })
       .sort(function (a, b) {
         return bookingEnd(b) - bookingEnd(a);
@@ -1330,8 +1379,8 @@
       "</div></div></section>" +
       '<div class="profile-stats">' +
       statBox(upcoming.length, "Upcoming") +
+      statBox(pending.length, "Pending") +
       statBox(complete.length, "Complete") +
-      statBox(mine.length, "All bookings") +
       "</div>" +
       '<section class="card profile-section"><h3>Profile</h3>' +
       (advisor.bio ? '<p class="profile-bio">' + esc(advisor.bio) + "</p>" : "") +
@@ -1350,6 +1399,14 @@
       (upcoming.length === 1 ? "" : "s") +
       '</p></div><div class="table-wrap card"><table><thead><tr><th>User</th><th>Date</th><th>Time</th><th>Status</th><th>Amount</th></tr></thead><tbody>' +
       sessionRows(upcoming, "No upcoming bookings.") +
+      "</tbody></table></div></section>" +
+      '<section class="profile-section"><div class="profile-section__head"><h3>Pending bookings</h3><p>' +
+      pending.length +
+      " session" +
+      (pending.length === 1 ? "" : "s") +
+      " still need to be marked complete." +
+      '</p></div><div class="table-wrap card"><table><thead><tr><th>User</th><th>Date</th><th>Time</th><th>Status</th><th>Amount</th></tr></thead><tbody>' +
+      sessionRows(pending, "No bookings are waiting.") +
       "</tbody></table></div></section>" +
       '<section class="profile-section"><div class="profile-section__head"><h3>Complete bookings</h3><p>' +
       complete.length +
@@ -1653,6 +1710,9 @@
       '<div class="admin-panel">' +
       panel +
       "</div></div></div>";
+    var mode = historyMode;
+    historyMode = "replace";
+    rememberAdminView(mode);
   }
 
   function showGate(html) {
@@ -1718,14 +1778,88 @@
     });
   }
 
+  var ADMIN_TABS = {
+    users: true,
+    tickets: true,
+    payments: true,
+    transactions: true,
+    bookings: true,
+    advisors: true,
+    inquiries: true,
+    applications: true,
+    coupons: true,
+  };
+  var historyMode = "replace";
+  var adminReady = false;
+
+  function readAdminLocation() {
+    var params = new URLSearchParams(window.location.search);
+    var tab = params.get("tab") || "users";
+    state.tab = ADMIN_TABS[tab] ? tab : "users";
+    var bookingView = params.get("view");
+    state.bookingView =
+      bookingView === "pending" || bookingView === "complete" ? bookingView : "upcoming";
+    var status = params.get("status") || "all";
+    state.txStatus =
+      status === "paid" || status === "failed" || status === "pending" ? status : "all";
+    var from = params.get("from") || "";
+    var to = params.get("to") || "";
+    state.txFrom = /^\d{4}-\d{2}-\d{2}$/.test(from) ? from : "";
+    state.txTo = /^\d{4}-\d{2}-\d{2}$/.test(to) ? to : "";
+    state.joinLinkId = "";
+    state.couponInfo = "";
+    state.couponEditing = state.tab === "coupons" ? String(params.get("coupon") || "") : "";
+    state.editing = null;
+    if (state.tab === "advisors") {
+      var edit = params.get("edit") || "";
+      if (edit === "new") state.editing = {};
+      else if (edit) {
+        state.editing =
+          state.advisors.find(function (advisor) {
+            return String(advisor.id) === edit;
+          }) || null;
+      }
+    }
+  }
+
+  function adminQuery() {
+    var params = new URLSearchParams();
+    if (state.tab && state.tab !== "users") params.set("tab", state.tab);
+    if (
+      state.tab === "bookings" &&
+      (state.bookingView === "complete" || state.bookingView === "pending")
+    ) {
+      params.set("view", state.bookingView);
+    }
+    if (state.tab === "transactions") {
+      if (state.txStatus && state.txStatus !== "all") params.set("status", state.txStatus);
+      if (state.txFrom) params.set("from", state.txFrom);
+      if (state.txTo) params.set("to", state.txTo);
+    }
+    if (state.tab === "coupons" && state.couponEditing) params.set("coupon", state.couponEditing);
+    if (state.tab === "advisors" && state.editing) {
+      params.set("edit", state.editing.id ? String(state.editing.id) : "new");
+    }
+    var text = params.toString();
+    return text ? "?" + text : "";
+  }
+
+  function rememberAdminView(mode) {
+    if (root.getAttribute("data-admin-view")) return;
+    var next = window.location.pathname + adminQuery();
+    var current = window.location.pathname + window.location.search;
+    if (next === current) return;
+    var data = { mytalksAdmin: true };
+    if (mode === "push") history.pushState(data, "", next);
+    else history.replaceState(data, "", next);
+  }
+
   async function openAdmin(user) {
     rememberAdmin(user.uid);
     await loadAll();
     var view = root.getAttribute("data-admin-view") || "";
-    if (!view) {
-      var tab = new URLSearchParams(window.location.search).get("tab");
-      if (tab) state.tab = tab;
-    }
+    if (!view) readAdminLocation();
+    adminReady = true;
     if (view === "user") renderUserPage();
     else if (view === "advisor") renderAdvisorPage();
     else render();
@@ -1970,26 +2104,10 @@
     }
     var completeBooking = e.target.closest("[data-booking-complete]");
     if (completeBooking) {
-      if (!window.confirm("Mark this booking as completed?")) return;
+      if (!window.confirm("Mark this booking complete and email the customer?")) return;
       setBookingBusy(completeBooking, "Completing…");
       try {
-        var completeId = completeBooking.getAttribute("data-booking-complete");
-        var completeRow = state.bookings.find(function (item) {
-          return String(item.bookingId || item.id) === String(completeId);
-        });
-        await window.MyTalksDB.updateBooking(completeId, {
-          status: "Completed",
-        });
-        notifyBookingMail(
-          "completed",
-          Object.assign({}, completeRow || {}, {
-            bookingId: completeId,
-            status: "Completed",
-          })
-        );
-        await loadAll();
-        render();
-        toast("Booking completed.");
+        await markBookingCompleted(completeBooking.getAttribute("data-booking-complete"));
       } catch (err) {
         clearBookingBusy(completeBooking);
         toast((err && err.message) || "Could not complete the booking.", "error");
@@ -2027,6 +2145,7 @@
     var txStatus = e.target.closest("[data-tx-status]");
     if (txStatus) {
       state.txStatus = txStatus.getAttribute("data-tx-status") || "all";
+      historyMode = "push";
       render();
       return;
     }
@@ -2040,6 +2159,7 @@
     if (bookingView) {
       state.bookingView = bookingView.getAttribute("data-booking-view") || "upcoming";
       state.joinLinkId = "";
+      historyMode = "push";
       render();
       return;
     }
@@ -2134,6 +2254,8 @@
       state.couponInfo = "";
       state.couponUses = [];
       state.couponUsesLoading = false;
+      state.joinLinkId = "";
+      historyMode = "push";
       render();
       return;
     }
@@ -2491,6 +2613,12 @@
     } catch (err) {
       toast((err && err.message) || "Could not save advisor.", "error");
     }
+  });
+
+  window.addEventListener("popstate", function () {
+    if (!adminReady || root.getAttribute("data-admin-view")) return;
+    readAdminLocation();
+    render();
   });
 
   if (document.readyState === "loading") {

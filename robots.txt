@@ -1,4 +1,11 @@
 User-agent: *
 Allow: /
+Disallow: /pages/admin
+Disallow: /pages/admin-user
+Disallow: /pages/admin-advisor
+Disallow: /pages/dashboard
+Disallow: /pages/login
+Disallow: /pages/register
+Disallow: /pages/google-callback
 
 Sitemap: https://mytalk.in/sitemap.xml

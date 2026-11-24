@@ -197,6 +197,10 @@
         "@type": "Organization",
         name: "MyTalk",
         url: "https://mytalk.in",
+        logo: {
+          "@type": "ImageObject",
+          url: "https://mytalk.in/assets/brand/logo-full-hd.png",
+        },
       },
       mainEntityOfPage: url,
       articleSection: post.category || "",

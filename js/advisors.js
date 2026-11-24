@@ -197,6 +197,67 @@
     });
   }
 
+  function setHeadMeta(attr, name, content) {
+    if (!content) return;
+    var el = document.querySelector("meta[" + attr + '="' + name + '"]');
+    if (!el) {
+      el = document.createElement("meta");
+      el.setAttribute(attr, name);
+      document.head.appendChild(el);
+    }
+    el.setAttribute("content", content);
+  }
+
+  function applyAdvisorSeo(person) {
+    var id = person.id || "";
+    var url = "https://mytalk.in/pages/advisor-profile?id=" + encodeURIComponent(id);
+    var focus = (person.specialties || []).slice(0, 2).join(" and ");
+    var title = person.name + " — Private listener on MyTalk";
+    var description =
+      "Book a private session with " +
+      person.name +
+      (focus ? " for " + focus.toLowerCase() : "") +
+      ". Confidential conversation by chat, voice, or video.";
+    if (description.length > 158) description = description.slice(0, 155).trim() + "…";
+    document.title = title;
+    var canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) canonical.setAttribute("href", url);
+    setHeadMeta("name", "description", description);
+    setHeadMeta("property", "og:type", "profile");
+    setHeadMeta("property", "og:title", title);
+    setHeadMeta("property", "og:description", description);
+    setHeadMeta("property", "og:url", url);
+    var photo = String(person.photo || "");
+    if (photo.charAt(0) === "/") photo = "https://mytalk.in" + photo.split("?")[0];
+    if (photo) {
+      setHeadMeta("property", "og:image", photo);
+      setHeadMeta("name", "twitter:image", photo);
+    }
+    setHeadMeta("name", "twitter:title", title);
+    setHeadMeta("name", "twitter:description", description);
+    var script = document.getElementById("advisor-jsonld");
+    if (!script) {
+      script = document.createElement("script");
+      script.type = "application/ld+json";
+      script.id = "advisor-jsonld";
+      document.head.appendChild(script);
+    }
+    script.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ProfilePage",
+      url: url,
+      name: title,
+      description: description,
+      mainEntity: {
+        "@type": "Person",
+        name: person.name,
+        description: person.bio || description,
+        image: photo || undefined,
+        worksFor: { "@type": "Organization", name: "MyTalk", url: "https://mytalk.in/" },
+      },
+    });
+  }
+
   async function initProfile() {
     const root = document.querySelector("[data-advisor-profile]");
     if (!root) return;
@@ -206,9 +267,16 @@
     const base = window.MyTalksBase || ".";
     if (!a) {
       root.innerHTML = '<p class="empty-state">Advisor not found.</p>';
+      var robots = document.querySelector('meta[name="robots"]');
+      if (!robots) {
+        robots = document.createElement("meta");
+        robots.setAttribute("name", "robots");
+        document.head.appendChild(robots);
+      }
+      robots.setAttribute("content", "noindex, nofollow");
       return;
     }
-    document.title = a.name + " | MyTalk Advisor";
+    applyAdvisorSeo(a);
     if (window.MyTalksAnalytics) {
       window.MyTalksAnalytics.track("view_item", {
         item_id: String(a.id || id),
@@ -235,7 +303,10 @@
       var next = (event.detail || []).find(function (item) {
         return String(item.id) === String(id);
       });
-      if (next) paintProfile(next);
+      if (next) {
+        applyAdvisorSeo(next);
+        paintProfile(next);
+      }
     });
   }
 

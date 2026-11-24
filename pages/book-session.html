@@ -17,13 +17,15 @@
   <title>Book a Session | MyTalk</title>
   <meta name="description" content="Book a confidential MyTalk session: select advisor, session length, date, and time." />
   <link rel="canonical" href="https://mytalk.in/pages/book-session" />
+  <meta property="og:url" content="https://mytalk.in/pages/book-session" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Book a Session | MyTalk" />
   <meta property="og:description" content="Book a confidential MyTalk session: select advisor, session length, date, and time." />
-  <meta property="og:image" content="https://images.unsplash.com/photo-1516302759342-fd024b64ad2b?w=1200&h=630&fit=crop" />
+  <meta property="og:image" content="https://mytalk.in/assets/images/hero.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Book a Session | MyTalk" />
   <meta name="twitter:description" content="Book a confidential MyTalk session: select advisor, session length, date, and time." />
+  <meta name="twitter:image" content="https://mytalk.in/assets/images/hero.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -104,7 +106,7 @@
 
             <fieldset class="booking-group">
               <legend class="booking-group__title">Date &amp; time</legend>
-              <p class="hint">Only this advisor’s open days can be selected. A session must begin at least 2 hours from now.</p>
+              <p class="hint">Pick an open day, then tap the time you want the session to start.</p>
               <div class="form-group">
                 <label id="date-label">Date</label>
                 <div class="date-picker" data-date-picker>
@@ -126,31 +128,12 @@
               <p class="hint" data-date-note hidden></p>
               <div class="form-group" data-start-block hidden>
                 <label id="start-time-label">Start time</label>
-                <p class="hint" data-hours-note hidden></p>
                 <div class="start-picker" data-start-picker>
                   <input type="hidden" id="start-time" name="startTime" value="" />
-                  <div class="start-picker__stage">
-                    <p class="start-picker__kicker">Preferred start</p>
-                    <div class="start-picker__clock" aria-hidden="true">
-                      <span class="start-picker__tile" data-hour-tile>–</span>
-                      <span class="start-picker__sep">:</span>
-                      <span class="start-picker__tile" data-minute-tile>–</span>
-                    </div>
-                    <p class="start-picker__period" data-start-period>Choose an hour, then a minute</p>
-                  </div>
-                  <div class="start-picker__body">
-                    <div class="start-picker__block">
-                      <div class="start-picker__label-row">
-                        <span class="start-picker__label">Hour and minute</span>
-                        <strong data-time-readout>Slide</strong>
-                      </div>
-                      <div class="start-picker__slider is-idle">
-                        <input type="range" min="0" max="1439" value="0" step="1" aria-label="Start time" data-time-range />
-                      </div>
-                      <div class="start-picker__scale" data-time-scale aria-hidden="true"><span>12 AM</span><span>12 PM</span><span>11 PM</span></div>
-                    </div>
-                  </div>
-                  <p class="start-picker__status" data-start-status>Select your preferred start time.</p>
+                  <p class="start-picker__lead">Tap a time. Your session starts then.</p>
+                  <p class="hint" data-hours-note hidden></p>
+                  <div data-time-slots></div>
+                  <p class="start-picker__status" data-start-status hidden></p>
                 </div>
               </div>
             </fieldset>

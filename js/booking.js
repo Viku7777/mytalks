@@ -673,7 +673,7 @@
         );
       }
       if (!timeInput || !timeInput.value) {
-        return issue("hint", "Slide to choose a start time.");
+        return issue("hint", "Tap a start time.");
       }
       var spoken = friendlyTime(timeInput.value);
       var startMin = slotMinutes(timeInput.value);
@@ -763,16 +763,19 @@
       var start = selectedStart();
       var issue = startProblem(now);
       var end = !issue.text && start ? endFromStart(start, minutes) : null;
-      var note = issue.text
+      var note = issue.tone === "error"
         ? issue.text
-        : "This time works. Your " +
-          minutes +
-          " minute session ends at " +
-          friendlyTime(formatTime(end)) +
-          (start && toLocalDateString(end) !== toLocalDateString(start) ? " the next day" : "") +
-          ".";
+        : start
+          ? "Starts at " +
+            friendlyTime(formatTime(start)) +
+            ". Ends at " +
+            friendlyTime(formatTime(end)) +
+            (toLocalDateString(end) !== toLocalDateString(start) ? " the next day" : "") +
+            "."
+          : "";
       var status = form.querySelector("[data-start-status]");
       if (status) {
+        status.hidden = !note;
         status.textContent = note;
         status.classList.toggle("is-error", issue.tone === "error");
         status.classList.toggle("is-ok", !issue.text && !!start);
@@ -1097,29 +1100,29 @@
 
     buildDatePicker();
 
-    var pickedHour = null;
-    var pickedMinute = null;
+    function startSlotList(bounds) {
+      var step = 30;
+      var first = Math.ceil(bounds.min / step) * step;
+      var list = [];
+      var minute;
+      for (minute = first; minute <= bounds.max; minute += step) list.push(minute);
+      if (!list.length && bounds.min <= bounds.max) list.push(bounds.min);
+      return list;
+    }
 
     function buildStartPicker() {
       var root = form.querySelector("[data-start-picker]");
-      var timeRange = root && root.querySelector("[data-time-range]");
-      var hourTile = root && root.querySelector("[data-hour-tile]");
-      var minuteTile = root && root.querySelector("[data-minute-tile]");
-      var readout = root && root.querySelector("[data-time-readout]");
-      var periodEl = root && root.querySelector("[data-start-period]");
-      if (!root || !timeRange || !timeInput) return;
-      var chosen = false;
+      var slotsHost = root && root.querySelector("[data-time-slots]");
+      if (!root || !slotsHost || !timeInput) return;
+      var slotKey = "";
 
-      function paintSlider() {
-        var min = Number(timeRange.min) || 0;
-        var max = Number(timeRange.max);
-        if (!isFinite(max) || max <= min) max = min + 1;
-        var wrap = timeRange.closest(".start-picker__slider");
-        timeRange.style.setProperty(
-          "--fill",
-          ((Number(timeRange.value) - min) / (max - min)) * 100 + "%"
-        );
-        if (wrap) wrap.classList.toggle("is-idle", !chosen);
+      function paintSelected() {
+        var current = timeInput.value;
+        slotsHost.querySelectorAll("[data-slot]").forEach(function (button) {
+          var on = button.getAttribute("data-slot") === current;
+          button.classList.toggle("is-selected", on);
+          button.setAttribute("aria-selected", on ? "true" : "false");
+        });
       }
 
       syncStartWindow = function () {
@@ -1127,116 +1130,96 @@
         var date = dateInput && dateInput.value ? parseLocalDate(dateInput.value) : null;
         var bounds = startWindow(advisor, date);
         var note = form.querySelector("[data-hours-note]");
-        var scale = root.querySelector("[data-time-scale]");
         if (!bounds) {
+          slotKey = "";
+          slotsHost.innerHTML = "";
           if (note) {
             note.hidden = true;
             note.textContent = "";
           }
           return;
         }
-        timeRange.min = String(bounds.min);
-        timeRange.max = String(Math.max(bounds.min, bounds.max));
-        var value = Number(timeRange.value);
-        if (!chosen) {
-          timeRange.value = String(bounds.min);
-        } else if (value < bounds.min || value > bounds.max) {
-          var clamped = Math.min(bounds.max, Math.max(bounds.min, value));
-          timeRange.value = String(clamped);
-          pickedHour = Math.floor(clamped / 60);
-          pickedMinute = clamped % 60;
-          timeInput.value = pad2(pickedHour) + ":" + pad2(pickedMinute);
-          paintFace();
+        var slots = startSlotList(bounds);
+        var key =
+          (dateInput.value || "") +
+          "|" +
+          bounds.min +
+          "|" +
+          bounds.max +
+          "|" +
+          selectedDuration();
+        var current = timeInput.value;
+        if (current && !slots.some(function (minute) { return minutesToSlot(minute) === current; })) {
+          timeInput.value = "";
+          current = "";
         }
-        if (scale) {
-          var mid = Math.round((bounds.min + bounds.max) / 2);
-          scale.innerHTML =
-            "<span>" +
-            friendlyTime(minutesToSlot(bounds.min)) +
-            "</span><span>" +
-            friendlyTime(minutesToSlot(mid)) +
-            "</span><span>" +
-            friendlyTime(minutesToSlot(bounds.max)) +
-            "</span>";
+        if (key !== slotKey) {
+          slotKey = key;
+          var groups = [
+            { label: "Night", from: 0, to: 6 * 60 },
+            { label: "Morning", from: 6 * 60, to: 12 * 60 },
+            { label: "Afternoon", from: 12 * 60, to: 17 * 60 },
+            { label: "Evening", from: 17 * 60, to: 24 * 60 },
+          ];
+          slotsHost.innerHTML = groups
+            .map(function (group) {
+              var mine = slots.filter(function (minute) {
+                return minute >= group.from && minute < group.to;
+              });
+              if (!mine.length) return "";
+              return (
+                '<div class="slot-group"><p class="slot-group__label">' +
+                group.label +
+                '</p><div class="slot-grid" role="listbox" aria-label="' +
+                group.label +
+                ' start times">' +
+                mine
+                  .map(function (minute) {
+                    var value = minutesToSlot(minute);
+                    var on = value === current;
+                    return (
+                      '<button type="button" class="slot-btn' +
+                      (on ? " is-selected" : "") +
+                      '" data-slot="' +
+                      value +
+                      '" role="option" aria-selected="' +
+                      (on ? "true" : "false") +
+                      '">' +
+                      friendlyTime(value) +
+                      "</button>"
+                    );
+                  })
+                  .join("") +
+                "</div></div>"
+              );
+            })
+            .join("");
+        } else {
+          paintSelected();
         }
         if (note) {
+          var name = advisor && advisor.name ? String(advisor.name).split(" ")[0] : "Your advisor";
           note.hidden = false;
-          if (advisor && advisor.hoursStart && advisor.hoursEnd) {
-            note.textContent =
-              "This advisor is available between " +
-              friendlyTime(advisor.hoursStart) +
-              " and " +
-              friendlyTime(advisor.hoursEnd) +
-              ".";
-          } else {
-            note.textContent = "This advisor is available all day.";
-          }
-          if (bounds.min !== bounds.open || bounds.max !== bounds.close - selectedDuration()) {
-            note.textContent +=
-              " For this session you can start between " +
-              friendlyTime(minutesToSlot(bounds.min)) +
-              " and " +
-              friendlyTime(minutesToSlot(bounds.max)) +
-              ".";
-          }
+          note.textContent = advisor && advisor.hoursStart && advisor.hoursEnd
+            ? name + " is free from " + friendlyTime(advisor.hoursStart) + " to " + friendlyTime(advisor.hoursEnd) + "."
+            : name + " is free all day. Tap the time you want.";
         }
-        paintSlider();
       };
 
-      function paintFace() {
-        var ready = pickedHour != null && pickedMinute != null;
-        var hour12 = ready ? pickedHour % 12 || 12 : null;
-        var suffix = ready ? (pickedHour >= 12 ? "PM" : "AM") : "";
-        var spoken = ready ? friendlyTime(pad2(pickedHour) + ":" + pad2(pickedMinute)) : "";
-        if (hourTile) {
-          hourTile.textContent = ready ? String(hour12) : "–";
-          hourTile.classList.toggle("is-set", ready);
-        }
-        if (minuteTile) {
-          minuteTile.textContent = ready ? pad2(pickedMinute) : "–";
-          minuteTile.classList.toggle("is-set", ready);
-        }
-        if (readout) {
-          readout.textContent = ready ? spoken : "Slide";
-          readout.classList.toggle("is-set", ready);
-        }
-        if (periodEl) {
-          periodEl.textContent = ready ? suffix : "Slide to choose the hour and minute";
-          periodEl.classList.toggle("is-set", ready);
-        }
-        paintSlider();
-      }
-
-      function commit() {
-        timeInput.value =
-          pickedHour != null && pickedMinute != null
-            ? pad2(pickedHour) + ":" + pad2(pickedMinute)
-            : "";
-        paintFace();
+      slotsHost.addEventListener("click", function (e) {
+        var button = e.target.closest("[data-slot]");
+        if (!button) return;
+        timeInput.value = button.getAttribute("data-slot") || "";
+        paintSelected();
         refreshTimer();
         updateSummary();
-      }
+      });
 
-      function take() {
-        var total = Number(timeRange.value);
-        chosen = true;
-        pickedHour = Math.floor(total / 60);
-        pickedMinute = total % 60;
-        commit();
-      }
-
-      timeRange.addEventListener("pointerdown", take);
-      timeRange.addEventListener("input", take);
-      timeRange.addEventListener("change", take);
       resetStartPicker = function () {
-        chosen = false;
-        pickedHour = null;
-        pickedMinute = null;
-        timeRange.value = "0";
+        slotKey = "";
         timeInput.value = "";
-        paintFace();
+        slotsHost.innerHTML = "";
       };
-      paintFace();
     }
 
     buildStartPicker();

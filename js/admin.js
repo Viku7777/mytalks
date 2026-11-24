@@ -26,6 +26,7 @@
     txFrom: "",
     txTo: "",
     rankSaving: "",
+    userFilter: "all",
   };
 
   function esc(value) {
@@ -147,6 +148,11 @@
     bookingPageVisitCount: "Booking page visits",
     lastBookingPageVisitAt: "Last booking page visit",
     lastBookingPageVisitAtClient: "Last booking page visit on device",
+    lastSeenAt: "Last seen",
+    lastSeenAtClient: "Last seen on device",
+    lastPageLabel: "Last page",
+    lastAdvisorName: "Last advisor",
+    activityCount: "Pages and steps",
   };
 
   function formatDetail(key, value) {
@@ -232,41 +238,127 @@
     );
   }
 
+  var USER_FILTERS = {
+    all: "All",
+    new: "New",
+    active: "Active",
+    upcoming: "Upcoming bookings",
+    quiet: "Quiet",
+  };
+
+  function userSeenAt(user) {
+    return Date.parse(user.lastSeenAt || user.lastSeenAtClient || user.lastLoginAt || "") || 0;
+  }
+
+  function userCreatedAt(user) {
+    return Date.parse(user.createdAt || user.createdAtClient || "") || 0;
+  }
+
+  function isNewUser(user) {
+    var created = userCreatedAt(user);
+    return created > 0 && Date.now() - created < 7 * 86400000;
+  }
+
+  function isActiveUser(user) {
+    var seen = userSeenAt(user);
+    return seen > 0 && Date.now() - seen < 7 * 86400000;
+  }
+
+  function isQuietUser(user) {
+    var seen = userSeenAt(user) || userCreatedAt(user);
+    if (!seen) return true;
+    return Date.now() - seen > 14 * 86400000;
+  }
+
+  function upcomingForUser(user) {
+    return bookingsForUser(user).filter(function (booking) {
+      return bookingBucket(booking) === "upcoming";
+    }).length;
+  }
+
+  function userMatchesFilter(user, filter) {
+    if (filter === "new") return isNewUser(user);
+    if (filter === "active") return isActiveUser(user);
+    if (filter === "upcoming") return upcomingForUser(user) > 0;
+    if (filter === "quiet") return isQuietUser(user);
+    return true;
+  }
+
+  function filteredUsers() {
+    var list = state.users.filter(function (user) {
+      return userMatchesFilter(user, state.userFilter);
+    });
+    if (state.userFilter === "active" || state.userFilter === "quiet") {
+      list.sort(function (a, b) {
+        return userSeenAt(b) - userSeenAt(a);
+      });
+    }
+    return list;
+  }
+
   function renderUsers() {
     if (!state.users.length) return '<p class="empty-state">No users yet.</p>';
+    var filters = Object.keys(USER_FILTERS)
+      .map(function (key) {
+        var count = state.users.filter(function (user) {
+          return userMatchesFilter(user, key);
+        }).length;
+        return (
+          '<button type="button" class="tab-btn' +
+          (state.userFilter === key ? " is-active" : "") +
+          '" data-user-filter="' +
+          key +
+          '">' +
+          esc(USER_FILTERS[key]) +
+          " (" +
+          count +
+          ")</button>"
+        );
+      })
+      .join("");
+    var rows = filteredUsers();
+    var body = rows.length
+      ? rows
+          .map(function (u) {
+            var id = u.id || u.uid;
+            var blocked = u.is_block === true;
+            var upcoming = upcomingForUser(u);
+            return (
+              '<tr class="admin-user-row" data-open-user="' +
+              esc(id) +
+              '" tabindex="0"><td data-label="Name"><a href="admin-user?id=' +
+              esc(encodeURIComponent(id)) +
+              '">' +
+              esc(u.name || u.displayName || "—") +
+              "</a>" +
+              '</td><td data-label="Email">' +
+              esc(u.email || "—") +
+              '</td><td data-label="Last seen">' +
+              prettyWhen(u.lastSeenAt || u.lastLoginAt) +
+              '</td><td data-label="Last page">' +
+              esc(u.lastPageLabel || "—") +
+              '</td><td data-label="Upcoming">' +
+              esc(upcoming) +
+              '</td><td data-label="Status">' +
+              (blocked ? "Blocked" : "Active") +
+              '</td><td data-label=""><button type="button" class="btn btn--ghost btn--sm" data-block="' +
+              esc(id) +
+              '" data-next="' +
+              (blocked ? "false" : "true") +
+              '">' +
+              (blocked ? "Unblock" : "Block") +
+              "</button></td></tr>"
+            );
+          })
+          .join("")
+      : '<tr><td colspan="7">No users in this filter.</td></tr>';
     return (
-      '<p class="admin-user__hint">Tap a user to open their profile.</p>' +
-      '<div class="table-wrap card"><table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody>' +
-      state.users
-        .map(function (u) {
-          var id = u.id || u.uid;
-          var blocked = u.is_block === true;
-          return (
-            '<tr class="admin-user-row" data-open-user="' +
-            esc(id) +
-            '" tabindex="0"><td data-label="Name"><a href="admin-user?id=' +
-            esc(encodeURIComponent(id)) +
-            '">' +
-            esc(u.name || u.displayName || "—") +
-            "</a>" +
-            '</td><td data-label="Email">' +
-            esc(u.email || "—") +
-            '</td><td data-label="Phone">' +
-            esc(u.phone || "—") +
-            '</td><td data-label="Role">' +
-            esc(u.role || "user") +
-            '</td><td data-label="Status">' +
-            (blocked ? "Blocked" : "Active") +
-            '</td><td data-label=""><button type="button" class="btn btn--ghost btn--sm" data-block="' +
-            esc(id) +
-            '" data-next="' +
-            (blocked ? "false" : "true") +
-            '">' +
-            (blocked ? "Unblock" : "Block") +
-            "</button></td></tr>"
-          );
-        })
-        .join("") +
+      '<p class="admin-user__hint">New is the last 7 days. Active visited in the last 7 days. Quiet has not been seen for 14 days. Tap a name for the full timeline.</p>' +
+      '<div class="tabs tabs--sub user-filters" role="tablist">' +
+      filters +
+      "</div>" +
+      '<div class="table-wrap card"><table><thead><tr><th>Name</th><th>Email</th><th>Last seen</th><th>Last page</th><th>Upcoming</th><th>Status</th><th></th></tr></thead><tbody>' +
+      body +
       "</tbody></table></div>"
     );
   }
@@ -1193,6 +1285,9 @@
     if (title) title.textContent = name;
     document.title = name + " — Admin";
     var bookings = bookingsForUser(user);
+    var upcoming = bookings.filter(function (booking) {
+      return bookingBucket(booking) === "upcoming";
+    }).length;
     var visits = unfinishedVisits(user, bookings);
     var email = String(user.email || "").toLowerCase();
     var tickets = state.tickets.filter(function (ticket) {
@@ -1269,14 +1364,23 @@
       "</span></div></div></section>" +
       '<div class="profile-stats">' +
       statBox(bookings.length, "Bookings") +
+      statBox(upcoming, "Upcoming") +
+      statBox(user.activityCount || 0, "Tracked steps") +
       statBox(visits.length, "Left without booking") +
-      statBox(tickets.length, "Tickets") +
       "</div>" +
+      '<section class="profile-section"><div class="profile-section__head"><h3>Activity</h3><p data-activity-count>Loading the timeline…</p></div>' +
+      '<div class="table-wrap card"><table class="activity-log"><thead><tr><th>When</th><th>What</th><th>Advisor</th><th>Details</th></tr></thead><tbody data-activity-body>' +
+      '<tr><td colspan="4">Loading…</td></tr>' +
+      "</tbody></table></div></section>" +
       '<section class="card profile-section"><h3>Account</h3><dl class="profile-facts">' +
       fact("Phone", user.phone) +
       fact("Sign-in", user.provider) +
       (user.createdAt ? '<div><dt>Created</dt><dd>' + prettyWhen(user.createdAt) + "</dd></div>" : "") +
-      (user.lastLoginAt ? '<div><dt>Last login</dt><dd>' + prettyWhen(user.lastLoginAt) + "</dd></div>" : "") +
+      (user.lastSeenAt || user.lastLoginAt
+        ? '<div><dt>Last seen</dt><dd>' + prettyWhen(user.lastSeenAt || user.lastLoginAt) + "</dd></div>"
+        : "") +
+      fact("Last page", user.lastPageLabel) +
+      fact("Last advisor", user.lastAdvisorName) +
       fact("Timezone", user.timezone) +
       fact("Language", user.locale) +
       fact("Booking page visits", user.bookingPageVisitCount) +
@@ -1293,6 +1397,75 @@
       '<div class="table-wrap card"><table><thead><tr><th>Ticket</th><th>Subject</th><th>Status</th></tr></thead><tbody>' +
       ticketRows +
       "</tbody></table></div></section>";
+    loadUserActivity(user.id || user.uid);
+  }
+
+  function activityAction(action) {
+    var labels = {
+      view: "Opened page",
+      open: "Opened booking",
+      "choose-advisor": "Chose advisor",
+      "choose-date": "Chose a date",
+      "choose-time": "Chose a start time",
+      "choose-duration": "Chose a length",
+      "choose-mode": "Chose chat, voice, or video",
+      pay: "Tapped pay",
+      booked: "Booking saved",
+    };
+    return labels[action] || action || "Opened page";
+  }
+
+  function activityRows(rows) {
+    if (!rows.length) {
+      return '<tr><td colspan="4">No signed-in page visits yet.</td></tr>';
+    }
+    return rows
+      .map(function (item) {
+        var what = activityAction(item.action);
+        if (item.kind === "advisor" && item.advisorName) what = "Opened advisor profile";
+        else if (item.label && item.kind === "page") what = "Opened " + item.label;
+        return (
+          "<tr><td data-label=\"When\">" +
+          prettyWhen(item.createdAtClient || item.createdAt) +
+          '</td><td data-label="What">' +
+          esc(what) +
+          '</td><td data-label="Advisor">' +
+          esc(item.advisorName || (item.advisorId ? advisorNameById(item.advisorId) : "—")) +
+          '</td><td data-label="Details">' +
+          esc(item.detail || item.label || "—") +
+          "</td></tr>"
+        );
+      })
+      .join("");
+  }
+
+  function loadUserActivity(userId) {
+    var request = ++activityRequest;
+    var DB = window.MyTalksDB;
+    if (!DB || !DB.listActivityForUser) {
+      var missing = root.querySelector("[data-activity-body]");
+      if (missing) missing.innerHTML = '<tr><td colspan="4">Activity storage is not available.</td></tr>';
+      return;
+    }
+    DB.listActivityForUser(userId)
+      .then(function (rows) {
+        if (request !== activityRequest) return;
+        var body = root.querySelector("[data-activity-body]");
+        var count = root.querySelector("[data-activity-count]");
+        if (body) body.innerHTML = activityRows(rows || []);
+        if (count) {
+          var total = (rows || []).length;
+          count.textContent =
+            total + " recorded step" + (total === 1 ? "" : "s") + ", newest first.";
+        }
+      })
+      .catch(function () {
+        if (request !== activityRequest) return;
+        var body = root.querySelector("[data-activity-body]");
+        var count = root.querySelector("[data-activity-count]");
+        if (body) body.innerHTML = '<tr><td colspan="4">Activity could not be loaded.</td></tr>';
+        if (count) count.textContent = "The timeline did not load.";
+      });
   }
 
   function renderAdvisorPage() {
@@ -1631,7 +1804,7 @@
       coupons: "fa-ticket",
     };
     var blurbs = {
-      users: "Open any account to see bookings, visits, and tickets.",
+      users: "Filter by new, active, upcoming bookings, or quiet accounts, then open a timeline.",
       tickets: "Support requests and the status of each one.",
       payments: "Daily totals and the advisor on each session.",
       transactions: "Move a payment between pending, success, and failed.",
@@ -1791,11 +1964,14 @@
   };
   var historyMode = "replace";
   var adminReady = false;
+  var activityRequest = 0;
 
   function readAdminLocation() {
     var params = new URLSearchParams(window.location.search);
     var tab = params.get("tab") || "users";
     state.tab = ADMIN_TABS[tab] ? tab : "users";
+    var userFilter = params.get("users") || "all";
+    state.userFilter = USER_FILTERS[userFilter] ? userFilter : "all";
     var bookingView = params.get("view");
     state.bookingView =
       bookingView === "pending" || bookingView === "complete" ? bookingView : "upcoming";
@@ -1825,6 +2001,9 @@
   function adminQuery() {
     var params = new URLSearchParams();
     if (state.tab && state.tab !== "users") params.set("tab", state.tab);
+    if ((!state.tab || state.tab === "users") && state.userFilter && state.userFilter !== "all") {
+      params.set("users", state.userFilter);
+    }
     if (
       state.tab === "bookings" &&
       (state.bookingView === "complete" || state.bookingView === "pending")
@@ -2243,6 +2422,14 @@
     if (e.target.closest("[data-coupon-cancel]")) {
       state.couponEditing = "";
       state.couponUses = [];
+      render();
+      return;
+    }
+    var userFilterBtn = e.target.closest("[data-user-filter]");
+    if (userFilterBtn) {
+      var nextFilter = userFilterBtn.getAttribute("data-user-filter") || "all";
+      state.userFilter = USER_FILTERS[nextFilter] ? nextFilter : "all";
+      historyMode = "push";
       render();
       return;
     }

@@ -256,6 +256,7 @@
           console.warn("Booking page visit tracking failed:", trackErr);
         });
       }
+      noteBooking("open");
       return signedIn;
     });
 
@@ -818,6 +819,7 @@
           ensureOpenDate();
           refreshTimer();
           updateSummary();
+          noteBooking("choose-duration");
         });
       });
     }
@@ -846,6 +848,51 @@
       const a = currentAdvisor();
       if (!a) return 0;
       return a.price || 0;
+    }
+
+    function bookingActor() {
+      var live = Auth && Auth.getUser ? Auth.getUser() : null;
+      if (live && live.uid) return live;
+      if (sessionHint && sessionHint.uid) {
+        return {
+          uid: sessionHint.uid,
+          email: sessionHint.email || "",
+          displayName: sessionHint.name || "",
+        };
+      }
+      return null;
+    }
+
+    function bookingDetailText(extra) {
+      var parts = [];
+      if (dateInput && dateInput.value) parts.push(dateInput.value);
+      if (timeInput && timeInput.value) parts.push(timeInput.value);
+      parts.push(selectedDuration() + " min");
+      parts.push(modeLabel(selectedMode()));
+      var price = priceFor();
+      if (price) parts.push("₹" + price);
+      var coupon = couponInput && couponInput.value ? String(couponInput.value).trim() : "";
+      if (coupon) parts.push("coupon " + coupon.toUpperCase());
+      if (extra) parts.push(extra);
+      return parts.join(" · ").slice(0, 500);
+    }
+
+    function noteBooking(action, extra) {
+      var actor = bookingActor();
+      if (!actor || !window.MyTalksDB || !window.MyTalksDB.recordActivity) return;
+      var advisor = currentAdvisor();
+      window.MyTalksDB.recordActivity(actor, {
+        kind: "booking",
+        action: action,
+        page: "book-session",
+        path: window.location.pathname || "/pages/book-session",
+        label: "Book a session",
+        advisorId: selectedAdvisorId(),
+        advisorName: advisor && advisor.name ? advisor.name : "",
+        detail: bookingDetailText(extra),
+      }).catch(function (err) {
+        console.warn("Booking activity was not saved:", err);
+      });
     }
 
     function updateSummary() {
@@ -975,6 +1022,7 @@
         resetStartPicker();
         refreshTimer();
         updateSummary();
+        noteBooking("choose-advisor");
       });
     }
 
@@ -986,6 +1034,7 @@
       }
       refreshTimer();
       updateSummary();
+      noteBooking("choose-date");
     });
 
     if (timeInput) {
@@ -1213,6 +1262,7 @@
         paintSelected();
         refreshTimer();
         updateSummary();
+        noteBooking("choose-time");
       });
 
       resetStartPicker = function () {
@@ -1244,7 +1294,10 @@
       if (modeInput) modeInput.checked = true;
     }
     form.querySelectorAll("[name=mode]").forEach(function (input) {
-      input.addEventListener("change", updateSummary);
+      input.addEventListener("change", function () {
+        updateSummary();
+        noteBooking("choose-mode");
+      });
     });
 
     if (phoneInput) {
@@ -1525,6 +1578,7 @@
           '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Opening payment…';
       }
 
+      noteBooking("pay");
       trackMetaCart(advisor, total);
       trackMetaCommerce("InitiateCheckout", booking.advisorId, booking.advisorName, total);
       trackEvent("begin_checkout", {
@@ -1647,6 +1701,7 @@
           var saved = await window.MyTalksDB.createBooking(booking);
           booking.bookingId = saved.bookingId || saved.id;
         }
+        noteBooking("booked", booking.bookingId ? "#" + booking.bookingId : "");
         if (booking.coupon && window.MyTalksDB && window.MyTalksDB.redeemCoupon) {
           try {
             await window.MyTalksDB.redeemCoupon(booking.coupon, {

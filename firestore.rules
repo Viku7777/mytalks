@@ -73,6 +73,42 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // Signed-in page, advisor, and booking-step history for the admin user profile
+    match /activity/{eventId} {
+      allow create: if isSignedIn()
+        && request.resource.data.keys().hasOnly([
+          'userId', 'email', 'name', 'kind', 'action', 'page', 'path', 'label',
+          'advisorId', 'advisorName', 'detail', 'createdAt', 'createdAtClient'
+        ])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.kind in ['page', 'advisor', 'booking']
+        && request.resource.data.action is string
+        && request.resource.data.action.size() > 0
+        && request.resource.data.action.size() <= 40
+        && request.resource.data.page is string
+        && request.resource.data.page.size() > 0
+        && request.resource.data.page.size() <= 80
+        && request.resource.data.path is string
+        && request.resource.data.path.size() <= 300
+        && request.resource.data.label is string
+        && request.resource.data.label.size() <= 160
+        && request.resource.data.email is string
+        && request.resource.data.email.size() <= 200
+        && request.resource.data.name is string
+        && request.resource.data.name.size() <= 120
+        && request.resource.data.advisorId is string
+        && request.resource.data.advisorId.size() <= 80
+        && request.resource.data.advisorName is string
+        && request.resource.data.advisorName.size() <= 120
+        && request.resource.data.detail is string
+        && request.resource.data.detail.size() <= 500
+        && request.resource.data.createdAtClient is string
+        && request.resource.data.createdAtClient.size() <= 40
+        && request.resource.data.createdAt == request.time;
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
     // Book-session page visits (funnel tracking)
     match /booking_visits/{visitId} {
       allow create: if isSignedIn()

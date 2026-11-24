@@ -2630,6 +2630,15 @@ html.auth-google-loading-active body {
   color: #fff;
 }
 
+.admin-main .user-filters {
+  display: flex;
+  width: 100%;
+}
+
+.activity-log td {
+  vertical-align: top;
+}
+
 .admin-body .admin-form,
 .admin-body .admin-record,
 .admin-body .rank-board__row,

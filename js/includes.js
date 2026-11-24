@@ -443,6 +443,106 @@
     }
   }
 
+  var PAGE_LABELS = {
+    index: "Home",
+    about: "About",
+    "how-it-works": "How it works",
+    services: "Services",
+    "find-advisor": "Find an advisor",
+    pricing: "Pricing",
+    testimonials: "Testimonials",
+    blog: "Blog",
+    "blog-details": "Blog article",
+    faq: "FAQ",
+    contact: "Contact",
+    "book-session": "Book a session",
+    login: "Log in",
+    register: "Create account",
+    dashboard: "Dashboard",
+    "help-center": "Help center",
+    support: "Support",
+    careers: "Careers",
+    "become-advisor": "Become an advisor",
+    privacy: "Privacy",
+    terms: "Terms",
+    "cookie-policy": "Cookie policy",
+    "refund-policy": "Refund policy",
+    "cancellation-policy": "Cancellation policy",
+    disclaimer: "Disclaimer",
+    "community-guidelines": "Community guidelines",
+    "code-of-conduct": "Code of conduct",
+    "safety-policy": "Safety policy",
+    emergency: "Emergency",
+    "advisor-profile": "Advisor profile",
+  };
+
+  function waitForHeading(selector, ms) {
+    return new Promise(function (resolve) {
+      var started = Date.now();
+      function look() {
+        var el = document.querySelector(selector);
+        var text = el ? String(el.textContent || "").trim() : "";
+        if (text && text !== "Advisor not found.") {
+          resolve(text);
+          return;
+        }
+        if (Date.now() - started >= ms) {
+          resolve("");
+          return;
+        }
+        setTimeout(look, 200);
+      }
+      look();
+    });
+  }
+
+  async function trackSignedInPage() {
+    var auth = window.MyTalksAuth;
+    var user = auth && auth.getUser ? auth.getUser() : null;
+    if ((!user || !user.uid) && auth && auth.ready) {
+      try {
+        user = await auth.ready;
+      } catch (err) {
+        user = null;
+      }
+    }
+    if (!user || !user.uid || !window.MyTalksDB || !window.MyTalksDB.recordActivity) return;
+    var path = window.location.pathname || "/";
+    var key = pageKey(path);
+    if (
+      key === "admin" ||
+      key === "admin-user" ||
+      key === "admin-advisor" ||
+      key === "google-callback" ||
+      key === "book-session"
+    ) {
+      return;
+    }
+    var params = new URLSearchParams(window.location.search);
+    var advisorId = key === "advisor-profile" ? params.get("id") || "" : "";
+    var advisorName = "";
+    if (key === "advisor-profile") advisorName = await waitForHeading("[data-advisor-profile] h1", 6000);
+    var label = PAGE_LABELS[key] || key;
+    if (key === "blog-details") {
+      var article = await waitForHeading("h1", 2500);
+      var slug = params.get("slug") || "";
+      label = article || (slug ? "Blog · " + slug : label);
+    }
+    if (advisorName) label = advisorName;
+    window.MyTalksDB.recordActivity(user, {
+      kind: key === "advisor-profile" ? "advisor" : "page",
+      action: "view",
+      page: key,
+      path: path,
+      label: label,
+      advisorId: advisorId,
+      advisorName: advisorName,
+      detail: advisorName ? "Opened the profile" : "",
+    }).catch(function (err) {
+      console.warn("Page activity was not saved:", err);
+    });
+  }
+
   var firebaseStack = loadFirebaseStack();
 
   async function init() {
@@ -456,6 +556,7 @@
     initCookieBanner(cookie);
     document.dispatchEvent(new CustomEvent("mytalks:layout-ready"));
     await firebaseStack;
+    trackSignedInPage();
     try {
       if (localStorage.getItem("mytalks-cookies") === "accepted") {
         document.dispatchEvent(new CustomEvent("mytalks:cookies-accepted"));

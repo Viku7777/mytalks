@@ -10,6 +10,7 @@
     settings: "settings",
     users: "users",
     bookingVisits: "booking_visits",
+    activity: "activity",
     advisors: "advisors",
     transactions: "transactions",
     coupons: "coupons",
@@ -78,7 +79,7 @@
 
   function normalizeDoc(id, data) {
     var out = Object.assign({ id: id }, data || {});
-    ["createdAt", "updatedAt", "lastLoginAt", "visitedAt"].forEach(function (key) {
+    ["createdAt", "updatedAt", "lastLoginAt", "visitedAt", "lastSeenAt", "lastBookingPageVisitAt"].forEach(function (key) {
       if (out[key]) out[key] = toMillis(out[key]);
     });
     return out;
@@ -284,6 +285,117 @@
     }
 
     return { id: ref.id };
+  }
+
+  function clipText(value, max) {
+    return String(value == null ? "" : value).trim().slice(0, max);
+  }
+
+  function activityRepeat(key) {
+    var now = Date.now();
+    var fresh = {};
+    try {
+      fresh = JSON.parse(sessionStorage.getItem("mytalks-activity-recent") || "{}") || {};
+    } catch (err) {
+      fresh = {};
+    }
+    var kept = {};
+    Object.keys(fresh).forEach(function (item) {
+      if (now - Number(fresh[item]) < 20000) kept[item] = fresh[item];
+    });
+    if (kept[key]) {
+      try {
+        sessionStorage.setItem("mytalks-activity-recent", JSON.stringify(kept));
+      } catch (err) {
+        /* private mode */
+      }
+      return true;
+    }
+    kept[key] = now;
+    var names = Object.keys(kept);
+    if (names.length > 40) delete kept[names[0]];
+    try {
+      sessionStorage.setItem("mytalks-activity-recent", JSON.stringify(kept));
+    } catch (err) {
+      /* private mode */
+    }
+    return false;
+  }
+
+  /**
+   * Save one signed-in page, advisor profile, or booking step.
+   */
+  async function recordActivity(user, event) {
+    event = event || {};
+    var firestore = await waitForDb();
+    if (!firestore || !user || !user.uid) return null;
+    var kind = event.kind === "advisor" || event.kind === "booking" ? event.kind : "page";
+    var action = clipText(event.action || "view", 40) || "view";
+    var page = clipText(event.page || "page", 80) || "page";
+    var path = clipText(event.path || (window.location && window.location.pathname) || "", 300);
+    var label = clipText(event.label || page, 160);
+    var advisorId = clipText(event.advisorId, 80);
+    var advisorName = clipText(event.advisorName, 120);
+    var detail = clipText(event.detail, 500);
+    var email = clipText(user.email || event.email || "", 200).toLowerCase();
+    var name = clipText(user.displayName || user.name || event.name || "", 120);
+    var repeatKey = [user.uid, kind, action, page, advisorId, detail].join("|");
+    if (activityRepeat(repeatKey)) return { skipped: true };
+
+    var now = firebase.firestore.FieldValue.serverTimestamp();
+    var clientNow = new Date().toISOString();
+    var doc = {
+      userId: user.uid,
+      email: email,
+      name: name,
+      kind: kind,
+      action: action,
+      page: page,
+      path: path,
+      label: label,
+      advisorId: advisorId,
+      advisorName: advisorName,
+      detail: detail,
+      createdAt: now,
+      createdAtClient: clientNow,
+    };
+    var ref = await firestore.collection(COL.activity).add(doc);
+    try {
+      var summary = {
+        lastSeenAt: now,
+        lastSeenAtClient: clientNow,
+        lastPage: page,
+        lastPageLabel: label,
+        activityCount: firebase.firestore.FieldValue.increment(1),
+        updatedAt: now,
+      };
+      if (advisorId) summary.lastAdvisorId = advisorId;
+      if (advisorName) summary.lastAdvisorName = advisorName;
+      await firestore.collection(COL.users).doc(user.uid).set(summary, { merge: true });
+    } catch (err) {
+      console.warn("Could not update the user's latest activity:", err);
+    }
+    return { id: ref.id };
+  }
+
+  async function listActivityForUser(userId) {
+    var firestore = await waitForDb();
+    if (!firestore || !userId) return [];
+    var snap = await firestore
+      .collection(COL.activity)
+      .where("userId", "==", String(userId))
+      .limit(200)
+      .get();
+    var rows = [];
+    snap.forEach(function (doc) {
+      rows.push(normalizeDoc(doc.id, doc.data()));
+    });
+    rows.sort(function (a, b) {
+      return String(b.createdAtClient || b.createdAt || "").localeCompare(
+        String(a.createdAtClient || a.createdAt || "")
+      );
+    });
+    return rows;
   }
 
   async function createTicket(payload) {
@@ -1066,6 +1178,8 @@
     assertUserNotBlocked: assertUserNotBlocked,
     updateUserProfile: updateUserProfile,
     trackBookingPageVisit: trackBookingPageVisit,
+    recordActivity: recordActivity,
+    listActivityForUser: listActivityForUser,
     listAdvisors: listAdvisors,
     setAdvisorRank: setAdvisorRank,
     saveAdvisor: saveAdvisor,

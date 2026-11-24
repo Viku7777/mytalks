@@ -15,6 +15,11 @@
     visits: [],
     contacts: [],
     transactions: [],
+    coupons: [],
+    couponUses: [],
+    couponUsesLoading: false,
+    couponEditing: "",
+    couponInfo: "",
     transactionsError: "",
     txStatus: "all",
     txFrom: "",
@@ -78,6 +83,11 @@
             return [];
           })
         : [],
+      DB.listCoupons
+        ? DB.listCoupons().catch(function () {
+            return [];
+          })
+        : [],
     ]);
     state.users = results[0];
     state.tickets = results[1];
@@ -86,6 +96,7 @@
     state.visits = results[4] || [];
     state.contacts = results[5] || [];
     state.transactions = results[6] || [];
+    state.coupons = results[7] || [];
     if (state.transactions.length) state.transactionsError = "";
     if (!state.advisors.length && window.MyTalksData) {
       var sample = await window.MyTalksData.loadJson("advisors.json");
@@ -496,7 +507,7 @@
 
   function txStatusLabel(status) {
     var lower = String(status || "pending").toLowerCase();
-    if (lower === "paid") return "Paid";
+    if (lower === "paid") return "Success";
     if (lower === "failed") return "Failed";
     return "Pending";
   }
@@ -521,7 +532,7 @@
       '<div class="tabs tabs--sub" role="tablist">' +
       [
         ["all", "All"],
-        ["paid", "Paid"],
+        ["paid", "Success"],
         ["failed", "Failed"],
         ["pending", "Pending"],
       ]
@@ -587,9 +598,22 @@
             esc(tx.name || "—") +
             (tx.email ? '<div class="tx-sub">' + esc(tx.email) + "</div>" : "") +
             (tx.phone ? '<div class="tx-sub">' + esc(tx.phone) + "</div>" : "");
+          var currentStatus = String(tx.status || "pending").toLowerCase();
+          if (currentStatus !== "paid" && currentStatus !== "failed") currentStatus = "pending";
           var status =
-            statusBadge(txStatusLabel(tx.status)) +
-            (String(tx.status || "").toLowerCase() === "failed" && tx.failureReason
+            '<select class="form-select tx-status-select" data-tx-set="' +
+            esc(tx.id) +
+            '" aria-label="Change transaction status">' +
+            '<option value="pending"' +
+            (currentStatus === "pending" ? " selected" : "") +
+            ">Pending</option>" +
+            '<option value="paid"' +
+            (currentStatus === "paid" ? " selected" : "") +
+            ">Success</option>" +
+            '<option value="failed"' +
+            (currentStatus === "failed" ? " selected" : "") +
+            ">Failed</option></select>" +
+            (currentStatus === "failed" && tx.failureReason
               ? '<div class="tx-sub">' + esc(tx.failureReason) + "</div>"
               : "") +
             (tx.bookingId
@@ -1365,6 +1389,119 @@
     );
   }
 
+  function couponUseRows(uses) {
+    return uses
+      .map(function (use) {
+        return (
+          "<tr><td data-label=\"Email\">" +
+          esc(use.email || use.uid || "—") +
+          '</td><td data-label="Booking">' +
+          esc(use.bookingId || "—") +
+          '</td><td data-label="Paid">₹' +
+          esc(use.paid || 0) +
+          '</td><td data-label="When">' +
+          esc(String(use.createdAt || "").slice(0, 16).replace("T", " ") || "—") +
+          "</td></tr>"
+        );
+      })
+      .join("");
+  }
+
+  function couponUsesDialog() {
+    if (!state.couponInfo) return "";
+    var body = state.couponUsesLoading
+      ? '<p class="empty-state">Loading…</p>'
+      : state.couponUses.length
+        ? '<div class="table-wrap"><table><thead><tr><th>Email</th><th>Booking</th><th>Paid</th><th>When</th></tr></thead><tbody>' +
+          couponUseRows(state.couponUses) +
+          "</tbody></table></div>"
+        : "<p>No one has used this coupon yet.</p>";
+    return (
+      '<div class="modal-backdrop is-open" data-coupon-info-modal><div class="modal coupon-uses-modal" role="dialog" aria-modal="true" aria-labelledby="coupon-uses-title"><h3 id="coupon-uses-title">Who used ' +
+      esc(state.couponInfo) +
+      "</h3>" +
+      body +
+      '<div class="modal__actions"><button type="button" class="btn btn--primary" data-coupon-info-close>Close</button></div></div></div>'
+    );
+  }
+
+  function couponByCode(code) {
+    var key = String(code || "").trim().toUpperCase();
+    return state.coupons.find(function (coupon) {
+      return coupon.code === key;
+    });
+  }
+
+  function renderCoupons() {
+    var editing = couponByCode(state.couponEditing);
+    var amount = editing ? editing.amount : "";
+    var expires = editing ? editing.expiresAt : "";
+    var maxUses = editing ? editing.maxUses : "";
+    var active = !editing || editing.active !== false;
+    var rows = state.coupons.length
+      ? state.coupons
+          .map(function (coupon) {
+            var expired = coupon.expiresAt && coupon.expiresAt < new Date().toISOString().slice(0, 10);
+            var full = coupon.usedCount >= coupon.maxUses;
+            var status = !coupon.active ? "Paused" : expired ? "Expired" : full ? "Full" : "Active";
+            return (
+              "<tr><td data-label=\"Code\"><strong>" +
+              esc(coupon.code) +
+              '</strong></td><td data-label="Off">₹' +
+              esc(coupon.amount) +
+              '</td><td data-label="Expires">' +
+              esc(coupon.expiresAt || "—") +
+              '</td><td data-label="Used"><span class="coupon-used">' +
+              esc(coupon.usedCount) +
+              " / " +
+              esc(coupon.maxUses) +
+              '<button type="button" class="coupon-info" data-coupon-info="' +
+              esc(coupon.code) +
+              '" aria-label="Who used ' +
+              esc(coupon.code) +
+              '"><i class="fa-solid fa-circle-info" aria-hidden="true"></i></button></span></td><td data-label="Status">' +
+              esc(status) +
+              '</td><td data-label=""><button type="button" class="btn btn--ghost btn--sm" data-coupon-edit="' +
+              esc(coupon.code) +
+              '">Edit</button> <button type="button" class="btn btn--ghost btn--sm" data-coupon-delete="' +
+              esc(coupon.code) +
+              '">Delete</button></td></tr>'
+            );
+          })
+          .join("")
+      : '<tr><td colspan="6">No coupons yet.</td></tr>';
+    return (
+      '<div class="card mb-6"><h2>' +
+      (editing ? "Edit " + esc(editing.code) : "New coupon") +
+      '</h2><p class="hint mt-4">The amount is taken off the session price. A booking is never free: at least ₹1 is charged.</p>' +
+      '<form class="mt-6" data-coupon-form><div class="form-row"><div class="form-group"><label for="coupon-code">Code</label><input class="form-control" id="coupon-code" name="code" maxlength="20" autocomplete="off" placeholder="MYTALK100" value="' +
+      esc(editing ? editing.code : "") +
+      '"' +
+      (editing ? " readonly" : "") +
+      ' /></div><div class="form-group"><label for="coupon-amount">Discount up to (₹)</label><input class="form-control" id="coupon-amount" name="amount" type="number" min="1" step="1" required value="' +
+      esc(amount) +
+      '" /></div></div><div class="form-row"><div class="form-group"><label for="coupon-expires">Expiry date</label><input class="form-control" id="coupon-expires" name="expiresAt" type="date" required value="' +
+      esc(expires) +
+      '" /></div><div class="form-group"><label for="coupon-max">Number of people</label><input class="form-control" id="coupon-max" name="maxUses" type="number" min="1" step="1" required value="' +
+      esc(maxUses) +
+      '" /></div></div><label class="mt-4"><input type="checkbox" name="active"' +
+      (active ? " checked" : "") +
+      ' /> Active</label><div class="mt-6" style="display:flex;gap:0.75rem;flex-wrap:wrap"><button class="btn btn--primary" type="submit">' +
+      (editing ? "Save coupon" : "Create coupon") +
+      '</button>' +
+      (editing
+        ? '<button class="btn btn--ghost" type="button" data-coupon-cancel>Cancel</button><button class="btn btn--ghost" type="button" data-coupon-delete="' +
+          esc(editing.code) +
+          '">Delete coupon</button>'
+        : "") +
+      "</div></form></div>" +
+      couponUsesDialog() +
+      '<div class="table-wrap card"><table><thead><tr><th>Code</th><th>Off</th><th>Expires</th><th>Used</th><th>Status</th><th></th></tr></thead><tbody>' +
+      rows +
+      "</tbody></table></div>"
+    );
+  }
+
   function render() {
     var labels = {
       users: "Users",
@@ -1375,6 +1512,7 @@
       advisors: "Advisors",
       inquiries: "Contact Us",
       applications: "Become an Advisor",
+      coupons: "Coupons",
     };
     var panel =
       state.tab === "tickets"
@@ -1390,11 +1528,13 @@
               : state.tab === "inquiries"
                 ? renderInquiries()
                 : state.tab === "applications"
-                  ? renderApplications()
+                ? renderApplications()
+                : state.tab === "coupons"
+                  ? renderCoupons()
                   : renderUsers();
     root.innerHTML =
       '<div class="tabs" role="tablist">' +
-      ["users", "tickets", "payments", "transactions", "bookings", "advisors", "inquiries", "applications"]
+      ["users", "tickets", "payments", "transactions", "bookings", "advisors", "coupons", "inquiries", "applications"]
         .map(function (tab) {
           var label = labels[tab] || tab;
           return (
@@ -1416,10 +1556,83 @@
     root.innerHTML = html;
   }
 
+  function storedAdminUid() {
+    try {
+      return localStorage.getItem("mytalks-admin-uid") || "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function rememberAdmin(uid) {
+    try {
+      if (uid) localStorage.setItem("mytalks-admin-uid", uid);
+      else localStorage.removeItem("mytalks-admin-uid");
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
+  function sessionUid() {
+    try {
+      var hint = JSON.parse(localStorage.getItem("mytalks-session") || "null");
+      return hint && hint.uid ? hint.uid : "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  var knownAdminUid = storedAdminUid();
+  var knownAdmin = !!(knownAdminUid && sessionUid() === knownAdminUid);
+  if (knownAdmin) {
+    root.innerHTML = '<p class="empty-state">Loading admin…</p>';
+  }
+
+  function waitForKnownAdmin(Auth) {
+    return new Promise(function (resolve) {
+      var settled = false;
+      var unsub = null;
+      function finish(user) {
+        if (settled) return;
+        settled = true;
+        if (typeof unsub === "function") {
+          try {
+            unsub();
+          } catch (e) {
+            /* ignore */
+          }
+        }
+        resolve(user || null);
+      }
+      if (Auth && Auth.onAuthStateChanged) {
+        unsub = Auth.onAuthStateChanged(function (next) {
+          if (next && next.uid === knownAdminUid) finish(next);
+        });
+      }
+      setTimeout(function () {
+        finish(Auth && Auth.getUser ? Auth.getUser() : null);
+      }, 2000);
+    });
+  }
+
+  async function openAdmin(user) {
+    rememberAdmin(user.uid);
+    await loadAll();
+    var view = root.getAttribute("data-admin-view") || "";
+    if (!view) {
+      var tab = new URLSearchParams(window.location.search).get("tab");
+      if (tab) state.tab = tab;
+    }
+    if (view === "user") renderUserPage();
+    else if (view === "advisor") renderAdvisorPage();
+    else render();
+  }
+
   async function boot() {
     await waitAuth();
     var Auth = window.MyTalksAuth;
     var user = Auth && Auth.getUser ? Auth.getUser() : null;
+    if (!user && knownAdmin) user = await waitForKnownAdmin(Auth);
     if (!user) {
       var next = encodeURIComponent(window.location.pathname + window.location.search);
       showGate(
@@ -1435,8 +1648,33 @@
       return;
     }
     if (DB.ready) await DB.ready;
+    if (knownAdmin && user.uid === knownAdminUid) {
+      DB.getUserProfile(user.uid)
+        .then(function (profile) {
+          if (profile && profile.role === "admin") {
+            rememberAdmin(user.uid);
+            return;
+          }
+          rememberAdmin("");
+          showGate(
+            '<div class="card"><h2>Admin access needed</h2><p class="mt-4">This account is signed in, but it no longer has admin access.</p></div>'
+          );
+        })
+        .catch(function () {});
+      try {
+        await openAdmin(user);
+      } catch (err) {
+        showGate(
+          '<div class="card"><h2>Could not load admin data</h2><p class="mt-4">' +
+            esc((err && err.message) || "Permission denied") +
+            "</p></div>"
+        );
+      }
+      return;
+    }
     var profile = await DB.getUserProfile(user.uid);
     if (!profile || profile.role !== "admin") {
+      rememberAdmin("");
       showGate(
         '<div class="card"><h2>Admin access needed</h2><p class="mt-4">This account is signed in as <strong>' +
           esc(user.email || user.uid) +
@@ -1447,15 +1685,7 @@
       return;
     }
     try {
-      await loadAll();
-      var view = root.getAttribute("data-admin-view") || "";
-      if (!view) {
-        var tab = new URLSearchParams(window.location.search).get("tab");
-        if (tab) state.tab = tab;
-      }
-      if (view === "user") renderUserPage();
-      else if (view === "advisor") renderAdvisorPage();
-      else render();
+      await openAdmin(user);
     } catch (err) {
       showGate(
         '<div class="card"><h2>Could not load admin data</h2><p class="mt-4">' +
@@ -1709,10 +1939,78 @@
       render();
       return;
     }
+    var couponInfo = e.target.closest("[data-coupon-info]");
+    if (couponInfo) {
+      var infoCode = couponInfo.getAttribute("data-coupon-info") || "";
+      state.couponInfo = infoCode;
+      state.couponUses = [];
+      state.couponUsesLoading = true;
+      render();
+      if (window.MyTalksDB && window.MyTalksDB.listCouponRedemptions) {
+        window.MyTalksDB.listCouponRedemptions(infoCode)
+          .then(function (rows) {
+            if (state.couponInfo !== infoCode) return;
+            state.couponUses = rows || [];
+            state.couponUsesLoading = false;
+            render();
+          })
+          .catch(function (err) {
+            state.couponUsesLoading = false;
+            toast((err && err.message) || "Could not load coupon uses.", "error");
+            render();
+          });
+      } else {
+        state.couponUsesLoading = false;
+      }
+      return;
+    }
+    if (e.target.closest("[data-coupon-info-close]") || e.target.matches("[data-coupon-info-modal]")) {
+      state.couponInfo = "";
+      state.couponUses = [];
+      state.couponUsesLoading = false;
+      render();
+      return;
+    }
+    var couponDelete = e.target.closest("[data-coupon-delete]");
+    if (couponDelete) {
+      var deleteCode = couponDelete.getAttribute("data-coupon-delete") || "";
+      if (!deleteCode || !window.confirm("Delete coupon " + deleteCode + "? This cannot be undone.")) return;
+      window.MyTalksDB.deleteCoupon(deleteCode)
+        .then(function () {
+          if (state.couponEditing === deleteCode) state.couponEditing = "";
+          if (state.couponInfo === deleteCode) state.couponInfo = "";
+          state.couponUses = [];
+          return loadAll();
+        })
+        .then(function () {
+          render();
+          toast("Coupon " + deleteCode + " deleted.");
+        })
+        .catch(function (err) {
+          toast((err && err.message) || "Could not delete coupon.", "error");
+        });
+      return;
+    }
+    var couponEdit = e.target.closest("[data-coupon-edit]");
+    if (couponEdit) {
+      state.couponEditing = couponEdit.getAttribute("data-coupon-edit") || "";
+      render();
+      return;
+    }
+    if (e.target.closest("[data-coupon-cancel]")) {
+      state.couponEditing = "";
+      state.couponUses = [];
+      render();
+      return;
+    }
     var tab = e.target.closest("[data-admin-tab]");
     if (tab) {
       state.tab = tab.getAttribute("data-admin-tab");
       state.editing = null;
+      state.couponEditing = "";
+      state.couponInfo = "";
+      state.couponUses = [];
+      state.couponUsesLoading = false;
       render();
       return;
     }
@@ -1819,7 +2117,86 @@
     }
   });
 
+  function bookingFromTransaction(tx, bookingId) {
+    var existing = state.bookings.find(function (item) {
+      return String(item.bookingId || item.id) === String(bookingId || tx.bookingId || "");
+    });
+    return {
+      bookingId: bookingId || tx.bookingId || (existing && (existing.bookingId || existing.id)) || "",
+      advisorId: (existing && existing.advisorId) || tx.advisorId || "",
+      advisorName: (existing && existing.advisorName) || tx.advisorName || "",
+      date: (existing && existing.date) || tx.date || "",
+      time: (existing && existing.time) || tx.time || "",
+      endTime: (existing && existing.endTime) || tx.endTime || "",
+      durationMinutes: (existing && existing.durationMinutes) || tx.durationMinutes || 0,
+      mode: (existing && existing.mode) || tx.mode || "voice",
+      email: (existing && existing.email) || tx.email || "",
+      phone: (existing && existing.phone) || tx.phone || "",
+      name: (existing && existing.name) || tx.name || "",
+      total: (existing && existing.total) || tx.amount || 0,
+      status: "Pending",
+    };
+  }
+
   root.addEventListener("change", async function (e) {
+    var txSelect = e.target.closest("[data-tx-set]");
+    if (txSelect) {
+      var txId = txSelect.getAttribute("data-tx-set");
+      var nextStatus = txSelect.value;
+      var tx = (state.transactions || []).find(function (item) {
+        return String(item.id) === String(txId);
+      });
+      var previous = String((tx && tx.status) || "pending").toLowerCase();
+      if (previous !== "paid" && previous !== "failed") previous = "pending";
+      if (!tx || nextStatus === previous) return;
+      txSelect.disabled = true;
+      try {
+        var bookingId = tx.bookingId || "";
+        if (nextStatus === "paid" && previous !== "paid" && !bookingId) {
+          var created = await window.MyTalksDB.createBooking({
+            advisorId: tx.advisorId,
+            advisorName: tx.advisorName,
+            date: tx.date,
+            time: tx.time,
+            endTime: tx.endTime,
+            durationMinutes: tx.durationMinutes,
+            mode: tx.mode || "voice",
+            coupon: tx.coupon || "",
+            email: tx.email,
+            phone: tx.phone,
+            userId: tx.userId,
+            total: tx.amount,
+            paymentStatus: "paid",
+            razorpayOrderId: tx.razorpayOrderId || "",
+            razorpayPaymentId: tx.razorpayPaymentId || "",
+          });
+          bookingId = created.bookingId || created.id || "";
+        }
+        await window.MyTalksDB.updateTransaction(txId, {
+          status: nextStatus,
+          failureReason: nextStatus === "failed" ? tx.failureReason || "Marked failed in admin" : "",
+          bookingId: bookingId,
+        });
+        if (nextStatus === "paid" && previous !== "paid") {
+          var mailed = bookingFromTransaction(tx, bookingId);
+          if (!mailed.email) {
+            toast("Marked success, but this transaction has no email address.", "error");
+          } else {
+            notifyBookingMail("pending", mailed);
+            toast("Marked success. Booking email sent.");
+          }
+        } else {
+          toast("Transaction marked " + (nextStatus === "paid" ? "success" : nextStatus) + ".");
+        }
+        await loadAll();
+        render();
+      } catch (err) {
+        txSelect.disabled = false;
+        txSelect.value = previous;
+        toast((err && err.message) || "Could not update the transaction.", "error");
+      }
+      return;
+    }
     var ticket = e.target.closest("[data-ticket-status]");
     if (ticket) {
       try {
@@ -1889,6 +2266,28 @@
   });
 
   root.addEventListener("submit", async function (e) {
+    var couponForm = e.target.closest("[data-coupon-form]");
+    if (couponForm) {
+      e.preventDefault();
+      var couponData = {
+        code: couponForm.querySelector("[name=code]").value,
+        amount: couponForm.querySelector("[name=amount]").value,
+        expiresAt: couponForm.querySelector("[name=expiresAt]").value,
+        maxUses: couponForm.querySelector("[name=maxUses]").value,
+        active: couponForm.querySelector("[name=active]").checked,
+      };
+      try {
+        var saved = await window.MyTalksDB.saveCoupon(couponData);
+        state.couponEditing = "";
+        state.couponUses = [];
+        await loadAll();
+        render();
+        toast("Coupon " + (saved && saved.code ? saved.code : "") + " saved.");
+      } catch (err) {
+        toast((err && err.message) || "Could not save coupon.", "error");
+      }
+      return;
+    }
     var form = e.target.closest("[data-advisor-form]");
     if (!form) return;
     e.preventDefault();

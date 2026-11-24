@@ -2,6 +2,7 @@
   var PROFILE_PREFIX = "mytalks-user-profile:";
   var AUTH_NEXT_KEY = "mytalks-auth-next";
   var SESSION_KEY = "mytalks-session";
+  var ADMIN_UID_KEY = "mytalks-admin-uid";
   var GOOGLE_REDIRECT_KEY = "mytalks-google-redirect";
   var GOOGLE_ID_TOKEN_KEY = "mytalks-google-id-token";
   var GOOGLE_ID_TOKEN_NEXT_KEY = "mytalks-google-id-token-next";
@@ -101,6 +102,23 @@
     }
   }
 
+  function cachedAdminUid() {
+    try {
+      return localStorage.getItem(ADMIN_UID_KEY) || "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function rememberAdminUid(uid) {
+    try {
+      if (uid) localStorage.setItem(ADMIN_UID_KEY, uid);
+      else localStorage.removeItem(ADMIN_UID_KEY);
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
   function applyOptimisticHeader() {
     var hint = getSessionHint();
     var root = document.getElementById("header-root");
@@ -128,6 +146,7 @@
       el.textContent = hint.name || "Account";
       if (hint.email) el.setAttribute("title", hint.email);
     });
+    if (cachedAdminUid() === hint.uid) applyAdminFlag({ role: "admin", uid: hint.uid });
   }
 
   function storeAuthNext(next) {
@@ -369,15 +388,29 @@
     });
   }
 
+  var sessionAtStart = null;
+  var authSawUser = false;
+  var heldEmptyAuth = false;
+
   function notify(user) {
+    if (!user && !authSawUser && sessionAtStart && sessionAtStart.uid && !heldEmptyAuth) {
+      heldEmptyAuth = true;
+      setTimeout(function () {
+        if (authSawUser) return;
+        notify(null);
+      }, 1600);
+      return;
+    }
     currentUser = user;
     ready = true;
     if (user) {
+      authSawUser = true;
       var profilePatch = { email: user.email || "" };
       if (user.displayName) profilePatch.name = user.displayName;
       saveLocalProfile(user.uid, profilePatch);
       saveSessionHint(user);
     } else {
+      rememberAdminUid("");
       saveSessionHint(null);
       applyAdminFlag(null);
     }
@@ -576,7 +609,16 @@
   }
 
   function applyAdminFlag(profile) {
+    var uid = (profile && profile.uid) || (currentUser && currentUser.uid) || "";
     var isAdmin = !!(profile && profile.role === "admin");
+    if (profile && uid) rememberAdminUid(isAdmin ? uid : "");
+    if (!isAdmin && uid && cachedAdminUid() === uid && profile && profile.role && profile.role !== "admin") {
+      rememberAdminUid("");
+    }
+    if (!profile && !currentUser && cachedAdminUid()) {
+      var hint = getSessionHint();
+      if (hint && hint.uid === cachedAdminUid()) isAdmin = true;
+    }
     try {
       document.documentElement.setAttribute("data-admin", isAdmin ? "true" : "false");
     } catch (e) {
@@ -822,6 +864,7 @@
 
   function signOut() {
     trackEvent("logout");
+    rememberAdminUid("");
     saveSessionHint(null);
     setAuthStateAttr("guest");
     return ensureFirebase().signOut();
@@ -1245,6 +1288,7 @@
     getLocalProfile: getLocalProfile,
     saveLocalProfile: saveLocalProfile,
     getSessionHint: getSessionHint,
+    cachedAdminUid: cachedAdminUid,
     authErrorMessage: authErrorMessage,
     mapError: authErrorMessage,
     updateHeader: updateHeader,
@@ -1259,5 +1303,6 @@
     signInGoogle: signInWithGoogle,
   };
 
+  sessionAtStart = getSessionHint();
   init();
 })();

@@ -427,6 +427,19 @@
         el.textContent = hint.name || "Account";
         if (hint.email) el.setAttribute("title", hint.email);
       });
+      var adminUid = "";
+      try {
+        adminUid = localStorage.getItem("mytalks-admin-uid") || "";
+      } catch (e) {
+        adminUid = "";
+      }
+      if (adminUid && adminUid === hint.uid) {
+        document.documentElement.setAttribute("data-admin", "true");
+        headerRoot.querySelectorAll("[data-auth-admin]").forEach(function (el) {
+          el.hidden = false;
+          el.setAttribute("aria-hidden", "false");
+        });
+      }
     }
   }
 

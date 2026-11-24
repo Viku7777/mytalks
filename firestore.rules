@@ -117,7 +117,8 @@ service cloud.firestore {
         && request.resource.data.createdAt == request.time
         && request.resource.data.createdAtClient is string;
 
-      allow update: if isSignedIn()
+      allow update: if isAdmin()
+        || (isSignedIn()
         && resource.data.userId == request.auth.uid
         && resource.data.status == 'pending'
         && (request.resource.data.status == 'paid' || request.resource.data.status == 'failed')
@@ -129,10 +130,44 @@ service cloud.firestore {
         && request.resource.data.time == resource.data.time
         && request.resource.data.createdAt == resource.data.createdAt
         && request.resource.data.createdAtClient == resource.data.createdAtClient
-        && request.resource.data.email == resource.data.email;
+        && request.resource.data.email == resource.data.email);
 
       allow read: if isAdmin();
       allow delete: if false;
+    }
+
+    // Coupons — public read so checkout can validate; only admins edit the offer
+    match /coupons/{code} {
+      allow read: if true;
+      allow create: if isAdmin()
+        && request.resource.data.code == code
+        && request.resource.data.amount is number
+        && request.resource.data.amount >= 1
+        && request.resource.data.maxUses is number
+        && request.resource.data.maxUses >= 1
+        && request.resource.data.expiresAt is string
+        && request.resource.data.usedCount == 0
+        && request.resource.data.active is bool;
+      allow update: if isAdmin()
+        || (isSignedIn()
+          && resource.data.active == true
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['usedCount'])
+          && request.resource.data.usedCount == resource.data.usedCount + 1
+          && request.resource.data.usedCount <= resource.data.maxUses);
+      allow delete: if isAdmin();
+
+      match /redemptions/{redemptionId} {
+        allow read: if isAdmin() || (isSignedIn() && redemptionId == request.auth.uid);
+        allow create: if isSignedIn()
+          && redemptionId == request.auth.uid
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.email is string
+          && request.resource.data.bookingId is string
+          && request.resource.data.amountOff is number
+          && request.resource.data.paid is number;
+        allow update: if false;
+        allow delete: if isAdmin();
+      }
     }
 
     // Contact / inquiry forms

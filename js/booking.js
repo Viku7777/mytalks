@@ -308,7 +308,18 @@
     try {
       pricingConfig = await window.MyTalksData.getPricing();
     } catch (err) {
-      pricingConfig = { coupons: { SAFE10: 10 } };
+      pricingConfig = { plans: [] };
+    }
+    var couponCatalog = [];
+    var couponQuote = emptyCouponQuote(0);
+    var celebratedCode = "";
+    var couponTimer = null;
+    try {
+      var couponDb = window.MyTalksDB || null;
+      if (couponDb && couponDb.ready) await couponDb.ready;
+      if (couponDb && couponDb.listCoupons) couponCatalog = await couponDb.listCoupons();
+    } catch (couponErr) {
+      couponCatalog = [];
     }
 
     const params = new URLSearchParams(window.location.search);
@@ -820,25 +831,30 @@
     }
 
     function updateSummary() {
+      paintSummary();
+      if (couponTimer) clearTimeout(couponTimer);
+      couponTimer = setTimeout(function () {
+        resolveCoupon(priceFor(), couponInput ? couponInput.value : "").then(function (quote) {
+          couponQuote = quote;
+          paintSummary();
+          celebrateCoupon(quote);
+        });
+      }, 180);
+    }
+
+    function paintSummary() {
       if (!summary) return;
 
       const a = currentAdvisor();
       if (!a) {
         summary.hidden = true;
         summary.innerHTML = "";
+        syncPayLabel();
         return;
       }
 
-      let total = priceFor();
-      const coupon = (couponInput.value || "").trim().toUpperCase();
-      let discountNote = "";
-      const pct =
-        ((pricingConfig && pricingConfig.coupons) || { SAFE10: 10 })[coupon] || 0;
-      if (pct > 0) {
-        total = Math.round(total * (1 - Number(pct) / 100));
-        discountNote = coupon + " (−" + pct + "%)";
-      }
-
+      var quote = couponQuote && couponQuote.original === priceFor() ? couponQuote : emptyCouponQuote(priceFor());
+      var total = quote.payable;
       const email = emailInput ? emailInput.value.trim() : "";
       const phone = phoneInput ? phoneInput.value.trim() : "";
       const contactParts = [];
@@ -854,24 +870,38 @@
         summaryRow("Starts", start ? friendlyTime(formatTime(start)) : "") +
         summaryRow("Ends", end ? formatEndLabel(start, end) : "") +
         summaryRow("Contact", contactParts.join(" · "));
+      var saved = quote.ok && !quote.empty && quote.off > 0;
+      var totalHtml = saved
+        ? '<span>Pay only</span><strong><span class="booking-summary__was">₹' +
+          quote.original +
+          "</span>₹" +
+          total +
+          "</strong>"
+        : "<span>Total</span><strong>₹" + total + "</strong>";
 
       summary.hidden = false;
       summary.innerHTML =
+        (saved
+          ? '<div class="coupon-celebrate" data-coupon-celebrate><p>Coupon applied</p><strong>Pay only ₹' +
+            total +
+            "</strong></div>"
+          : "") +
         '<dl class="booking-summary__list">' +
         rows +
         "</dl>" +
         '<div class="booking-summary__total">' +
-        "<span>Total" +
-        (discountNote
-          ? ' <small class="booking-summary__discount">' +
-            discountNote +
-            "</small>"
-          : "") +
-        "</span>" +
-        "<strong>₹" +
-        total +
-        "</strong>" +
+        totalHtml +
         "</div>";
+      var hint = form.querySelector("[data-coupon-hint]");
+      if (hint) {
+        hint.hidden = !quote.message;
+        hint.textContent = quote.message
+          ? quote.message + " You can still book without it."
+          : "";
+        hint.classList.toggle("hint--error", !!quote.message);
+      }
+      if (couponInput) couponInput.classList.toggle("is-invalid", !!quote.message);
+      syncPayLabel();
     }
 
     function showContactError(message, field) {
@@ -1239,10 +1269,196 @@
       });
     }
 
-    function couponPercent(code) {
-      var coupons = (pricingConfig && pricingConfig.coupons) || { SAFE10: 10 };
-      var key = String(code || "").trim().toUpperCase();
-      return Number(coupons[key]) || 0;
+    function emptyCouponQuote(price) {
+      var original = Math.round(Number(price) || 0);
+      return {
+        ok: true,
+        empty: true,
+        code: "",
+        original: original,
+        payable: original,
+        off: 0,
+        message: "",
+      };
+    }
+
+    function todayKey() {
+      var d = new Date();
+      var month = String(d.getMonth() + 1);
+      var day = String(d.getDate());
+      if (month.length < 2) month = "0" + month;
+      if (day.length < 2) day = "0" + day;
+      return d.getFullYear() + "-" + month + "-" + day;
+    }
+
+    function couponKey(code) {
+      return String(code || "")
+        .trim()
+        .toUpperCase()
+        .replace(/[^A-Z0-9]/g, "");
+    }
+
+    function waitForCouponDb() {
+      if (window.MyTalksDB && window.MyTalksDB.getCoupon) {
+        return window.MyTalksDB.ready
+          ? window.MyTalksDB.ready.then(function () {
+              return window.MyTalksDB;
+            })
+          : Promise.resolve(window.MyTalksDB);
+      }
+      return new Promise(function (resolve) {
+        var done = false;
+        function finish() {
+          if (done) return;
+          done = true;
+          var db = window.MyTalksDB;
+          if (db && db.ready) {
+            db.ready.then(function () {
+              resolve(window.MyTalksDB);
+            });
+            return;
+          }
+          resolve(db || null);
+        }
+        document.addEventListener("mytalks:firestore-ready", finish, { once: true });
+        setTimeout(finish, 5000);
+      });
+    }
+
+    function quoteCoupon(code, price, coupon) {
+      var original = Math.round(Number(price) || 0);
+      var key = couponKey(code);
+      if (!key) return emptyCouponQuote(original);
+      if (!coupon) {
+        coupon = couponCatalog.find(function (item) {
+          return item.code === key;
+        });
+      }
+      if (!coupon || coupon.active === false) {
+        return {
+          ok: false,
+          empty: false,
+          code: key,
+          original: original,
+          payable: original,
+          off: 0,
+          message: "This coupon is not valid.",
+        };
+      }
+      if (coupon.expiresAt && coupon.expiresAt < todayKey()) {
+        return {
+          ok: false,
+          empty: false,
+          code: key,
+          original: original,
+          payable: original,
+          off: 0,
+          message: "This coupon has expired.",
+        };
+      }
+      if (coupon.usedCount >= coupon.maxUses) {
+        return {
+          ok: false,
+          empty: false,
+          code: key,
+          original: original,
+          payable: original,
+          off: 0,
+          message: "This coupon has been fully used.",
+        };
+      }
+      var payable = original > 1 ? Math.max(1, original - coupon.amount) : original;
+      return {
+        ok: true,
+        empty: false,
+        code: key,
+        original: original,
+        payable: payable,
+        off: original - payable,
+        amount: coupon.amount,
+        message: "",
+      };
+    }
+
+    async function resolveCoupon(price, code) {
+      var key = couponKey(code);
+      var coupon = null;
+      var lookupFailed = false;
+      if (key) {
+        try {
+          var db = await waitForCouponDb();
+          if (!db || !db.getCoupon) lookupFailed = true;
+          else coupon = await db.getCoupon(key);
+        } catch (lookupErr) {
+          lookupFailed = true;
+          console.warn("Coupon lookup failed:", lookupErr);
+        }
+        if (coupon) {
+          var existing = couponCatalog.findIndex(function (item) {
+            return item.code === coupon.code;
+          });
+          if (existing >= 0) couponCatalog[existing] = coupon;
+          else couponCatalog.push(coupon);
+        }
+      }
+      var quote = quoteCoupon(code, price, coupon);
+      if (lookupFailed && key && !coupon) {
+        quote.ok = false;
+        quote.message = "We couldn't check that coupon yet. You can still book without it.";
+      }
+      if (!quote.ok || quote.empty) return quote;
+      var user = window.MyTalksAuth && window.MyTalksAuth.getUser && window.MyTalksAuth.getUser();
+      if (user && window.MyTalksDB && window.MyTalksDB.getCouponRedemption) {
+        try {
+          var prior = await window.MyTalksDB.getCouponRedemption(quote.code, user.uid);
+          if (prior) {
+            quote.ok = false;
+            quote.payable = quote.original;
+            quote.off = 0;
+            quote.message = "You have already used this coupon.";
+          }
+        } catch (err) {
+          console.warn("Coupon check failed:", err);
+        }
+      }
+      return quote;
+    }
+
+    function syncPayLabel() {
+      var submitBtn = form.querySelector('[type="submit"]');
+      if (!submitBtn || submitBtn.getAttribute("aria-busy") === "true") return;
+      var quote = couponQuote;
+      var label =
+        quote && quote.ok && !quote.empty && quote.off > 0
+          ? "Pay only ₹" + quote.payable
+          : "Confirm & Pay";
+      submitBtn.textContent = label;
+    }
+
+    function celebrateCoupon(quote) {
+      if (!quote || !quote.ok || quote.empty || quote.off < 1) {
+        if (!quote || quote.empty) celebratedCode = "";
+        return;
+      }
+      if (celebratedCode === quote.code + ":" + quote.payable) return;
+      celebratedCode = quote.code + ":" + quote.payable;
+      var box = summary && summary.querySelector("[data-coupon-celebrate]");
+      if (!box) return;
+      box.classList.remove("is-on");
+      void box.offsetWidth;
+      box.classList.add("is-on");
+      var colors = ["#16a34a", "#f59e0b", "#7c3aed", "#0ea5e9", "#ec4899"];
+      for (var i = 0; i < 14; i += 1) {
+        var bit = document.createElement("span");
+        bit.className = "coupon-celebrate__bit";
+        bit.style.left = 8 + Math.random() * 84 + "%";
+        bit.style.background = colors[i % colors.length];
+        bit.style.animationDelay = Math.random() * 0.15 + "s";
+        box.appendChild(bit);
+        setTimeout(function (node) {
+          if (node.parentNode) node.parentNode.removeChild(node);
+        }, 1000, bit);
+      }
     }
 
     function missingSelectionMessage() {
@@ -1264,10 +1480,19 @@
       const sessionUser = (await authReady) || (Auth && Auth.getUser ? Auth.getUser() : null);
       if (!sessionUser) return;
       const advisor = currentAdvisor();
-      let total = priceFor();
       const coupon = (couponInput.value || "").trim().toUpperCase();
-      const pct = couponPercent(coupon);
-      if (pct > 0) total = Math.round(total * (1 - pct / 100));
+      var quote = await resolveCoupon(priceFor(), coupon);
+      if (coupon && !quote.ok) {
+        window.MyTalksUI.showToast(
+          (quote.message || "This coupon is not valid.") + " You can still book at the full price."
+        );
+        quote = emptyCouponQuote(quote.original);
+      }
+      couponQuote = quote;
+      paintSummary();
+      let total = quote.payable;
+      const subtotal = quote.original;
+      const discount = quote.off;
 
       var start = selectedStart();
       var minutes = selectedDuration();
@@ -1280,7 +1505,9 @@
         endTime: formatTime(end),
         durationMinutes: minutes,
         mode: selectedMode(),
-        coupon: coupon,
+        coupon: quote.empty ? "" : quote.code,
+        subtotal: subtotal,
+        discount: discount,
         email: contact.email,
         phone: contact.phone,
         userId: sessionUser ? sessionUser.uid : null,
@@ -1422,6 +1649,17 @@
           var saved = await window.MyTalksDB.createBooking(booking);
           booking.bookingId = saved.bookingId || saved.id;
         }
+        if (booking.coupon && window.MyTalksDB && window.MyTalksDB.redeemCoupon) {
+          try {
+            await window.MyTalksDB.redeemCoupon(booking.coupon, {
+              email: booking.email,
+              bookingId: booking.bookingId || "",
+              paid: total,
+            });
+          } catch (redeemErr) {
+            console.warn("Coupon use was not recorded:", redeemErr);
+          }
+        }
         await markTransaction({
           status: "paid",
           razorpayOrderId: booking.razorpayOrderId || "",
@@ -1514,7 +1752,7 @@
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.removeAttribute("aria-busy");
-          submitBtn.textContent = submitBtn.getAttribute("data-label") || "Confirm & Pay";
+          syncPayLabel();
         }
       }
     });

@@ -12,6 +12,7 @@
     bookingVisits: "booking_visits",
     advisors: "advisors",
     transactions: "transactions",
+    coupons: "coupons",
   };
 
   function blockedError() {
@@ -377,6 +378,8 @@
       durationMinutes: Number(payload.durationMinutes) || 0,
       mode: payload.mode || "voice",
       coupon: payload.coupon || "",
+      subtotal: Number(payload.subtotal) || Number(payload.total) || 0,
+      discount: Number(payload.discount) || 0,
       email: String(payload.email || "").trim().toLowerCase(),
       phone: String(payload.phone || "").trim(),
       userId: payload.userId || null,
@@ -503,8 +506,8 @@
     if (!firestore || !id) throw new Error("Missing transaction.");
     fields = fields || {};
     var status = String(fields.status || "").toLowerCase();
-    if (status !== "paid" && status !== "failed") {
-      throw new Error("Transaction status must be paid or failed.");
+    if (status !== "paid" && status !== "failed" && status !== "pending") {
+      throw new Error("Transaction status must be pending, paid, or failed.");
     }
     var patch = {
       status: status,
@@ -840,6 +843,208 @@
     setTimeout(boot, 5000);
   }
 
+  function couponCode(value) {
+    return String(value || "")
+      .trim()
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, "");
+  }
+
+  function todayKey() {
+    var d = new Date();
+    var month = String(d.getMonth() + 1);
+    var day = String(d.getDate());
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+    return d.getFullYear() + "-" + month + "-" + day;
+  }
+
+  function normalizeCoupon(id, data) {
+    data = data || {};
+    return {
+      id: id,
+      code: couponCode(data.code || id),
+      amount: Math.round(Number(data.amount) || 0),
+      expiresAt: String(data.expiresAt || ""),
+      maxUses: Math.round(Number(data.maxUses) || 0),
+      usedCount: Math.round(Number(data.usedCount) || 0),
+      active: data.active !== false,
+    };
+  }
+
+  async function listCoupons() {
+    var firestore = await waitForDb();
+    if (!firestore) return [];
+    var snap = await firestore.collection(COL.coupons).get();
+    var rows = [];
+    snap.forEach(function (doc) {
+      rows.push(normalizeCoupon(doc.id, doc.data()));
+    });
+    rows.sort(function (a, b) {
+      return a.code.localeCompare(b.code);
+    });
+    return rows;
+  }
+
+  async function saveCoupon(input) {
+    var firestore = await waitForDb();
+    if (!firestore) throw new Error("Firestore is not available.");
+    var code = couponCode(input && input.code);
+    if (code.length < 3 || code.length > 20) {
+      throw new Error("Use a code with 3 to 20 letters or numbers.");
+    }
+    var amount = Math.round(Number(input.amount));
+    var maxUses = Math.round(Number(input.maxUses));
+    var expiresAt = String((input && input.expiresAt) || "").trim();
+    if (!Number.isFinite(amount) || amount < 1) {
+      throw new Error("Enter how many rupees this coupon takes off.");
+    }
+    if (!Number.isFinite(maxUses) || maxUses < 1) {
+      throw new Error("Enter how many people can use this coupon.");
+    }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(expiresAt)) {
+      throw new Error("Choose an expiry date.");
+    }
+    var ref = firestore.collection(COL.coupons).doc(code);
+    var existing = await ref.get();
+    var active = !input || input.active !== false;
+    var now = firebase.firestore.FieldValue.serverTimestamp();
+    if (!existing.exists) {
+      await ref.set({
+        code: code,
+        amount: amount,
+        expiresAt: expiresAt,
+        maxUses: maxUses,
+        usedCount: 0,
+        active: active,
+        createdAt: now,
+        updatedAt: now,
+      });
+    } else {
+      var used = Math.round(Number(existing.data().usedCount) || 0);
+      if (maxUses < used) {
+        throw new Error("The user limit cannot be lower than " + used + " people who already used it.");
+      }
+      await ref.set(
+        {
+          code: code,
+          amount: amount,
+          expiresAt: expiresAt,
+          maxUses: maxUses,
+          active: active,
+          updatedAt: now,
+        },
+        { merge: true }
+      );
+    }
+    return normalizeCoupon(code, {
+      code: code,
+      amount: amount,
+      expiresAt: expiresAt,
+      maxUses: maxUses,
+      usedCount: existing.exists ? existing.data().usedCount : 0,
+      active: active,
+    });
+  }
+
+  async function getCoupon(code) {
+    var firestore = await waitForDb();
+    var key = couponCode(code);
+    if (!firestore || !key) return null;
+    var snap = await firestore.collection(COL.coupons).doc(key).get();
+    if (!snap.exists) return null;
+    return normalizeCoupon(snap.id, snap.data());
+  }
+
+  async function getCouponRedemption(code, uid) {
+    var firestore = await waitForDb();
+    var key = couponCode(code);
+    if (!firestore || !key || !uid) return null;
+    var snap = await firestore
+      .collection(COL.coupons)
+      .doc(key)
+      .collection("redemptions")
+      .doc(uid)
+      .get();
+    return snap.exists ? normalizeDoc(snap.id, snap.data()) : null;
+  }
+
+  async function listCouponRedemptions(code) {
+    var firestore = await waitForDb();
+    var key = couponCode(code);
+    if (!firestore || !key) return [];
+    var snap = await firestore
+      .collection(COL.coupons)
+      .doc(key)
+      .collection("redemptions")
+      .limit(100)
+      .get();
+    var rows = [];
+    snap.forEach(function (doc) {
+      rows.push(normalizeDoc(doc.id, doc.data()));
+    });
+    rows.sort(function (a, b) {
+      return String(b.createdAt || "").localeCompare(String(a.createdAt || ""));
+    });
+    return rows;
+  }
+
+  async function deleteCoupon(code) {
+    var firestore = await waitForDb();
+    if (!firestore) throw new Error("Firestore is not available.");
+    var key = couponCode(code);
+    if (!key) throw new Error("Missing coupon.");
+    var ref = firestore.collection(COL.coupons).doc(key);
+    var uses = await ref.collection("redemptions").get();
+    var batch = firestore.batch();
+    var count = 0;
+    uses.forEach(function (doc) {
+      batch.delete(doc.ref);
+      count += 1;
+    });
+    if (count > 450) {
+      throw new Error("Too many uses to delete at once. Pause the coupon instead.");
+    }
+    batch.delete(ref);
+    await batch.commit();
+  }
+
+  async function redeemCoupon(code, meta) {
+    var firestore = await waitForDb();
+    if (!firestore) throw new Error("Firestore is not available.");
+    var user = firebase.auth() && firebase.auth().currentUser;
+    if (!user) throw new Error("Sign in to use a coupon.");
+    var key = couponCode(code);
+    if (!key) return null;
+    meta = meta || {};
+    var ref = firestore.collection(COL.coupons).doc(key);
+    var redemptionRef = ref.collection("redemptions").doc(user.uid);
+    await firestore.runTransaction(function (tx) {
+      return tx.get(ref).then(function (snap) {
+        if (!snap.exists) throw new Error("This coupon is not valid.");
+        var data = snap.data() || {};
+        if (data.active === false) throw new Error("This coupon is not active.");
+        if (String(data.expiresAt || "") < todayKey()) throw new Error("This coupon has expired.");
+        return tx.get(redemptionRef).then(function (prior) {
+          if (prior.exists) throw new Error("You have already used this coupon.");
+          var used = Math.round(Number(data.usedCount) || 0);
+          var maxUses = Math.round(Number(data.maxUses) || 0);
+          if (used >= maxUses) throw new Error("This coupon has been fully used.");
+          tx.update(ref, { usedCount: used + 1 });
+          tx.set(redemptionRef, {
+            uid: user.uid,
+            email: String(meta.email || user.email || ""),
+            bookingId: String(meta.bookingId || ""),
+            amountOff: Math.round(Number(data.amount) || 0),
+            paid: Math.round(Number(meta.paid) || 0),
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        });
+      });
+    });
+    return key;
+  }
+
   window.MyTalksDB = {
     ready: ready,
     collections: COL,
@@ -873,5 +1078,12 @@
     updateTicket: updateTicket,
     updateBooking: updateBooking,
     setUserAccess: setUserAccess,
+    listCoupons: listCoupons,
+    getCoupon: getCoupon,
+    saveCoupon: saveCoupon,
+    getCouponRedemption: getCouponRedemption,
+    listCouponRedemptions: listCouponRedemptions,
+    deleteCoupon: deleteCoupon,
+    redeemCoupon: redeemCoupon,
   };
 })();

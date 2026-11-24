@@ -352,6 +352,55 @@ var TEMPLATES = {
       );
     },
   },
+
+  "booking-join-link": {
+    subject: "Your joining link for {{date}} — {{advisorName}}",
+    build: function (data) {
+      return wrap({
+        title: "Your joining link",
+        preheader: "Join your session with " + (data.advisorName || "your advisor") + " at " + (data.timeRange || "the scheduled time") + ".",
+        accent: "#5b6cff",
+        body:
+          heading("Your session link is ready") +
+          para("Hi " + (data.name || "there") + ",") +
+          para(
+            "Your MyTalk session" +
+              (data.advisorName ? " with " + data.advisorName : "") +
+              " is ready. Use the button below at the scheduled time. A quiet place and a stable connection will help the conversation."
+          ) +
+          cta(data.joinUrl, "Join session") +
+          (data.joinUrl
+            ? '<p style="margin:14px 0 0;font-size:13px;line-height:1.5;color:#6b7280;word-break:break-all;">Or copy this link:<br /><a href="' +
+              esc(data.joinUrl) +
+              '" style="color:#5b6cff;text-decoration:none;">' +
+              esc(data.joinUrl) +
+              "</a></p>"
+            : "") +
+          detailsCard(data) +
+          note("This link is only for you. Please don’t forward it."),
+      });
+    },
+    text: function (data) {
+      return (
+        "Your MyTalk joining link is ready\n\nHi " +
+        (data.name || "there") +
+        ",\n\nJoin your session" +
+        (data.advisorName ? " with " + data.advisorName : "") +
+        " using this link:\n" +
+        (data.joinUrl || "") +
+        "\n\nBooking ID: " +
+        (data.bookingId || "") +
+        "\nDate: " +
+        (data.date || "") +
+        "\nTime: " +
+        (data.timeRange || "") +
+        "\nMode: " +
+        (data.mode || "") +
+        (data.amount ? "\nAmount: " + data.amount : "") +
+        "\n\nThis link is only for you. Please don’t forward it."
+      );
+    },
+  },
 };
 
 var EVENT_TO_TEMPLATE = {
@@ -362,6 +411,7 @@ var EVENT_TO_TEMPLATE = {
   cancelled: "booking-cancelled",
   completed: "booking-completed",
   reminder: "booking-reminder",
+  "join-link": "booking-join-link",
 };
 
 function listTemplates() {

@@ -9,6 +9,7 @@
     advisors: [],
     tab: "users",
     bookingView: "upcoming",
+    joinLinkId: "",
     editing: null,
     selectedUserId: null,
     selectedAdvisorId: null,
@@ -466,7 +467,7 @@
             esc(b.status || "Pending") +
             '</td><td data-label="Amount">' +
             money(b.total) +
-            '</td><td data-label="Actions"><div class="booking-edit">' +
+            '</td><td data-label="Actions"><div class="booking-actions">' +
             (confirmed
               ? '<button type="button" class="btn btn--ghost btn--sm" disabled>Confirmed</button>'
               : '<button type="button" class="btn btn--primary btn--sm" data-booking-confirm="' +
@@ -477,11 +478,46 @@
             '">Complete</button>' +
             '<button type="button" class="btn btn--ghost btn--sm" data-booking-cancel="' +
             esc(id) +
-            '">Cancel</button></div></td></tr>'
+            '">Cancel</button>' +
+            '<button type="button" class="btn btn--ghost btn--sm" data-booking-link="' +
+            esc(id) +
+            '">' +
+            (b.joinUrl ? "Resend link" : "Send link") +
+            "</button></div></td></tr>"
           );
         })
         .join("") +
-      "</tbody></table></div>"
+      "</tbody></table></div>" +
+      joinLinkDialog()
+    );
+  }
+
+  function bookingById(id) {
+    return state.bookings.find(function (item) {
+      return String(item.bookingId || item.id) === String(id);
+    });
+  }
+
+  function joinLinkDialog() {
+    if (!state.joinLinkId || state.bookingView === "complete") return "";
+    var booking = bookingById(state.joinLinkId);
+    if (!booking) return "";
+    var who = booking.email || booking.phone || "this guest";
+    return (
+      '<div class="modal-backdrop is-open" data-join-link-modal>' +
+      '<form class="modal" data-join-link-form role="dialog" aria-modal="true" aria-labelledby="join-link-title">' +
+      '<h3 id="join-link-title">Send joining link</h3>' +
+      '<p class="hint">Email the session details and this link to ' +
+      esc(who) +
+      ".</p>" +
+      '<div class="form-group mt-4"><label for="join-link-url">Joining link</label>' +
+      '<input class="form-control" id="join-link-url" name="joinUrl" type="url" inputmode="url" required placeholder="https://" value="' +
+      esc(booking.joinUrl || "") +
+      '" /></div>' +
+      '<div class="modal__actions">' +
+      '<button type="button" class="btn btn--ghost" data-join-link-close>Cancel</button>' +
+      '<button type="submit" class="btn btn--primary">Send email</button>' +
+      "</div></form></div>"
     );
   }
 
@@ -2003,7 +2039,27 @@
     var bookingView = e.target.closest("[data-booking-view]");
     if (bookingView) {
       state.bookingView = bookingView.getAttribute("data-booking-view") || "upcoming";
+      state.joinLinkId = "";
       render();
+      return;
+    }
+    if (e.target.closest("[data-join-link-close]")) {
+      state.joinLinkId = "";
+      render();
+      return;
+    }
+    var sendLink = e.target.closest("[data-booking-link]");
+    if (sendLink) {
+      var linkId = sendLink.getAttribute("data-booking-link") || "";
+      var linkBooking = bookingById(linkId);
+      if (!linkBooking || !linkBooking.email) {
+        toast("This booking has no email address.", "error");
+        return;
+      }
+      state.joinLinkId = linkId;
+      render();
+      var linkInput = root.querySelector("#join-link-url");
+      if (linkInput) linkInput.focus();
       return;
     }
     var couponInfo = e.target.closest("[data-coupon-info]");
@@ -2333,6 +2389,53 @@
   });
 
   root.addEventListener("submit", async function (e) {
+    var linkForm = e.target.closest("[data-join-link-form]");
+    if (linkForm) {
+      e.preventDefault();
+      var linkBooking = bookingById(state.joinLinkId);
+      var joinUrl = String((linkForm.querySelector("[name=joinUrl]") || {}).value || "").trim();
+      var submitBtn = linkForm.querySelector("[type=submit]");
+      if (!linkBooking || !linkBooking.email) {
+        toast("This booking has no email address.", "error");
+        return;
+      }
+      if (!/^https?:\/\//i.test(joinUrl)) {
+        toast("Enter a full link starting with https://.", "error");
+        return;
+      }
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending…";
+      }
+      try {
+        var mailed = window.MyTalksMail
+          ? await window.MyTalksMail.notify(
+              "join-link",
+              Object.assign({}, linkBooking, { bookingId: state.joinLinkId }),
+              { joinUrl: joinUrl }
+            )
+          : { ok: false, error: "Email is not available." };
+        if (!mailed || !mailed.ok) {
+          throw new Error((mailed && mailed.error) || "Could not send the email.");
+        }
+        try {
+          await window.MyTalksDB.updateBooking(state.joinLinkId, { joinUrl: joinUrl });
+        } catch (saveErr) {
+          /* The email already went out. */
+        }
+        state.joinLinkId = "";
+        await loadAll();
+        render();
+        toast("Joining link sent to " + linkBooking.email + ".");
+      } catch (err) {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Send email";
+        }
+        toast((err && err.message) || "Could not send the email.", "error");
+      }
+      return;
+    }
     var couponForm = e.target.closest("[data-coupon-form]");
     if (couponForm) {
       e.preventDefault();

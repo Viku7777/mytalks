@@ -11,6 +11,7 @@
     cancelled: "cancelled",
     completed: "completed",
     reminder: "reminder",
+    "join-link": "join-link",
   };
 
   function apiUrl() {

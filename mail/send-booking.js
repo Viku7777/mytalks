@@ -10,6 +10,9 @@ async function sendBookingEmail(event, booking, extras) {
   if (!data.email) {
     throw new Error("Booking has no email address.");
   }
+  if (event === "join-link" && !data.joinUrl) {
+    throw new Error("A joining link is required.");
+  }
   var rendered = renderEvent(event, data);
   var info = await sendMail({
     to: data.email,

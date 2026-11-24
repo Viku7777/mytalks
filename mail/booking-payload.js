@@ -53,6 +53,12 @@ function modeLabel(mode) {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
+function safeHttpUrl(value) {
+  var text = String(value || "").trim();
+  if (!/^https?:\/\//i.test(text)) return "";
+  return text;
+}
+
 function guestName(booking) {
   if (booking.name) return String(booking.name).trim();
   var email = String(booking.email || "").trim();
@@ -78,6 +84,7 @@ function bookingToTemplateData(booking, extras) {
     amount: money(booking.total),
     dashboardUrl: extras.dashboardUrl || "https://mytalk.in/pages/dashboard",
     bookUrl: extras.bookUrl || "https://mytalk.in/pages/book-session",
+    joinUrl: safeHttpUrl(extras.joinUrl),
   };
 }
 

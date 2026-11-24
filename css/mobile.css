@@ -233,6 +233,14 @@
     width: auto;
     max-width: 100%;
   }
+
+  .booking-actions {
+    width: 100%;
+  }
+
+  .booking-actions .btn {
+    width: 100%;
+  }
 }
 
 @media (min-width: 480px) and (max-width: 767px) {

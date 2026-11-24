@@ -9,46 +9,100 @@
     const base = window.MyTalksBase || ".";
     const posts = await window.MyTalksData.getBlogs();
     const filter = document.querySelector("[data-blog-filter]");
+    const pager = document.querySelector("[data-blog-pager]");
+    const prevBtn = document.querySelector("[data-blog-prev]");
+    const nextBtn = document.querySelector("[data-blog-next]");
+    const pageStatus = document.querySelector("[data-blog-page-status]");
+    const pageSize = 20;
+    let page = 1;
+    const initialPage = Number(new URLSearchParams(window.location.search).get("page"));
+    if (initialPage > 1) page = initialPage;
 
-    function render() {
+    function filteredPosts() {
       const cat = filter ? filter.value : "";
-      const list = cat
+      return cat
         ? posts.filter(function (p) {
             return p.category === cat;
           })
         : posts;
-      grid.innerHTML = list
-        .map(function (p) {
-          return (
-            '<article class="card blog-card">' +
-            '<img class="blog-card__image" src="' +
-            esc(p.image) +
-            '" alt="" width="640" height="400" loading="lazy" />' +
-            '<div class="blog-card__meta"><span class="tag">' +
-            esc(p.category) +
-            "</span><span>" +
-            esc(p.date) +
-            "</span><span>" +
-            esc(p.readingTime) +
-            " min read</span></div>" +
-            "<h3><a href=\"" +
-            base +
-            "/pages/blog-details?slug=" +
-            esc(p.slug) +
-            '">' +
-            esc(p.title) +
-            "</a></h3>" +
-            "<p>" +
-            esc(p.excerpt) +
-            "</p></article>"
-          );
-        })
-        .join("");
+    }
+
+    function syncPageUrl() {
+      const url = new URL(window.location.href);
+      if (page <= 1) url.searchParams.delete("page");
+      else url.searchParams.set("page", String(page));
+      history.replaceState(null, "", url);
+    }
+
+    function render(scrollToList) {
+      const list = filteredPosts();
+      const pages = Math.max(1, Math.ceil(list.length / pageSize));
+      if (page > pages) page = pages;
+      if (page < 1) page = 1;
+      const start = (page - 1) * pageSize;
+      const visible = list.slice(start, start + pageSize);
+      grid.innerHTML = visible.length
+        ? visible
+            .map(function (p) {
+              return (
+                '<a class="card blog-card" href="' +
+                base +
+                "/pages/blog-details?slug=" +
+                esc(p.slug) +
+                '">' +
+                '<img class="blog-card__image" src="' +
+                esc(p.image) +
+                '" alt="" width="640" height="400" loading="lazy" />' +
+                '<div class="blog-card__meta"><span class="tag">' +
+                esc(p.category) +
+                "</span><span>" +
+                esc(p.date) +
+                "</span><span>" +
+                esc(p.readingTime) +
+                " min read</span></div>" +
+                "<h3>" +
+                esc(p.title) +
+                "</h3>" +
+                "<p>" +
+                esc(p.excerpt) +
+                "</p></a>"
+              );
+            })
+            .join("")
+        : '<p class="empty-state">No articles in this category.</p>';
+
+      if (pager) {
+        pager.hidden = pages <= 1;
+        if (pageStatus) pageStatus.textContent = "Page " + page + " of " + pages;
+        if (prevBtn) prevBtn.disabled = page <= 1;
+        if (nextBtn) nextBtn.disabled = page >= pages;
+      }
+      syncPageUrl();
+      if (scrollToList && filter) {
+        filter.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener("click", function () {
+        if (page <= 1) return;
+        page -= 1;
+        render(true);
+      });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener("click", function () {
+        const pages = Math.ceil(filteredPosts().length / pageSize);
+        if (page >= pages) return;
+        page += 1;
+        render(true);
+      });
     }
 
     if (filter) {
       filter.addEventListener("change", function () {
-        render();
+        page = 1;
+        render(false);
         if (filter.value && window.MyTalksAnalytics) {
           window.MyTalksAnalytics.track("search", {
             search_term: filter.value,
@@ -64,6 +118,92 @@
       });
     }
     render();
+    const origin = "https://mytalk.in";
+    upsertJsonLd("blog-list-jsonld", {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      name: "MyTalk Blog",
+      description:
+        "Relationship advice, dating tips, mental wellness, and communication guides from MyTalk.",
+      url: origin + "/pages/blog",
+      blogPost: posts.map(function (p) {
+        return {
+          "@type": "BlogPosting",
+          headline: p.title,
+          description: p.excerpt,
+          datePublished: p.date,
+          url: origin + "/pages/blog-details?slug=" + p.slug,
+          author: { "@type": "Person", name: p.author },
+        };
+      }),
+    });
+  }
+
+  function setMeta(attr, name, content) {
+    let el = document.querySelector("meta[" + attr + '="' + name + '"]');
+    if (!el) {
+      el = document.createElement("meta");
+      el.setAttribute(attr, name);
+      document.head.appendChild(el);
+    }
+    el.setAttribute("content", content);
+  }
+
+  function upsertJsonLd(id, data) {
+    let el = document.getElementById(id);
+    if (!el) {
+      el = document.createElement("script");
+      el.type = "application/ld+json";
+      el.id = id;
+      document.head.appendChild(el);
+    }
+    el.textContent = JSON.stringify(data);
+  }
+
+  function applyArticleSeo(post) {
+    const url =
+      "https://mytalk.in/pages/blog-details?slug=" +
+      encodeURIComponent(post.slug);
+    const title = post.title + " | MyTalk Blog";
+    const descText = post.excerpt || "";
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.setAttribute("rel", "canonical");
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute("href", url);
+    setMeta("name", "description", descText);
+    setMeta("name", "keywords", post.category + ", MyTalk, relationship advice, emotional support");
+    setMeta("property", "og:type", "article");
+    setMeta("property", "og:title", title);
+    setMeta("property", "og:description", descText);
+    setMeta("property", "og:url", url);
+    setMeta("property", "og:image", post.image || "");
+    setMeta("property", "article:published_time", post.date || "");
+    setMeta("name", "twitter:card", "summary_large_image");
+    setMeta("name", "twitter:title", title);
+    setMeta("name", "twitter:description", descText);
+    setMeta("name", "twitter:image", post.image || "");
+    upsertJsonLd("blog-article-jsonld", {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: post.title,
+      description: descText,
+      image: post.image || "",
+      datePublished: post.date || "",
+      author: { "@type": "Person", name: post.author || "MyTalk Editorial" },
+      publisher: {
+        "@type": "Organization",
+        name: "MyTalk",
+        url: "https://mytalk.in",
+      },
+      mainEntityOfPage: url,
+      articleSection: post.category || "",
+      keywords:
+        post.category +
+        ", MyTalk, relationship advice, emotional support, communication",
+    });
   }
 
   async function initDetails() {
@@ -78,6 +218,7 @@
       return;
     }
     document.title = post.title + " | MyTalk Blog";
+    applyArticleSeo(post);
     if (window.MyTalksAnalytics) {
       window.MyTalksAnalytics.track("view_item", {
         item_id: post.slug || "",
@@ -85,8 +226,6 @@
         item_category: "blog",
       });
     }
-    const desc = document.querySelector('meta[name="description"]');
-    if (desc) desc.setAttribute("content", post.excerpt);
 
     const body = (post.content || [])
       .map(function (p) {
@@ -94,10 +233,16 @@
       })
       .join("");
 
-    const related = (await window.MyTalksData.getBlogs())
+    const allPosts = await window.MyTalksData.getBlogs();
+    const related = allPosts
       .filter(function (p) {
-        return p.slug !== post.slug;
+        return p.slug !== post.slug && p.category === post.category;
       })
+      .concat(
+        allPosts.filter(function (p) {
+          return p.slug !== post.slug && p.category !== post.category;
+        })
+      )
       .slice(0, 3);
     const base = window.MyTalksBase || ".";
 

@@ -1,95 +1,5 @@
 [
   {
-    "slug": "how-to-ask-for-emotional-support",
-    "title": "How to Ask for Emotional Support Without Feeling Weak",
-    "excerpt": "Simple scripts and mindset shifts that make opening up feel safer and more natural.",
-    "category": "Mental Wellness",
-    "author": "MyTalk Editorial",
-    "date": "2026-06-12",
-    "readingTime": 6,
-    "image": "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=1200&h=700&fit=crop",
-    "content": [
-      "Asking for support is a skill, not a failure. Many people wait until overwhelm becomes unbearable before speaking up.",
-      "Start small: name the feeling, share one specific request, and choose a trusted listener. On MyTalk, you can begin with chat if voice feels too intense.",
-      "Remember that emotional support is complementary to professional care. If you are in crisis, contact local emergency services immediately."
-    ]
-  },
-  {
-    "slug": "rebuild-trust-after-arguments",
-    "title": "Rebuilding Trust After Repeated Arguments",
-    "excerpt": "A practical framework for couples who want calmer conversations and clearer repair.",
-    "category": "Relationship Articles",
-    "author": "Meera Sharma",
-    "date": "2026-05-28",
-    "readingTime": 8,
-    "image": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=1200&h=700&fit=crop",
-    "content": [
-      "Repeated arguments often hide unmet needs. Slow the conversation, reflect what you heard, and repair before problem-solving.",
-      "Agree on a pause word when emotions spike. Return within an agreed time window so the pause does not become avoidance.",
-      "Trust grows from consistent micro-repairs more than one perfect conversation."
-    ]
-  },
-  {
-    "slug": "dating-boundaries-that-feel-kind",
-    "title": "Dating Boundaries That Still Feel Kind",
-    "excerpt": "How to protect your energy while staying open to connection.",
-    "category": "Dating Tips",
-    "author": "Arjun Singh",
-    "date": "2026-05-10",
-    "readingTime": 5,
-    "image": "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1200&h=700&fit=crop",
-    "content": [
-      "Boundaries are instructions for how you can stay in relationship with yourself while dating.",
-      "State preferences early: communication cadence, meeting pace, and exclusivity expectations.",
-      "Kindness is clarity delivered without contempt."
-    ]
-  },
-  {
-    "slug": "listening-skills-for-partners",
-    "title": "Listening Skills That Transform Partner Conversations",
-    "excerpt": "Three listening habits that reduce defensiveness and increase understanding.",
-    "category": "Communication Skills",
-    "author": "Ishita Banerjee",
-    "date": "2026-04-22",
-    "readingTime": 7,
-    "image": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=700&fit=crop",
-    "content": [
-      "Reflect before you reply. Summarize the feeling and the fact.",
-      "Ask one clarifying question instead of offering five solutions.",
-      "Validate the emotion even when you disagree with the interpretation."
-    ]
-  },
-  {
-    "slug": "lonely-in-a-busy-city",
-    "title": "Feeling Lonely in a Busy City",
-    "excerpt": "Why connection can feel scarce—and gentle ways to rebuild social energy.",
-    "category": "Lifestyle",
-    "author": "MyTalk Editorial",
-    "date": "2026-04-02",
-    "readingTime": 6,
-    "image": "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=1200&h=700&fit=crop",
-    "content": [
-      "Loneliness is not always about being alone; sometimes it is about not being known.",
-      "Schedule low-pressure contact: short walks, shared hobbies, or a confidential MyTalk session when friends are unavailable.",
-      "Treat loneliness as information about your need for belonging, not as a personal flaw."
-    ]
-  },
-  {
-    "slug": "calm-routines-after-work",
-    "title": "Calm After-Work Routines for Emotional Reset",
-    "excerpt": "A 20-minute transition ritual for people who bring stress home.",
-    "category": "Mental Wellness",
-    "author": "Aditya Kulkarni",
-    "date": "2026-03-18",
-    "readingTime": 4,
-    "image": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&h=700&fit=crop",
-    "content": [
-      "Create a deliberate bridge between work mode and home mode.",
-      "Try: change clothes, drink water, five minutes of quiet breathing, then one pleasant sensory cue like music or tea.",
-      "Consistency matters more than intensity."
-    ]
-  },
-  {
     "slug": "when-love-starts-feeling-like-an-affair",
     "title": "When Love Starts Feeling Like a Secret Affair",
     "excerpt": "How secrecy changes intimacy—and how to bring honesty back without shame.",
@@ -226,6 +136,21 @@
     ]
   },
   {
+    "slug": "how-to-ask-for-emotional-support",
+    "title": "How to Ask for Emotional Support Without Feeling Weak",
+    "excerpt": "Simple scripts and mindset shifts that make opening up feel safer and more natural.",
+    "category": "Mental Wellness",
+    "author": "MyTalk Editorial",
+    "date": "2026-06-12",
+    "readingTime": 6,
+    "image": "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=1200&h=700&fit=crop",
+    "content": [
+      "Asking for support is a skill, not a failure. Many people wait until overwhelm becomes unbearable before speaking up.",
+      "Start small: name the feeling, share one specific request, and choose a trusted listener. On MyTalk, you can begin with chat if voice feels too intense.",
+      "Remember that emotional support is complementary to professional care. If you are in crisis, contact local emergency services immediately."
+    ]
+  },
+  {
     "slug": "jealousy-in-modern-dating",
     "title": "Jealousy in Modern Dating: Instagram, Exes & Overthinking",
     "excerpt": "Turn jealousy from accusation into a useful conversation.",
@@ -294,6 +219,21 @@
     ]
   },
   {
+    "slug": "rebuild-trust-after-arguments",
+    "title": "Rebuilding Trust After Repeated Arguments",
+    "excerpt": "A practical framework for couples who want calmer conversations and clearer repair.",
+    "category": "Relationship Articles",
+    "author": "Meera Sharma",
+    "date": "2026-05-28",
+    "readingTime": 8,
+    "image": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=1200&h=700&fit=crop",
+    "content": [
+      "Repeated arguments often hide unmet needs. Slow the conversation, reflect what you heard, and repair before problem-solving.",
+      "Agree on a pause word when emotions spike. Return within an agreed time window so the pause does not become avoidance.",
+      "Trust grows from consistent micro-repairs more than one perfect conversation."
+    ]
+  },
+  {
     "slug": "trust-after-lying-about-money",
     "title": "Trust After Lying About Money in Marriage",
     "excerpt": "Financial secrecy is emotional betrayal too—here’s a repair map.",
@@ -345,6 +285,21 @@
     ]
   },
   {
+    "slug": "dating-boundaries-that-feel-kind",
+    "title": "Dating Boundaries That Still Feel Kind",
+    "excerpt": "How to protect your energy while staying open to connection.",
+    "category": "Dating Tips",
+    "author": "Arjun Singh",
+    "date": "2026-05-10",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1200&h=700&fit=crop",
+    "content": [
+      "Boundaries are instructions for how you can stay in relationship with yourself while dating.",
+      "State preferences early: communication cadence, meeting pace, and exclusivity expectations.",
+      "Kindness is clarity delivered without contempt."
+    ]
+  },
+  {
     "slug": "reconciling-after-separation",
     "title": "Should You Reconcile After a Separation?",
     "excerpt": "A checklist before you unlock old chats and old patterns.",
@@ -379,6 +334,22 @@
     ]
   },
   {
+    "slug": "your-first-fight-is-not-the-end",
+    "title": "Your First Fight Is Not the End",
+    "excerpt": "Conflict is information. Repair is the green flag.",
+    "category": "Relationship Articles",
+    "author": "Aditya Kulkarni",
+    "date": "2026-04-28",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&h=700&fit=crop",
+    "content": [
+      "The first real fight scares new couples because the fantasy cracks. Disagreement does not mean you chose wrong. Cruelty, mockery, or refusal to return would mean something else.",
+      "After you cool down, each person names one feeling and one request. Skip the trial. ‘I felt dismissed when you laughed. Next time please ask if I am serious.’ That is enough architecture.",
+      "Notice whether you both want to understand or only to win. Two people trying to understand can survive a clumsy fight. One person keeping score will recreate it.",
+      "If the fight woke up old fear — of yelling at home, of being left — say that. Context helps. A MyTalk session can hold the old fear so your partner is not asked to heal your entire history in one evening."
+    ]
+  },
+  {
     "slug": "talking-about-intimacy-without-shame",
     "title": "Talking About Intimacy Without Shame",
     "excerpt": "Language for desire, mismatch, and consent in long-term love.",
@@ -393,6 +364,53 @@
       "Consent is ongoing. Marriage or dating history never cancels the right to say not tonight.",
       "If cultural shame makes words hard, writing notes or starting in chat mode on MyTalk can lower the heat.",
       "Intimacy thrives on safety. Shame thrives on silence. Choose the first, patiently."
+    ]
+  },
+  {
+    "slug": "talking-about-the-future-without-pressure",
+    "title": "Talking About the Future Without Turning It Into Pressure",
+    "excerpt": "Cities, marriage, children, and timing — said early enough to be kind.",
+    "category": "Relationship Articles",
+    "author": "Ishita Banerjee",
+    "date": "2026-04-25",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=1200&h=700&fit=crop",
+    "content": [
+      "Future talk is pressure only when it is a trap. As information, it is care. ‘I want to stay in India.’ ‘I am unsure about children.’ ‘I do not want to marry this year.’ These lines save people.",
+      "Share your picture and ask for theirs. Look for overlap, not a winner. If the pictures cannot share a life, affection will not glue the logistics.",
+      "You can revisit as life changes. A no from two years ago can become a yes, and a yes can become a no. Update each other before you update your families.",
+      "If you are scared the truth will end things, the truth is already the thing. Say it with kindness. Practise once if you need to. Then let them choose with clear eyes."
+    ]
+  },
+  {
+    "slug": "listening-skills-for-partners",
+    "title": "Listening Skills That Transform Partner Conversations",
+    "excerpt": "Three listening habits that reduce defensiveness and increase understanding.",
+    "category": "Communication Skills",
+    "author": "Ishita Banerjee",
+    "date": "2026-04-22",
+    "readingTime": 7,
+    "image": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=700&fit=crop",
+    "content": [
+      "Reflect before you reply. Summarize the feeling and the fact.",
+      "Ask one clarifying question instead of offering five solutions.",
+      "Validate the emotion even when you disagree with the interpretation."
+    ]
+  },
+  {
+    "slug": "ghosted-and-still-checking",
+    "title": "You Were Ghosted and You Are Still Checking Their Profile",
+    "excerpt": "The silence already answered. The checking is the habit.",
+    "category": "Love & Affairs",
+    "author": "Arjun Singh",
+    "date": "2026-04-22",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1200&h=700&fit=crop",
+    "content": [
+      "Ghosting is an ending without manners. It stings because your brain hates unfinished stories. Checking their profile pretends the story might update. Most days it only refreshes the bruise.",
+      "Mute or remove them. Tell one person so the silence is not a private obsession. Do not send the long paragraph that asks them to explain your worth. They already declined the conversation.",
+      "Let the anger and the embarrassment exist. Both are normal. You did not imagine the warmth that came before. You also do not have to wait in the doorway.",
+      "On the night you want to look ‘just once’, talk to someone else first. A ten-minute MyTalk chat can outlast the urge. Your dignity likes a witness that is not their grid."
     ]
   },
   {
@@ -413,6 +431,38 @@
     ]
   },
   {
+    "slug": "stop-overthinking-every-text",
+    "title": "How to Stop Overthinking Every Text",
+    "excerpt": "A short reply is not a novel. Here is how to get your evening back.",
+    "category": "Dating Tips",
+    "author": "Meera Sharma",
+    "date": "2026-04-19",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=1200&h=700&fit=crop",
+    "content": [
+      "Overthinking a text means you write five drafts, analyse punctuation, and check if they were active elsewhere. The message becomes a verdict on your worth. It is usually just a message.",
+      "Set a rule: one clarification if plans are unclear, then wait. No decoding ‘haha’ with a friend for forty minutes. Put the phone away during meals.",
+      "Ask for the communication style you need instead of mind-reading theirs. ‘Short replies make me spiral. If you are busy, say busy.’ Adults can meet that.",
+      "If the spiral is nightly, the issue may be anxiety more than this chat. Talk about the pattern. MyTalk is a better place for the analysis than their notification banner."
+    ]
+  },
+  {
+    "slug": "what-emotional-safety-feels-like",
+    "title": "What Emotional Safety Actually Feels Like",
+    "excerpt": "Safety is being able to tell the truth without bracing for contempt.",
+    "category": "Relationship Articles",
+    "author": "MyTalk Editorial",
+    "date": "2026-04-16",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&h=700&fit=crop",
+    "content": [
+      "Emotional safety is not boredom and it is not constant agreement. It is knowing you can bring a mistake, a need, or a fear and the relationship will not use it against you later.",
+      "You feel it in your body: shoulders drop, you speak in full sentences, you do not rehearse for an hour. You also feel it in repair. Rupture happens and respect stays.",
+      "If you only feel alive when you are anxious, safety may feel dull at first. Give it time before you call it no spark. Chaos is a familiar drug. Calm is a skill.",
+      "MyTalk’s promise is close to this feeling: someone to talk to, someone to understand. You can practise safety with a listener and then ask for it, clearly, in your own life."
+    ]
+  },
+  {
     "slug": "healthy-boundaries-with-an-ex",
     "title": "Healthy Boundaries With an Ex Who Still Texts",
     "excerpt": "When ‘we’re friends’ keeps reopening the wound.",
@@ -427,6 +477,1396 @@
       "Scripts help: “I care about you, but daily chat isn’t healthy for me right now.”",
       "Mutual friend groups need adult coordination, not possession battles.",
       "Confusion is expensive. Clarity is kindness—even when it disappoints someone."
+    ]
+  },
+  {
+    "slug": "beige-flags-in-dating",
+    "title": "Beige Flags in Dating and What to Do With Them",
+    "excerpt": "Not red, not green — the small oddities that still deserve a question.",
+    "category": "Dating Tips",
+    "author": "Aditya Kulkarni",
+    "date": "2026-04-13",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=1200&h=700&fit=crop",
+    "content": [
+      "Beige flags are the mildly off details people joke about: they are rude only to delivery workers, they have no friends, they talk about an ex in every story, they never plan and call it spontaneous.",
+      "Do not build a case from one quirk. Do ask a question. ‘I noticed plans always stay vague. Is that how you like to date?’ Their answer tells you if it is a style or a dodge.",
+      "A pile of beige becomes a pattern. Patterns predict your future Tuesdays better than one charming Saturday.",
+      "You can like someone and still decline the life their habits imply. Attraction is data. So is your peace."
+    ]
+  },
+  {
+    "slug": "healing-era-without-isolation",
+    "title": "A Healing Era That Does Not Turn Into Isolation",
+    "excerpt": "Rest and standards are healthy. Disappearing from all human contact is not the goal.",
+    "category": "Mental Wellness",
+    "author": "Ishita Banerjee",
+    "date": "2026-04-10",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1474418397713-7ede21d49118?w=1200&h=700&fit=crop",
+    "content": [
+      "A healing era can mean better boundaries, therapy, slower dating, and fewer chaotic nights. It can also become a brand for avoiding every feeling and every person. Know which one you are in.",
+      "Keep one relationship where you practise being known. Healing that never risks honesty is just a quieter loneliness. Friends, family, or a regular listener all count.",
+      "Notice if ‘I am focusing on myself’ is a shield against a conversation you owe someone. Self-respect includes clean endings, not only distance.",
+      "MyTalk fits a healing season because support does not require you to be finished, shiny, or ready to date. Come as you are. Leave with one clearer next step."
+    ]
+  },
+  {
+    "slug": "realistic-timeline-for-rebuilding-trust",
+    "title": "A Realistic Timeline for Rebuilding Trust",
+    "excerpt": "Trust returns through repeated proof, not a single apology.",
+    "category": "Relationship Articles",
+    "author": "Arjun Singh",
+    "date": "2026-04-07",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=700&fit=crop",
+    "content": [
+      "After a lie or betrayal, people want a date when things feel normal. There is no universal date. Early weeks are for truth, safety, and stopping the harmful behaviour completely.",
+      "The next months are for transparency you both agreed to, not for endless punishment and not for pretending it is over because the apology was eloquent. Check in on a schedule so the topic does not ambush every dinner.",
+      "The hurt partner’s triggers are not a strategy. The person who broke trust does not get to demand speed. The hurt partner does not get to invent new tests forever. Both edges matter.",
+      "If you are stuck between hope and surveillance, get an outside perspective. Rebuilding is possible when both people do the work. It is not owed."
+    ]
+  },
+  {
+    "slug": "forgiveness-vs-getting-back-together",
+    "title": "Forgiveness Is Not the Same as Getting Back Together",
+    "excerpt": "You can release bitterness and still keep the door closed.",
+    "category": "Love & Affairs",
+    "author": "Meera Sharma",
+    "date": "2026-04-04",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=1200&h=700&fit=crop",
+    "content": [
+      "Forgiveness is an internal loosening of the wish for revenge. Reconciliation is a new agreement with the person who hurt you. Families often mash them into one demand: forgive and return.",
+      "You can forgive and still end it. You can stay and still be mid-forgiveness, which takes time and changed behaviour. Rushing either one to look evolved helps nobody.",
+      "Ask what you would need to see over months, not over a tearful night. Words are cheap on the night of discovery. Patterns are the evidence.",
+      "If pressure to ‘move on’ is coming from relatives or from your own guilt, talk it through with someone who does not need a reunion. MyTalk will not push you back into a story you have outgrown."
+    ]
+  },
+  {
+    "slug": "lonely-in-a-busy-city",
+    "title": "Feeling Lonely in a Busy City",
+    "excerpt": "Why connection can feel scarce—and gentle ways to rebuild social energy.",
+    "category": "Lifestyle",
+    "author": "MyTalk Editorial",
+    "date": "2026-04-02",
+    "readingTime": 6,
+    "image": "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=1200&h=700&fit=crop",
+    "content": [
+      "Loneliness is not always about being alone; sometimes it is about not being known.",
+      "Schedule low-pressure contact: short walks, shared hobbies, or a confidential MyTalk session when friends are unavailable.",
+      "Treat loneliness as information about your need for belonging, not as a personal flaw."
+    ]
+  },
+  {
+    "slug": "parenting-stress-and-couple-time",
+    "title": "Parenting Stress and Protecting Couple Time",
+    "excerpt": "The child needs you. The relationship also needs a pulse.",
+    "category": "Relationship Articles",
+    "author": "MyTalk Editorial",
+    "date": "2026-04-01",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&h=700&fit=crop",
+    "content": [
+      "Parenting stress makes couples into shift workers. You discuss fees, fevers, and pickups, and forget you liked each other. The absence is not dramatic. It is logistical.",
+      "Protect a small, repeatable pocket: twenty minutes after bedtime, one outing a month, phones left in another room. Tiny and reliable beats a fantasy vacation you resent each other for not taking.",
+      "Divide the load visibly so resentment does not eat the pocket. If one person is always ‘on’, date night feels like another task they must host.",
+      "You can love your child and grieve your old ease. Say that without blame. If the grief has nowhere to go, put it in a private conversation so it does not come out as criticism at breakfast."
+    ]
+  },
+  {
+    "slug": "career-guilt-and-love",
+    "title": "Career Guilt and Love",
+    "excerpt": "Ambition is not betrayal. Neglect is a separate choice.",
+    "category": "Lifestyle",
+    "author": "Aditya Kulkarni",
+    "date": "2026-03-29",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=1200&h=700&fit=crop",
+    "content": [
+      "Career guilt shows up when a late night feels like a moral failure and a promotion feels like you abandoned the relationship. Ambition and care can coexist if you tell the truth about time.",
+      "Share the season. ‘These six weeks are heavy. Here is what I can still give: Sunday morning, a daily call, no work in bed.’ Then protect those promises harder than the extra meeting.",
+      "Ask your partner what they actually miss. Often it is not equal hours. It is being remembered. A specific check-in beats a vague apology tour.",
+      "If work is an escape from home, admit that to yourself first. A listener can help you see whether you are building a life or hiding in one."
+    ]
+  },
+  {
+    "slug": "consent-in-a-long-term-relationship",
+    "title": "Consent in a Long-Term Relationship",
+    "excerpt": "Years together do not retire the right to say yes, no, or not tonight.",
+    "category": "Love & Affairs",
+    "author": "Ishita Banerjee",
+    "date": "2026-03-26",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=700&fit=crop",
+    "content": [
+      "Consent stays active after commitment. Marriage, habit, and history are not blanket permission. ‘Not tonight’ can be complete. A caring partner can feel disappointed and still stop.",
+      "Enthusiasm matters more than duty. If closeness has become something you endure, say so outside the moment, when you are clothed and calm. Explain what would help you feel safe.",
+      "Pressure, sulking, and punishment after a no are not romance. They teach the other person to override themselves. That is how resentment and shutdown grow.",
+      "You can want more intimacy and still refuse coercion. Talk about desire as a shared design, not a debt. If you cannot say no safely, seek support and prioritise safety."
+    ]
+  },
+  {
+    "slug": "body-image-and-feeling-close",
+    "title": "Body Image and Feeling Close to Someone",
+    "excerpt": "Shame is loud in intimate moments. Kindness can be specific.",
+    "category": "Love & Affairs",
+    "author": "Arjun Singh",
+    "date": "2026-03-23",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1200&h=700&fit=crop",
+    "content": [
+      "Body image can sit between two people who love each other. You may avoid lights, touch, or photos. Your partner may think you are avoiding them. Say the difference.",
+      "Ask for what helps: certain words, no comments on weight, a slower pace, clothes that stay on. A loving partner can follow instructions better than hints.",
+      "Do not outsource your entire self-worth to their attraction, and do not accept insults framed as honesty. Desire and disrespect are not the same conversation.",
+      "If shame is old and heavy, you deserve more than one talk. A confidential conversation can be the first place the sentence exists outside your head."
+    ]
+  },
+  {
+    "slug": "stop-comparing-to-instagram-couples",
+    "title": "Stop Comparing Your Relationship to Instagram Couples",
+    "excerpt": "Their highlight reel is not your private life’s opponent.",
+    "category": "Lifestyle",
+    "author": "Meera Sharma",
+    "date": "2026-03-20",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=1200&h=700&fit=crop",
+    "content": [
+      "Couple photos are advertisements for a moment, sometimes for a brand. You see the airport, not the argument about the cab. Comparing your Tuesday to their caption is an unfair sport.",
+      "Notice when scrolling turns into scorekeeping against your partner. Mute accounts that leave you ashamed of a good, ordinary love. Curation is allowed. So is opting out.",
+      "Ask what you actually want more of — time, touch, laughter, help — and request that in your real kitchen. A post cannot deliver it.",
+      "If comparison has become a daily mood disorder in your pocket, talk about the loneliness underneath the envy. Envy is often a wish for a feeling, not for their exact holiday."
+    ]
+  },
+  {
+    "slug": "calm-routines-after-work",
+    "title": "Calm After-Work Routines for Emotional Reset",
+    "excerpt": "A 20-minute transition ritual for people who bring stress home.",
+    "category": "Mental Wellness",
+    "author": "Aditya Kulkarni",
+    "date": "2026-03-18",
+    "readingTime": 4,
+    "image": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&h=700&fit=crop",
+    "content": [
+      "Create a deliberate bridge between work mode and home mode.",
+      "Try: change clothes, drink water, five minutes of quiet breathing, then one pleasant sensory cue like music or tea.",
+      "Consistency matters more than intensity."
+    ]
+  },
+  {
+    "slug": "conversations-before-moving-in",
+    "title": "Conversations to Have Before You Move In Together",
+    "excerpt": "Chores, money, guests, and alone time — before the boxes.",
+    "category": "Relationship Articles",
+    "author": "MyTalk Editorial",
+    "date": "2026-03-17",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=1200&h=700&fit=crop",
+    "content": [
+      "Moving in is a design project disguised as romance. Talk about rent split, chores, families visiting, work-from-home space, and what ‘a night off’ means in a shared flat.",
+      "Discuss conflict style. Can you pause? Who needs to talk immediately? What happens if one of you wants to leave the relationship later — notice periods, deposits, furniture.",
+      "Be honest about habits you will not magically drop: sleep times, cleanliness, spending, prayer, food. Surprise habits become character attacks in month two.",
+      "If you cannot have these talks, you are not ready for the keys. Practise the awkward ones. Clarity now is cheaper than a breakup with a lease."
+    ]
+  },
+  {
+    "slug": "wedding-stress-and-mental-health",
+    "title": "Wedding Stress and Your Mental Health",
+    "excerpt": "Shaadi planning can swallow the couple it is meant to celebrate.",
+    "category": "Mental Wellness",
+    "author": "Aditya Kulkarni",
+    "date": "2026-03-14",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&h=700&fit=crop",
+    "content": [
+      "Wedding stress is logistics plus every relative’s dream. You can love the person and hate the planning. Say that distinction often so the stress does not get misread as doubt.",
+      "Pick three decisions that matter to you as a couple and release the rest where you can. A guest list war is a poor place to prove love.",
+      "Watch sleep, appetite, and how you speak to each other after vendor calls. If cruelty shows up only in wedding month, name it and repair it. Do not save every apology for the honeymoon.",
+      "You are allowed to want a simpler event. You are allowed to talk to someone who is not your fiancé, your mother, or the planner. MyTalk can be the quiet room in a loud season."
+    ]
+  },
+  {
+    "slug": "post-wedding-blues",
+    "title": "Post-Wedding Blues Are More Common Than the Photos Suggest",
+    "excerpt": "The function ends. The feeling can dip. You are not ungrateful.",
+    "category": "Mental Wellness",
+    "author": "Ishita Banerjee",
+    "date": "2026-03-11",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=1200&h=700&fit=crop",
+    "content": [
+      "After the wedding, many people feel flat, irritable, or oddly grieving. The project that organised every month is over. Family has gone home. Real life, bills, and a new household remain.",
+      "Talk about it without turning it into ‘so you regret marrying me?’ The blues are often about transition, exhaustion, and identity, not about the partner’s worth.",
+      "Rest before you redecorate your whole life. Sleep, simple food, fewer visitors. Make one new ritual that belongs to the two of you, not to the guests.",
+      "If the dip includes hopelessness that does not lift, or panic, reach for real support. A listener, a doctor, or both. Celebration and struggle can sit in the same month."
+    ]
+  },
+  {
+    "slug": "keeping-romance-after-years",
+    "title": "Keeping Romance Alive After Years Together",
+    "excerpt": "Long love needs ritual, novelty, and the decision to stay curious.",
+    "category": "Love & Affairs",
+    "author": "Arjun Singh",
+    "date": "2026-03-08",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1200&h=700&fit=crop",
+    "content": [
+      "Romance after years is less about surprise trips and more about attention. A midweek note, a walk without errands, remembering the story they are tired of telling their office.",
+      "Novelty can be small and local: a new tea stall, a swapped chore, a question you have never asked. The brain bonds to what feels a little alive, not only to what feels safe.",
+      "Protect a weekly pocket that is not about children, parents, or money. If money talk always eats date night, schedule the money talk somewhere else.",
+      "If you feel like roommates, say that without contempt. ‘I miss us’ is an invitation. Contempt is a closing. You can ask for help rebuilding attention before you call it over."
+    ]
+  },
+  {
+    "slug": "questions-to-ask-your-partner-tonight",
+    "title": "12 Questions to Ask Your Partner Tonight",
+    "excerpt": "Better than ‘how was your day’ when you want an actual conversation.",
+    "category": "Communication Skills",
+    "author": "Meera Sharma",
+    "date": "2026-03-05",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=1200&h=700&fit=crop",
+    "content": [
+      "Try one or two, not an interview. What felt heavy today? Where did you feel appreciated? What are you looking forward to this month? What do you wish I understood without you explaining?",
+      "More: What is a small stress I might be missing? When did you feel closest to me recently? What would make this week kinder? Is there a conversation we keep postponing?",
+      "And: What do you need from me when you are quiet? What family expectation is loud right now? What would a good ordinary Sunday include? What is one boundary you want respected?",
+      "Listen longer than you want to. The point is not clever follow-ups. The point is leaving the other person feeling known. If these questions feel impossible at home, practise the tone with a MyTalk listener first."
+    ]
+  },
+  {
+    "slug": "how-to-ask-for-space",
+    "title": "How to Ask for Space Without Sounding Like Goodbye",
+    "excerpt": "Space works when it has a reason, a shape, and a return.",
+    "category": "Communication Skills",
+    "author": "MyTalk Editorial",
+    "date": "2026-03-02",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&h=700&fit=crop",
+    "content": [
+      "‘I need space’ terrifies people because it often means ‘I am leaving and will not say so’. Make yours different. ‘I am overwhelmed and I want an evening alone. I am not ending this. I will call tomorrow after dinner.’",
+      "During the space, do not use dating apps or punishing silence if you promised a return. Use the time to calm your body, not to build a case.",
+      "If you are the one asked to wait, you can agree and still name your limit. ‘I can give you tonight. I cannot give you an undefined week.’",
+      "Space without a return time is a slow breakup. Either add the time or tell the truth. Both are kinder than fog."
+    ]
+  },
+  {
+    "slug": "needing-reassurance-without-shame",
+    "title": "Needing Reassurance Without Shame",
+    "excerpt": "Wanting to know you matter is human. Asking on repeat needs a better plan.",
+    "category": "Mental Wellness",
+    "author": "Aditya Kulkarni",
+    "date": "2026-02-27",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=1200&h=700&fit=crop",
+    "content": [
+      "Reassurance is a normal need: a clear ‘I choose you’, a plan, a kind text. Shame says you should not need it. That shame usually comes from years of guessing.",
+      "Ask specifically and sparingly. ‘When you go quiet, I spin. A line that you are busy and still with me helps.’ Then let the answer land. Asking ten more times in an hour teaches your body that no answer counts.",
+      "Build reassurance that does not depend on one person: friends, routine, a promise you keep to yourself. If you need constant proof, look at anxiety and old abandonment, not only at their flaws.",
+      "You can be needy in a moment and still be worthy of love. Talk about the need before it becomes an accusation. That is a conversation MyTalk hears every day."
+    ]
+  },
+  {
+    "slug": "over-apologising-in-love",
+    "title": "Over-Apologising in Love",
+    "excerpt": "Saying sorry for existing teaches people to overlook your needs.",
+    "category": "Communication Skills",
+    "author": "Ishita Banerjee",
+    "date": "2026-02-24",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1474418397713-7ede21d49118?w=1200&h=700&fit=crop",
+    "content": [
+      "Over-apologising sounds polite and trains everyone to treat your needs as inconvenience. ‘Sorry, quick question’ and ‘sorry you had to listen’ shrink you before the sentence starts.",
+      "Replace some sorries with thanks or with nothing. ‘Thank you for waiting.’ ‘I need a minute.’ ‘That did not work for me.’ Reserve sorry for actual harm.",
+      "If you apologise to end tension you did not cause, notice the relief and the resentment that follows. Peace bought that way is a loan.",
+      "Practise one day of fewer apologies and see who gets uncomfortable. Their discomfort is not proof you were rude. It may be proof the old pattern served them."
+    ]
+  },
+  {
+    "slug": "when-anger-is-really-hurt",
+    "title": "When Anger Is Really Hurt",
+    "excerpt": "The sharp sentence often protects a softer one you have not said.",
+    "category": "Communication Skills",
+    "author": "Arjun Singh",
+    "date": "2026-02-21",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=700&fit=crop",
+    "content": [
+      "Anger is frequently hurt wearing armour. ‘You never care’ might mean ‘I waited and felt foolish’. If you can find the hurt, the conversation gets a door.",
+      "Pause when you want to humiliate. Ask, ‘What am I protecting?’ Then try the softer line first. If it is dismissed, you can still be firm. Soft is not the same as weak.",
+      "If you only know how to be angry, your partner only knows how to defend. Change one exchange this week. It will feel unnatural. Unnatural is how new skills arrive.",
+      "Chronic rage that scares people needs more than a blog tip. Step away, and if you fear you might harm someone, seek immediate local help. MyTalk is for talking, not for moments of danger."
+    ]
+  },
+  {
+    "slug": "crying-in-front-of-your-partner",
+    "title": "Crying in Front of Your Partner",
+    "excerpt": "Tears are information. They do not cancel your dignity.",
+    "category": "Communication Skills",
+    "author": "Meera Sharma",
+    "date": "2026-02-18",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=1200&h=700&fit=crop",
+    "content": [
+      "Crying in front of someone you love can feel like losing rank. It is usually a sign the feeling finally got past the performance. A safe partner stays, offers water, and does not rush you to the lesson.",
+      "If they freeze or joke, they may be unskilled rather than cruel. Tell them what helps: ‘Sit with me. Please do not fix it yet.’ Skill can be taught. Contempt cannot.",
+      "You also do not have to cry on demand to prove the pain is real. Some people go quiet. Both are human. Ask for the kind of comfort that matches your style.",
+      "If you have never been allowed to cry without punishment, the first time will feel like danger. Go slowly. A listener can be the rehearsal before home."
+    ]
+  },
+  {
+    "slug": "men-and-talking-about-feelings-in-india",
+    "title": "Men and Talking About Feelings in India",
+    "excerpt": "You were told to be strong. Strength includes having someone to talk to.",
+    "category": "Mental Wellness",
+    "author": "MyTalk Editorial",
+    "date": "2026-02-15",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&h=700&fit=crop",
+    "content": [
+      "Many Indian men learn early that sadness is inconvenience and anger is the only public emotion. Then a partner asks ‘what is wrong’ and the honest answer feels dangerous, so they say ‘nothing’.",
+      "Start smaller than a confession. ‘Work was heavy and I do not want to be snapped at or to snap.’ That sentence is emotional skill. You can build from there.",
+      "Choose a listener who will not mock you — a friend who has earned it, or a confidential MyTalk session if your circle treats feelings as weakness. Privacy helps the first tries.",
+      "Your partner is not your only option, and silence is not protection. People who love you are already living with the mood. Naming it is kinder than making them guess."
+    ]
+  },
+  {
+    "slug": "mental-load-and-quiet-resentment",
+    "title": "The Mental Load and the Quiet Resentment It Creates",
+    "excerpt": "Remembering the milk, the forms, and the feelings will eventually speak.",
+    "category": "Relationship Articles",
+    "author": "Aditya Kulkarni",
+    "date": "2026-02-12",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=1200&h=700&fit=crop",
+    "content": [
+      "The mental load is the planning brain of a household: school forms, medicine, guest menus, whose mother needs a call. The person who holds it often looks controlling because they are trying not to drop anything.",
+      "Resentment arrives when help is offered only after a meltdown. ‘Tell me what to do’ still leaves the planning on you. Shared load means shared noticing.",
+      "Move recurring tasks into owners, not reminders. A list on the fridge beats a personality critique. Review it monthly like adults, not like a parent and a teenager.",
+      "If you have swallowed the resentment for years, it will sound sharp when it finally exits. Practise the first version somewhere safe. MyTalk is useful before the kitchen becomes a courtroom."
+    ]
+  },
+  {
+    "slug": "emotional-labour-in-marriage",
+    "title": "Emotional Labour in Marriage",
+    "excerpt": "Who remembers birthdays, moods, and the fight that was never finished?",
+    "category": "Relationship Articles",
+    "author": "Ishita Banerjee",
+    "date": "2026-02-09",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=700&fit=crop",
+    "content": [
+      "Emotional labour is the invisible management of feelings, social plans, and repair. In many marriages one person tracks everyone’s mood while the other believes things are ‘fine’ because nobody is shouting.",
+      "List it without sarcasm first: who initiates hard talks, who apologises, who calls relatives, who notices a bad day. Seeing the list changes the argument from ‘you are dramatic’ to ‘the load is uneven’.",
+      "Redistribute in concrete chores of the heart. ‘You check on your parents this week. You plan the apology to your friend. I will not be the family project manager.’",
+      "If naming the load starts a fight about your tone, that reaction is part of the load. Get a private place to sort your anger so the next conversation stays specific."
+    ]
+  },
+  {
+    "slug": "introvert-dating-without-burnout",
+    "title": "Introvert Dating Without Burning Out",
+    "excerpt": "You can want love and still need the evening to end.",
+    "category": "Dating Tips",
+    "author": "Arjun Singh",
+    "date": "2026-02-06",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1200&h=700&fit=crop",
+    "content": [
+      "Introvert dating works with shorter meets, quieter places, and recovery time on the calendar. A three-hour loud plan is not more romantic. It is just louder.",
+      "Say your pace early. ‘I like one-to-one and I get tired after two hours. That is not a lack of interest.’ The right person is relieved. The wrong person is offended by your battery.",
+      "Do not use texting as a permanent hiding place. Some voice or in-person time is how you learn safety. Schedule it, then actually rest afterward.",
+      "If you leave dates ashamed that you were ‘too quiet’, remember quiet is not empty. Interest, questions, and kindness are audible even in a soft voice."
+    ]
+  },
+  {
+    "slug": "grief-after-a-friendship-breakup",
+    "title": "Grief After a Friendship Breakup",
+    "excerpt": "Losing a best friend can hurt as much as a romance. Almost nobody brings food.",
+    "category": "Mental Wellness",
+    "author": "Meera Sharma",
+    "date": "2026-02-03",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=1200&h=700&fit=crop",
+    "content": [
+      "Friendship breakups are under-recognised grief. Shared history, jokes, and emergencies vanish, and people tell you to ‘just make new friends’. You are allowed to mourn.",
+      "Name what ended: trust, time, values, or a slow drift. Drift still hurts. You can send one clear note if needed, then stop prosecuting the past in your head every night.",
+      "Remove the daily triggers kindly. Mute, do not stalk, and tell mutual friends you will not discuss it in the group. Dignity helps the grief move.",
+      "Talk about the friend the way you would talk about an ex — honestly, with someone who will not turn it into gossip. That is a good use of a private listener."
+    ]
+  },
+  {
+    "slug": "making-friends-as-an-adult",
+    "title": "Making Friends as an Adult",
+    "excerpt": "Friendship after college takes repetition, not a perfect personality.",
+    "category": "Lifestyle",
+    "author": "MyTalk Editorial",
+    "date": "2026-01-31",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=1200&h=700&fit=crop",
+    "content": [
+      "Adult friendship forms through repeated, low-pressure contact. A class, a sport, a faith community, a volunteering shift. One charming dinner rarely becomes a bond. Ten ordinary Tuesdays might.",
+      "Be the initiator twice before you decide they are uninterested. People are tired and flattered and slow. ‘Want to get chai after this?’ is a complete brave act.",
+      "Shift from colleague to friend with one personal question and one plan outside work. If they only talk tasks, keep them as colleagues and keep looking.",
+      "Loneliness eases faster when you stop requiring a soulmate friend and start collecting a few warm ones. You can also talk to MyTalk on the weeks the search feels humiliating."
+    ]
+  },
+  {
+    "slug": "festival-loneliness-away-from-home",
+    "title": "Festival Loneliness When Home Is Far Away",
+    "excerpt": "Diwali, Eid, Christmas, or Pongal can hurt when you are the one not travelling.",
+    "category": "Lifestyle",
+    "author": "Aditya Kulkarni",
+    "date": "2026-01-28",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&h=700&fit=crop",
+    "content": [
+      "Festivals advertise togetherness. If you are in a rented room while your feed fills with families, the contrast is brutal. You are allowed to mute the feed and still love your people.",
+      "Make one small ritual that is yours: a sweet, a call at a set time, a walk when the noise peaks. Waiting to feel festive before you participate keeps you stuck.",
+      "Invite one other person who is also away, or accept that this year is quiet. Quiet is not a moral failure. It is a season.",
+      "If the holiday opens an old family wound, you do not have to spend it rehearsing the fight alone. MyTalk can sit with you between the rituals."
+    ]
+  },
+  {
+    "slug": "work-from-home-isolation",
+    "title": "Work-From-Home Isolation and Your Mood",
+    "excerpt": "When the office is your bed, loneliness arrives before lunch.",
+    "category": "Mental Wellness",
+    "author": "Ishita Banerjee",
+    "date": "2026-01-25",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=1200&h=700&fit=crop",
+    "content": [
+      "Remote work removes commutes and also removes casual human contact. Days can pass with Slack as your only voice. Mood drops, and then you blame your personality.",
+      "Create artificial edges: a start walk, a desk that is not the bed, a lunch away from the screen, and one human voice daily. The voice can be a friend, a parent, or a listener.",
+      "Tell your partner or roommate that silence after work is recovery, not rejection, and still offer a reconnection point later. Isolation plus irritability is a known pair.",
+      "If you have not left the flat in days and hope is thinning, add support beyond productivity hacks. Talk to someone. If you feel unsafe with your thoughts, use local emergency or crisis resources."
+    ]
+  },
+  {
+    "slug": "lonely-in-a-mumbai-crowd",
+    "title": "Lonely in a Mumbai Crowd",
+    "excerpt": "Local trains are full. Your evening can still be empty.",
+    "category": "Lifestyle",
+    "author": "Arjun Singh",
+    "date": "2026-01-22",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1200&h=700&fit=crop",
+    "content": [
+      "Mumbai offers proximity without belonging. You can stand against strangers for an hour and still eat dinner alone. Crowds do not count as company.",
+      "Anchor the week: one sea-facing walk, one neighbour or colleague you greet by name, one call that is not logistics. Small repetition beats a fantasy of instant friend groups.",
+      "Housing is tight and moods get sharp. If you live with roommates, agree on quiet hours and one shared meal. If you live alone, do not let every night be screens.",
+      "Loneliness in a famous city feels embarrassing. It should not. Plenty of people in this city want someone to talk to. Start with one real conversation, even if it is confidential and scheduled."
+    ]
+  },
+  {
+    "slug": "lonely-in-bengaluru-after-a-move",
+    "title": "Lonely in Bengaluru After a Move",
+    "excerpt": "A new job, a PG, and a city full of people who are not your people yet.",
+    "category": "Lifestyle",
+    "author": "Meera Sharma",
+    "date": "2026-01-19",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=1200&h=700&fit=crop",
+    "content": [
+      "Bengaluru can look social and still feel empty. Traffic eats the evening. Colleagues are kind at standup and gone by seven. You are not failing at adulthood. You are new.",
+      "Build three thin ties before you hunt one best friend: a sport or class, a lunch with one teammate, a weekly call home that has a start and an end so it does not become your whole social life.",
+      "Weekends need a plan before Friday sadness arrives. One outing, one rest block, one conversation that is not about tickets or standups.",
+      "If the room feels too quiet after the laptop closes, talk to someone the same night. MyTalk is there for new-city loneliness, not only for relationship crises."
+    ]
+  },
+  {
+    "slug": "nri-love-across-time-zones",
+    "title": "NRI Love Across Time Zones",
+    "excerpt": "How couples in India and abroad stay close without living on opposite clocks.",
+    "category": "Love & Affairs",
+    "author": "MyTalk Editorial",
+    "date": "2026-01-16",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&h=700&fit=crop",
+    "content": [
+      "Time zones punish improvised love. Pick two overlapping windows a week and protect them like meetings. A planned forty minutes beats fragmented ‘you up?’ messages that always miss.",
+      "Talk about visits, money for tickets, and the question under the romance: whose city is the future? Avoiding it feels kind until one person has built a life the other cannot enter.",
+      "Jealousy grows in the gap. Share ordinary details — food, weather, a colleague — so the other person still knows your day. Mystery is not intimacy when you already live apart.",
+      "Loneliness in the hours you cannot call is real. Fill some of them with local friends or a MyTalk conversation so the relationship is not punished for being asleep."
+    ]
+  },
+  {
+    "slug": "social-media-jealousy",
+    "title": "Social Media Jealousy in Modern Couples",
+    "excerpt": "Likes, close friends lists, and the ex who still watches stories.",
+    "category": "Love & Affairs",
+    "author": "Aditya Kulkarni",
+    "date": "2026-01-13",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=1200&h=700&fit=crop",
+    "content": [
+      "A like is small and the story in your head is large. Social media jealousy spikes when the relationship already feels thin. The app is the stage, not always the cause.",
+      "Say the specific fear. ‘When you share private jokes with an ex in comments, I feel unsteady.’ Ask for a behaviour, not a personality transplant. ‘Please move that conversation off my feed or stop it.’",
+      "You can mute people without announcing a war. You can also ask yourself how often you audit their following list. Audits steal evenings you could have spent being a partner.",
+      "If jealousy is constant, treat it as a feeling that needs care, not as a detective project. Talk it through before you post something you cannot take back."
+    ]
+  },
+  {
+    "slug": "phone-privacy-and-trust",
+    "title": "Phone Privacy and Trust in a Relationship",
+    "excerpt": "You can have boundaries and still be honest. Snooping is not intimacy.",
+    "category": "Relationship Articles",
+    "author": "Ishita Banerjee",
+    "date": "2026-01-10",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1474418397713-7ede21d49118?w=1200&h=700&fit=crop",
+    "content": [
+      "Trust is not the right to read every chat. Privacy is not the right to hide a double life. Adults can have locked phones and still tell the truth about where they are and who matters.",
+      "If you are searching their phone, you already feel unsafe. Say that. ‘I do not want to police you. I am anxious because of X. Can we talk about what reassurance looks like?’ Surveillance rarely soothes for long.",
+      "If you are hiding ordinary friendships because any name starts a fight, the problem may be control. If you are hiding romance, the problem is the secret. Know which one you are in.",
+      "Agree on basics: no romantic secrecy, no humiliation via screenshots, no all-night interrogations. Then live the agreement. MyTalk can help you sort jealousy from a real breach."
+    ]
+  },
+  {
+    "slug": "financial-honesty-before-marriage",
+    "title": "Financial Honesty Before Marriage",
+    "excerpt": "Debt, family support, and spending styles are love conversations.",
+    "category": "Relationship Articles",
+    "author": "Arjun Singh",
+    "date": "2026-01-07",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=700&fit=crop",
+    "content": [
+      "Money fights are often values fights. Before marriage, share income range, debts, dependents, and the family transfers you already make. Surprise EMIs destroy trust faster than a small salary.",
+      "Talk about lifestyle, not only numbers. Who pays for parents, how you feel about loans, what ‘enough’ looks like, and who tracks the account. Shame makes people lie. Lying costs more than the number.",
+      "You can be generous and still refuse a secret. If a partner hides money the way some hide messages, believe the pattern. Transparency is a green flag with a bank balance attached.",
+      "If the talk feels impossible because of how you were raised, rehearse it. A listener can help you say the number without collapsing."
+    ]
+  },
+  {
+    "slug": "in-law-conflict-without-permanent-war",
+    "title": "In-Law Conflict Without Starting a Permanent War",
+    "excerpt": "Stay married to your partner, not to every family opinion.",
+    "category": "Relationship Articles",
+    "author": "Meera Sharma",
+    "date": "2026-01-04",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=1200&h=700&fit=crop",
+    "content": [
+      "In-law stress explodes when the couple does not have a private alliance. Decide together what you will accommodate — visits, food, childcare help — and what you will not debate in the living room.",
+      "Speak to your own parent when you can. Asking your partner to fight your mother, or you to fight theirs, builds resentment on a timer. ‘I will talk to my side’ is adult.",
+      "Keep score of kindness too. Many in-law stories erase the ordinary help. Gratitude does not cancel a boundary. Both can exist.",
+      "If every dinner becomes a trial, shorten the visits and lengthen your debrief with each other. You can love a family and still leave the table."
+    ]
+  },
+  {
+    "slug": "living-with-parents-and-privacy",
+    "title": "Living With Parents and Still Needing a Private Life",
+    "excerpt": "How to date, grieve, and breathe in a full house.",
+    "category": "Lifestyle",
+    "author": "MyTalk Editorial",
+    "date": "2026-01-01",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&h=700&fit=crop",
+    "content": [
+      "Privacy in a joint household is a design problem. You may not get a locked emotional room. You can still get walks, headphones, late calls from the terrace, and one friend who is not the family.",
+      "Tell your parents a category without every detail. ‘I need an hour after work to decompress.’ Repeat it. Privacy stated once gets treated as a mood.",
+      "Do not use a partner as your only secret exit. That pressure cracks dating. Have one other outlet — exercise, a colleague you trust, or a confidential MyTalk chat — so romance is not your sole oxygen.",
+      "You can be a good child and a separate adult. Those roles argue in small flats. The argument is normal. Your need for a self is still valid."
+    ]
+  },
+  {
+    "slug": "interfaith-relationship-conversations",
+    "title": "Honest Conversations for an Interfaith Relationship in India",
+    "excerpt": "Festivals, families, food, and children — talk before crisis, not during it.",
+    "category": "Relationship Articles",
+    "author": "Aditya Kulkarni",
+    "date": "2025-12-29",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=1200&h=700&fit=crop",
+    "content": [
+      "Interfaith love in India is tender and public at the same time. Start with curiosity, not debate club. How do you each practise, what can flex, and what is sacred?",
+      "Talk about festivals, weddings, last rites, and children’s upbringing while you still like each other. ‘We will see’ becomes a fight when a parent is already on the phone.",
+      "Protect the relationship from becoming a daily court case. You are partners, not spokespeople for entire communities. Correct relatives who demand you shrink the other person.",
+      "If fear or secrecy is the main feeling, name it with a listener before you name it only as romance. Love can be real and still need a plan."
+    ]
+  },
+  {
+    "slug": "talking-to-family-about-love-marriage",
+    "title": "Talking to Family About a Love Marriage",
+    "excerpt": "A calmer order of operations when you are ready to tell them.",
+    "category": "Relationship Articles",
+    "author": "Ishita Banerjee",
+    "date": "2025-12-26",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=700&fit=crop",
+    "content": [
+      "Lead with respect and a plan, not a surprise attack at a wedding. Choose the parent most able to hear you, share who the person is in human terms, and say what you are asking for today: a meeting, time, or simply to be told.",
+      "Expect fear dressed as logistics — community, money, children, ‘what will people say’. Answer what you can. Do not promise to abandon your partner to buy peace you will resent.",
+      "You and your partner should know your non-negotiables before the meeting. If the family conversation turns insulting, pause it. Endurance is not the only form of respect.",
+      "These talks can take months. Get support so you are not processing every relative’s opinion alone at midnight."
+    ]
+  },
+  {
+    "slug": "shaadi-pressure-after-28",
+    "title": "Shaadi Pressure After 28: How to Stay Sane",
+    "excerpt": "Wedding questions at every function do not get to run your nervous system.",
+    "category": "Lifestyle",
+    "author": "Arjun Singh",
+    "date": "2025-12-23",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1200&h=700&fit=crop",
+    "content": [
+      "After a certain age in many Indian families, every gathering becomes a status check. ‘Any good news?’ can ruin a good plate of food. The pressure is social. Your timeline is still yours.",
+      "Prepare two lines: one warm, one closing. ‘I am focusing on work and health.’ ‘I will share when there is something to share.’ Then ask about their child, their knee, their trip. Redirecting is a skill.",
+      "Decide what you actually want, separate from the chorus. Marriage, a slower search, or a single life with community are all legitimate. Clarity inside you makes the questions less sticky.",
+      "If the pressure has become shame, you deserve a conversation that does not end in ‘beta, adjust’. MyTalk can be that room between functions."
+    ]
+  },
+  {
+    "slug": "boundaries-with-parents-while-dating",
+    "title": "Boundaries With Parents While You Are Dating",
+    "excerpt": "Love your family without handing them the keys to your relationship.",
+    "category": "Relationship Articles",
+    "author": "Meera Sharma",
+    "date": "2025-12-20",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=1200&h=700&fit=crop",
+    "content": [
+      "Parents often believe access is care. You can honour them and still keep timing, privacy, and partner details in your hands. ‘We will tell you when we are ready’ is a boundary, not an insult.",
+      "Agree with your partner first. Mixed stories — you say slow, they promise a wedding date to an aunt — create chaos. One message, delivered kindly, repeated as needed.",
+      "Expect a wave of worry, jokes, or silence. Do not fill the silence with extra concessions. Offer what you can: a festival visit, a call, a future introduction. Decline the interrogation.",
+      "If family conflict is costing your sleep, talk it out somewhere that will not report back to the family WhatsApp. That privacy is part of becoming an adult in love."
+    ]
+  },
+  {
+    "slug": "how-to-say-no-without-guilt",
+    "title": "How to Say No Without Guilt",
+    "excerpt": "Short refusals for family, partners, and the group chat.",
+    "category": "Communication Skills",
+    "author": "MyTalk Editorial",
+    "date": "2025-12-17",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=1200&h=700&fit=crop",
+    "content": [
+      "A clean no is a full sentence. ‘I cannot make it.’ ‘I am not lending money.’ ‘I do not want to talk about marriage tonight.’ You do not owe a novel.",
+      "Guilt often arrives even when the no is fair. Feel it and do not automatically undo the sentence. Guilt is a feeling, not a command to comply.",
+      "If they push, repeat the line once and change the subject or leave. Debating every no trains people to wear you down. Warmth can stay. The answer can stay no.",
+      "Practice in low-stakes places this week. The skill you need at the family table is built at the smaller tables first."
+    ]
+  },
+  {
+    "slug": "self-worth-after-being-chosen-last",
+    "title": "Self-Worth After Being Chosen Last",
+    "excerpt": "You are not a backup plan. Here is how to stop living like one.",
+    "category": "Mental Wellness",
+    "author": "Aditya Kulkarni",
+    "date": "2025-12-14",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&h=700&fit=crop",
+    "content": [
+      "Being chosen last — after their work, their ex, their mother’s opinion, their phone — teaches you to take scraps and call them effort. Your worth did not shrink. Your standard did.",
+      "Write what ‘chosen’ looks like in ordinary weeks: plans kept, repair offered, your name said with respect. Compare behaviour to that list, not to your fear of being alone.",
+      "Practise choosing yourself in public-sized ways. Leave on time. Eat. Keep the hobby. Tell the truth once. Self-worth grows from evidence you create, not from a speech in the mirror.",
+      "If the last relationship convinced you that you are hard to love, say that sentence to a listener and let it be questioned. MyTalk is for the story underneath the breakup, not only the breakup."
+    ]
+  },
+  {
+    "slug": "trauma-bond-vs-love",
+    "title": "Trauma Bond vs Love: Why Chaos Can Feel Like Chemistry",
+    "excerpt": "Intensity after harm is not proof you are soulmates.",
+    "category": "Love & Affairs",
+    "author": "Ishita Banerjee",
+    "date": "2025-12-11",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=1200&h=700&fit=crop",
+    "content": [
+      "A trauma bond forms when harm and relief take turns. They hurt you, then they soothe you, and the soothing feels like the deepest love you have known. The cycle, not the person, creates the high.",
+      "Love can include conflict. It does not require you to survive cruelty to earn the kind version. If you miss them most after the worst nights, look at the pattern before you look at the poetry.",
+      "Distance is medicine and it feels like illness at first. Your body will crave the relief hit. Plan for that craving: no late-night replies, a friend on call, food, sleep.",
+      "You do not have to decide they are a monster to decide the bond is unsafe. Get support that is not inside the cycle. If you are afraid of their reaction to you leaving, prioritise safety and local help."
+    ]
+  },
+  {
+    "slug": "codependency-vs-healthy-closeness",
+    "title": "Codependency vs Healthy Closeness",
+    "excerpt": "Caring deeply is not the same as losing your own life.",
+    "category": "Relationship Articles",
+    "author": "Arjun Singh",
+    "date": "2025-12-08",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1200&h=700&fit=crop",
+    "content": [
+      "Healthy closeness means two people with lives, friends, and opinions who choose each other. Codependency means your mood is a remote control in their hand, and their crisis is your identity.",
+      "Signs: you cannot enjoy a good day if they are upset, you rescue them from consequences they earned, and your hobbies have quietly died. You call it loyalty.",
+      "Practise one separate plan a week and one feeling you do not immediately fix for them. Support can sound like ‘I believe you can handle this call’ instead of taking the call yourself.",
+      "Closeness gets better when both people have a self to bring back to the room. If separation feels like panic, talk about that panic with someone who is not the relationship."
+    ]
+  },
+  {
+    "slug": "people-pleasing-in-relationships",
+    "title": "People Pleasing in Relationships: The Hidden Cost of Being Easy",
+    "excerpt": "If you never disagree, you eventually disappear.",
+    "category": "Relationship Articles",
+    "author": "Meera Sharma",
+    "date": "2025-12-05",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=1200&h=700&fit=crop",
+    "content": [
+      "People pleasing looks like kindness and functions like fear. You say yes, swallow the preference, then resent them for not reading a mind you refused to show.",
+      "Start with low-stakes truth. The restaurant. The film. The time you need to leave. Each small no teaches your body that love can survive your preference.",
+      "Watch who gets angry when you become specific. That reaction is data. A partner who needs you shapeless is not offering safety. They are offering approval.",
+      "If guilt arrives the moment you state a need, you may have learned that love is earned by usefulness. You can unlearn it. Say the need once in a MyTalk session if home still feels too risky."
+    ]
+  },
+  {
+    "slug": "slow-dating-in-a-fast-feed",
+    "title": "Slow Dating in a Fast Feed",
+    "excerpt": "Take the pace that lets you see someone, not just their highlight reel.",
+    "category": "Dating Tips",
+    "author": "MyTalk Editorial",
+    "date": "2025-12-02",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&h=700&fit=crop",
+    "content": [
+      "Slow dating means fewer parallel stories and more complete ones. You learn how they treat time, money, friends, and a disappointing evening before you call it love.",
+      "Tell them your pace. ‘I like getting to know one person. I am not rushing exclusivity, and I am not collecting backups.’ The right match relaxes. The wrong one calls you boring.",
+      "Use the extra time to notice your body, not only their banter. Do you perform? Do you abandon meals, sleep, or friends? Speed hides self-abandonment.",
+      "Slow is not passive. You still ask clear questions and leave clear mismatches. Patience is not the same as waiting in the dark."
+    ]
+  },
+  {
+    "slug": "dating-app-fatigue-in-indian-cities",
+    "title": "Dating App Fatigue in Indian Cities",
+    "excerpt": "Swiping is not a personality. Here is how to date without the burnout.",
+    "category": "Dating Tips",
+    "author": "Aditya Kulkarni",
+    "date": "2025-11-29",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=1200&h=700&fit=crop",
+    "content": [
+      "App fatigue looks like matches you never message, conversations that die at ‘haha’, and a low mood after twenty minutes of faces. The product is built for browsing. Your heart is not.",
+      "Set a container: two evenings a week, three active chats, one real meeting before you open new profiles. Delete the apps on heavy work weeks. Rest is part of dating well.",
+      "Move promising chats offline quickly and into public places. Chemistry in text is a trailer. Character shows up when plans, delays, and bills happen.",
+      "If the apps make you feel disposable, talk about that feeling instead of swiping it away. You are allowed to want a person, not a leaderboard. MyTalk can hold the loneliness between matches."
+    ]
+  },
+  {
+    "slug": "what-to-expect-in-your-first-mytalk-session",
+    "title": "What to Expect in Your First MyTalk Session",
+    "excerpt": "A simple map for people who have never asked a stranger for emotional support.",
+    "category": "Lifestyle",
+    "author": "Ishita Banerjee",
+    "date": "2025-11-26",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1474418397713-7ede21d49118?w=1200&h=700&fit=crop",
+    "content": [
+      "You do not need a polished problem. ‘I feel heavy and I do not know where to start’ is a valid opening. A listener will help you slow down and name what hurts.",
+      "You can talk about love, family pressure, loneliness, work, or a secret you are not ready to tell friends. You set the pace. You can skip details that feel too raw.",
+      "Come with one hope if you have it: to feel less alone, to decide whether to send a message, to practise an apology. If you have no hope yet, company is enough for session one.",
+      "MyTalk is someone to talk to and someone to understand. It is guidance and support, not emergency care and not a promise to fix another person. If you are in immediate danger, contact local emergency services first."
+    ]
+  },
+  {
+    "slug": "chat-or-call-for-emotional-support",
+    "title": "Chat or Call: How to Choose Emotional Support on MyTalk",
+    "excerpt": "Voice feels brave. Text feels possible. Both can be honest.",
+    "category": "Lifestyle",
+    "author": "Arjun Singh",
+    "date": "2025-11-23",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=700&fit=crop",
+    "content": [
+      "Choose chat when your voice might break, when you are in a shared house, or when you think better in writing. Choose a call when tone matters and typing makes you over-edit.",
+      "There is no more ‘real’ format. Honesty is the standard. Start with the format you will actually open, not the one that sounds impressive.",
+      "If you freeze on a call, say so. ‘I need a second.’ If chat feels thin, add one voice note. You are allowed to change your mind mid-conversation.",
+      "The goal is relief and clarity, not a performance of strength. MyTalk works when you arrive as you are — messy sentence included."
+    ]
+  },
+  {
+    "slug": "why-a-confidential-listener-helps",
+    "title": "Why a Confidential Listener Helps You Think Clearly",
+    "excerpt": "Saying it out loud, to someone with no stake in the outcome, changes the story.",
+    "category": "Mental Wellness",
+    "author": "Meera Sharma",
+    "date": "2025-11-20",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=1200&h=700&fit=crop",
+    "content": [
+      "Friends advise from loyalty. Family advises from reputation. A confidential listener has one job: help you hear yourself. That difference matters when you are deciding whether to stay, leave, apologise, or rest.",
+      "Speaking slows the spiral. A thought that felt huge in your head often becomes a sentence with edges. You can then choose a next step instead of rehearsing the same scene.",
+      "Privacy matters in Indian cities where circles overlap — office, colony, cousins. You deserve a place that does not become gossip.",
+      "MyTalk is private emotional support, not a replacement for therapy or emergency care. Use it when you need someone steady tonight. Use a clinician when symptoms run your life. Use emergency services when you are unsafe."
+    ]
+  },
+  {
+    "slug": "someone-to-talk-to-when-friends-are-busy",
+    "title": "Someone to Talk to When Your Friends Are Busy",
+    "excerpt": "You should not have to wait for a free weekend to feel less alone.",
+    "category": "Lifestyle",
+    "author": "MyTalk Editorial",
+    "date": "2025-11-17",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&h=700&fit=crop",
+    "content": [
+      "Adult friendship runs on calendars. The people who love you may be in another city, on a night shift, or asleep with a baby. Your feeling does not wait for their free slot.",
+      "Keep a short list: one friend for practical help, one for humour, and one option that does not require their availability. That third option can be a journal, a walk, or MyTalk.",
+      "When you do reach a friend, be specific. ‘Can you talk for fifteen minutes tonight?’ is easier to answer than ‘we should catch up sometime’.",
+      "Needing a listener is not proof your friendships failed. It is proof you are a person with a full inner life. Someone to talk to, someone to understand — that is the gap MyTalk is built to fill."
+    ]
+  },
+  {
+    "slug": "lonely-at-night-in-a-relationship",
+    "title": "Lonely at Night Even When You Are in a Relationship",
+    "excerpt": "Sharing a bed is not the same as feeling known.",
+    "category": "Mental Wellness",
+    "author": "Aditya Kulkarni",
+    "date": "2025-11-14",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=1200&h=700&fit=crop",
+    "content": [
+      "Night loneliness inside a couple is common and rarely said. The day was logistics. The phone won the evening. You lie next to someone and still feel like a guest in your own life.",
+      "Ask for a ten-minute lights-on conversation before sleep: one true thing from the day, one thing you need tomorrow. Keep it small enough to actually happen.",
+      "Also check whether you have abandoned every friendship. A partner cannot be your entire village. Loneliness is sometimes a too-narrow life, not a failed marriage.",
+      "On nights you cannot wake them and cannot text a friend, a confidential MyTalk conversation is a humane middle. Someone to talk to is the whole point of the brand."
+    ]
+  },
+  {
+    "slug": "sunday-scaries-and-your-relationship",
+    "title": "Sunday Scaries and Your Relationship",
+    "excerpt": "The weekend dread that turns into snappy evenings at home.",
+    "category": "Lifestyle",
+    "author": "Ishita Banerjee",
+    "date": "2025-11-11",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=700&fit=crop",
+    "content": [
+      "Sunday scaries are the drop in mood before Monday. They often leak onto the person nearest you. A harmless question about dinner becomes a fight because the real fear is the week.",
+      "Say the dread early. ‘I am anxious about Monday. I might be short. It is not you.’ Then do one preparatory act — clothes, a list, a shutdown time — so the anxiety has a job.",
+      "Plan a small Sunday pleasure that ends before late night. Joy that steals sleep makes Monday worse. A walk, a call with a sibling, or a MyTalk chat can hold the feeling so your partner does not have to.",
+      "If every Sunday is dread, look at the job and the rest, not only the relationship. Love cannot compensate for a life with no recovery."
+    ]
+  },
+  {
+    "slug": "burnout-is-stealing-your-intimacy",
+    "title": "Burnout Is Stealing Your Intimacy",
+    "excerpt": "When work empties you, love starts to feel like another task.",
+    "category": "Lifestyle",
+    "author": "Arjun Singh",
+    "date": "2025-11-08",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1200&h=700&fit=crop",
+    "content": [
+      "Burnout makes even a kind partner feel like demand. You are not cold. You are out of battery. Sex, chat, and family visits all start to cost the same, so you postpone all of them.",
+      "Name the season. ‘I am depleted from the quarter-end. I still choose you. I can do a short dinner and an early night, not a full social weekend.’ Specific capacity prevents the story that you do not care.",
+      "Protect one tiny bridge between work and home: changed clothes, a glass of water, ten minutes without Slack. Then one point of contact — a hug, a shared show, a real question.",
+      "If burnout has lasted months, the relationship cannot be the only recovery plan. Rest, workload, and sometimes a doctor belong in the picture. Talk it through before resentment hardens."
+    ]
+  },
+  {
+    "slug": "supporting-a-partner-through-low-mood",
+    "title": "Supporting a Partner Through a Low Mood",
+    "excerpt": "Presence beats pep talks. Here is how to stay close without disappearing into their sadness.",
+    "category": "Mental Wellness",
+    "author": "Meera Sharma",
+    "date": "2025-11-05",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=1200&h=700&fit=crop",
+    "content": [
+      "A low mood is not a puzzle you must solve tonight. Sit, offer food, keep the lights gentle, and ask, ‘Do you want company, quiet, or a distraction?’ Then do that thing.",
+      "Skip ‘others have it worse’ and ‘just go out’. Those lines shrink the person. Try ‘this looks heavy and I am here.’ Practical help — a shower, a walk to the gate, one email sent — can matter more than insight.",
+      "You still have a life. Care does not mean cancelling every plan or accepting cruelty. If the low mood includes hopeless talk about not wanting to be alive, take it seriously and use emergency or local crisis lines. Do not carry that alone.",
+      "Supporters burn out in secret. A MyTalk session is a place for the person who is ‘the strong one’ to put the weight down for an hour."
+    ]
+  },
+  {
+    "slug": "talk-about-anxiety-with-your-partner",
+    "title": "How to Talk About Anxiety With Your Partner",
+    "excerpt": "Tell them what anxiety does, what helps, and what makes it worse.",
+    "category": "Mental Wellness",
+    "author": "MyTalk Editorial",
+    "date": "2025-11-02",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=1200&h=700&fit=crop",
+    "content": [
+      "Anxiety is easier to support when it has a shape. ‘When I go quiet, I am spiralling, not punishing you. A short text that you are on your way helps more than ten questions.’ That is a user manual, not a confession of weakness.",
+      "Pick a steady hour, not the peak of a panic. Describe body signals — tight chest, doom scrolling, cancelled plans — so they do not invent a story that you have fallen out of love.",
+      "Ask for one help and one boundary. Help: sit nearby. Boundary: do not tell me to calm down. You can also say what you will do for yourself, so they are a partner and not your only regulator.",
+      "If anxiety is constant, add professional care. MyTalk can be the practice conversation before you tell the person you live with. If you are in crisis, contact local emergency services."
+    ]
+  },
+  {
+    "slug": "emotional-intelligence-on-early-dates",
+    "title": "Emotional Intelligence on Early Dates",
+    "excerpt": "How to show warmth, boundaries, and curiosity before you are official.",
+    "category": "Dating Tips",
+    "author": "Aditya Kulkarni",
+    "date": "2025-10-30",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&h=700&fit=crop",
+    "content": [
+      "Emotional intelligence on a date is noticing the room and the person. You ask a real question, you let silence exist, you do not tease a sore spot to seem clever.",
+      "Share something true in proportion. A whole trauma on coffee one overwhelms. A nothing-burger personality also hides you. One honest story and one clear preference is a good dose.",
+      "Notice how you feel in your body after you part. Calm and interested is a signal. Buzzing and slightly ashamed is another. Intelligence includes believing your own aftertaste.",
+      "You can be kind and still end a date that felt off. ‘I enjoyed meeting you and I do not feel a romantic fit’ is emotionally intelligent, not cold."
+    ]
+  },
+  {
+    "slug": "active-listening-examples-for-couples",
+    "title": "Active Listening Examples for Couples",
+    "excerpt": "What to say when your partner needs to be understood, not fixed.",
+    "category": "Communication Skills",
+    "author": "Ishita Banerjee",
+    "date": "2025-10-27",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=1200&h=700&fit=crop",
+    "content": [
+      "Active listening is a loop: they speak, you reflect, they confirm. ‘So the meeting rattled you and you wanted quiet, not questions. Did I get that?’ If they say no, try again. Do not argue with the correction.",
+      "Put the phone face down. Turn your body toward them. Interrupt only to check meaning. Advice waits until they ask, or until you ask, ‘Do you want ideas or company?’",
+      "Reflect the feeling, not a courtroom summary. ‘You felt left out at dinner’ matters more than repeating every name they mentioned.",
+      "This skill is awkward for a week and then intimate. Practise on low-stakes stories before you use it on the fight you always have. A MyTalk listener can model it if you have never been heard that way yourself."
+    ]
+  },
+  {
+    "slug": "i-statements-that-sound-human",
+    "title": "I-Statements That Do Not Sound Like a Workshop",
+    "excerpt": "Say what you feel and what you need without corporate therapy voice.",
+    "category": "Communication Skills",
+    "author": "Arjun Singh",
+    "date": "2025-10-24",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1200&h=700&fit=crop",
+    "content": [
+      "An I-statement works when it is short and concrete. ‘I felt embarrassed when the joke was about my job in front of your friends. Please do not do that again.’ That is enough.",
+      "Skip the script if it makes you stiff. Use your own words and keep three parts: what happened, what you felt, what you want next. Leave their motives out.",
+      "You can be angry and still be specific. Anger is not the problem. Global insults are. ‘I am angry we are late again. I need us to leave at 6:40.’",
+      "If every attempt turns into a debate about your tone, the issue may not be phrasing. Note that. Skills help willing people. They do not fix contempt."
+    ]
+  },
+  {
+    "slug": "repair-after-harsh-words",
+    "title": "How to Repair After You Said Something Harsh",
+    "excerpt": "Apologies that rebuild trust instead of rushing past the hurt.",
+    "category": "Communication Skills",
+    "author": "Meera Sharma",
+    "date": "2025-10-21",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=1200&h=700&fit=crop",
+    "content": [
+      "A repair starts with the specific sentence you regret. ‘I called you dramatic. That was contempt, and it was wrong.’ Do not add ‘but you made me’ in the same breath.",
+      "Ask what landed. Let them answer. If you explain your stress first, you are asking to be soothed by the person you hurt. Soothe yourself, then listen.",
+      "Offer a next behaviour, not a speech about your childhood, unless they ask. ‘Next time I will leave the room before I insult you.’ Then do it once, visibly.",
+      "If apologies are a weekly product and the behaviour never changes, the other person is allowed to stop accepting them. Repair is a pattern, not a talent for wording."
+    ]
+  },
+  {
+    "slug": "criticism-vs-a-clear-complaint",
+    "title": "Criticism vs a Clear Complaint",
+    "excerpt": "Attack the problem, not the person — with examples you can steal.",
+    "category": "Communication Skills",
+    "author": "MyTalk Editorial",
+    "date": "2025-10-18",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&h=700&fit=crop",
+    "content": [
+      "Criticism says ‘you are careless’. A complaint says ‘when the rent was late, I felt anxious. I need us to set a reminder together.’ One attacks identity. The other requests a change.",
+      "Start with ‘I feel’ only if you follow it with a fact and a request. ‘I feel you never help’ is still a global attack. ‘I feel overloaded. Can you handle school pickup on Thursdays?’ is usable.",
+      "If you receive criticism, ask for the request inside it before you defend your character. ‘What do you need this week?’ can rescue a clumsy sentence.",
+      "Practise out loud. The first draft is usually sharper than you want to be. MyTalk is a safe rehearsal room for the second draft."
+    ]
+  },
+  {
+    "slug": "stonewalling-and-the-silent-treatment",
+    "title": "Stonewalling and the Silent Treatment Are Not the Same as Calm",
+    "excerpt": "When quiet is regulation — and when it is punishment.",
+    "category": "Communication Skills",
+    "author": "Aditya Kulkarni",
+    "date": "2025-10-15",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=1200&h=700&fit=crop",
+    "content": [
+      "Stonewalling is shutting down in conflict: blank face, leaving, monosyllables. Sometimes the body is overwhelmed and needs a break. The silent treatment is different. It withholds contact to make the other person suffer.",
+      "If you shut down, announce it. ‘I cannot talk well right now. I am not leaving the relationship. I will talk at 7.’ Then regulate — walk, breathe, eat — and return.",
+      "If you face silence used as punishment, do not fill it with ten apologies. Say, ‘I am willing to talk. I will not guess my way through a freeze-out.’ Then live your evening.",
+      "Chronic shutdown needs practice, not a personality label you hide behind. A listener can help you find words while you are still calm enough to use them."
+    ]
+  },
+  {
+    "slug": "how-to-fight-fair-with-your-partner",
+    "title": "How to Fight Fair With Your Partner",
+    "excerpt": "Rules for conflict that leave the relationship intact.",
+    "category": "Communication Skills",
+    "author": "Ishita Banerjee",
+    "date": "2025-10-12",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1474418397713-7ede21d49118?w=1200&h=700&fit=crop",
+    "content": [
+      "Fair fighting has edges: no name-calling, no dragging in parents as weapons, no threats you do not mean, no audience of group chats. Start with the issue in one sentence.",
+      "Use a pause word when voices rise, and a return time so the pause is not abandonment. ‘I am flooded. I will come back at 8:30.’ Then actually come back.",
+      "Stay on one topic. The unpaid bill does not need the wedding comment from 2019. Solve or schedule. Do not collect victories.",
+      "Afterward, a small repair — water, a hand, ‘we are still us’ — teaches the body that conflict is survivable. That memory is worth more than winning."
+    ]
+  },
+  {
+    "slug": "habits-that-predict-a-breakup",
+    "title": "Four Everyday Habits That Quietly Predict a Breakup",
+    "excerpt": "Contempt, scorekeeping, silence, and phone walls — before the big fight.",
+    "category": "Relationship Articles",
+    "author": "Arjun Singh",
+    "date": "2025-10-09",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=700&fit=crop",
+    "content": [
+      "Couples rarely end on one explosion. They end on habits: eye-rolls, ‘you always’, keeping a ledger of who suffered more, and shutting down until the other person begs.",
+      "Contempt is the sharp one. Mocking their voice, their family, or their intelligence tells the body this person is beneath you. Admiration cannot survive that diet.",
+      "Replace the habit with a smaller skill. Complaint instead of character attack. A twenty-minute pause instead of a two-day silence. One appreciation said out loud each day.",
+      "If the habits are already identity, get an outside ear. MyTalk gives you a private place to practise a new sentence before you use it at home."
+    ]
+  },
+  {
+    "slug": "when-staying-and-repairing-is-brave",
+    "title": "When Staying and Repairing Is the Braver Choice",
+    "excerpt": "Not every hard season is a sign to walk. Here is what real repair requires.",
+    "category": "Relationship Articles",
+    "author": "Meera Sharma",
+    "date": "2025-10-06",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=1200&h=700&fit=crop",
+    "content": [
+      "Staying is brave when both people tell the truth, stop the harmful behaviour, and accept help. It is not brave to stay while nothing changes and you call that patience.",
+      "Repair needs a specific problem, a specific change, and a check-in date. ‘I will be better’ is a wish. ‘I will put the phone away after 9 and we will review this in two weeks’ is a plan.",
+      "You can use a listener individually even if your partner will not attend anything. Sorting your side — resentment, fear, the story you tell friends — makes the next conversation cleaner.",
+      "If only one person wants repair, you are not in a project. You are waiting. Waiting has a cost. Name it."
+    ]
+  },
+  {
+    "slug": "when-to-leave-a-relationship",
+    "title": "When to Leave a Relationship: Questions That Cut Through Guilt",
+    "excerpt": "A grounded checklist for people who stay because leaving feels selfish.",
+    "category": "Relationship Articles",
+    "author": "MyTalk Editorial",
+    "date": "2025-10-03",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&h=700&fit=crop",
+    "content": [
+      "Leave is worth considering when you are chronically unsafe, lied to about basics, or doing all the repair alone. Love remaining is not the same as a livable partnership.",
+      "Ask: Do I become smaller here? Am I afraid to tell the truth? Has the same harm repeated after clear conversations? Would I want my closest friend to accept this?",
+      "Guilt is loud in families that treat endurance as virtue. Endurance without change is not loyalty. You can grieve someone and still go.",
+      "Plan the practical exit — housing, money, shared accounts — before the speech if conflict turns volatile. If you are in danger, use local emergency help first. MyTalk can support the decision, not a crisis."
+    ]
+  },
+  {
+    "slug": "how-to-read-mixed-signals",
+    "title": "How to Read Mixed Signals Without Losing Your Mind",
+    "excerpt": "When behaviour and words disagree, believe the pattern.",
+    "category": "Dating Tips",
+    "author": "Aditya Kulkarni",
+    "date": "2025-09-30",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=1200&h=700&fit=crop",
+    "content": [
+      "Mixed signals are two stories at once: affectionate words and unavailable behaviour, or cool texts and intense nights. You are not bad at reading. The message is genuinely split.",
+      "Track actions for a fortnight. Do they make plans, keep them, and include you in real life? Or do they offer feelings only when it costs nothing?",
+      "Ask one clarifying question and accept the first clear answer. If you need a paragraph of interpretation, you already have the answer.",
+      "Protect your sleep. Mixed signals are expensive. A listener can help you hear your own standard again when charm has blurred it."
+    ]
+  },
+  {
+    "slug": "exclusivity-conversation-scripts",
+    "title": "Exclusivity Conversation Scripts That Sound Like You",
+    "excerpt": "Words for asking ‘are we only seeing each other?’ without performing chill.",
+    "category": "Communication Skills",
+    "author": "Ishita Banerjee",
+    "date": "2025-09-27",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=700&fit=crop",
+    "content": [
+      "Exclusivity is an agreement, not a vibe. If you want it, say so. ‘I am not seeing anyone else and I do not want to. Are you in the same place?’ is a complete question.",
+      "If they say they need time, ask what time means. A week to think is different from an open calendar. Put a date on the follow-up so you are not left in a soft maybe.",
+      "If you are the one who wants openness, say that before intimacy deepens. Surprise non-exclusivity after someone caught feelings is how trust dies early.",
+      "Scripts are training wheels. Your tone matters more than perfect lines. Kind, brief, and specific beats a long essay."
+    ]
+  },
+  {
+    "slug": "define-the-relationship-talk",
+    "title": "How to Have the Define-the-Relationship Talk",
+    "excerpt": "A clear DTR script that does not sound like an ultimatum.",
+    "category": "Communication Skills",
+    "author": "Arjun Singh",
+    "date": "2025-09-24",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1200&h=700&fit=crop",
+    "content": [
+      "The define-the-relationship talk works best after you have seen someone’s ordinary behaviour, not on night one and not after a year of hints. Pick a calm time, not the end of a fight.",
+      "Try: ‘I like what we are building. I want to know if we are exclusive and heading toward a relationship, or if you want to stay casual. Either is information I can use.’ Then stop talking.",
+      "A good answer is direct, even if it disappoints you. ‘I am not ready’ is clearer than ‘let us see’. You get to decide whether ‘not ready’ fits your life.",
+      "Do not negotiate your needs into fog so the evening stays pleasant. Clarity is more romantic than another month of guessing."
+    ]
+  },
+  {
+    "slug": "hot-and-cold-behaviour",
+    "title": "Hot and Cold Behaviour in Dating",
+    "excerpt": "Why warmth followed by distance keeps you hooked — and how to step off.",
+    "category": "Dating Tips",
+    "author": "Meera Sharma",
+    "date": "2025-09-21",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=1200&h=700&fit=crop",
+    "content": [
+      "Hot and cold is intense closeness, then sudden chill, then a return that feels like relief. The relief is the hook. You start working to get back to the warm version and ignoring the cold one.",
+      "Sometimes stress or avoidant fear explains a dip. A pattern of disappearing without repair is different. Ask, ‘What happens for you when you go quiet?’ Listen for ownership, not a charm offensive.",
+      "Decide your floor: no relationship where you regularly wonder if you imagined the affection. State it once. If the cycle repeats, believe the cycle.",
+      "Your nervous system will miss the high. Missing it is withdrawal, not proof you should go back."
+    ]
+  },
+  {
+    "slug": "one-sided-effort-in-love",
+    "title": "One-Sided Effort: When You Are the Only One Trying",
+    "excerpt": "Love should not feel like a job you cannot resign from.",
+    "category": "Relationship Articles",
+    "author": "MyTalk Editorial",
+    "date": "2025-09-18",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=1200&h=700&fit=crop",
+    "content": [
+      "Effort looks like initiation, planning, repair, and remembering. If you do all four and they do the fun parts only when it is easy, you are carrying the relationship.",
+      "Stop over-functioning for two weeks and observe. Do plans die when you stop making them? Does conflict vanish only because you apologise first every time? Data is kinder than hope.",
+      "Say it plainly. ‘I am tired of being the only one who reaches out. I need you to plan the next two times we meet.’ Then wait. A speech without a change is still one-sided.",
+      "You can love someone’s potential and still leave their present. Potential does not text you back."
+    ]
+  },
+  {
+    "slug": "rebound-or-real-beginning",
+    "title": "Is It a Rebound or a Real Beginning?",
+    "excerpt": "How to date again without using someone as pain relief.",
+    "category": "Dating Tips",
+    "author": "Aditya Kulkarni",
+    "date": "2025-09-15",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&h=700&fit=crop",
+    "content": [
+      "A rebound uses a new person to outrun grief. A real beginning can happen soon after a breakup and still be honest, slow, and curious. The difference is whether you can be present.",
+      "Check your motives. Are you comparing every laugh to the ex? Are you rushing exclusivity so you do not feel single? Are you hiding the recent breakup because the truth might slow things down?",
+      "Tell a simple version early: ‘I am recently out of something and I am going slowly.’ The right person can meet that. Someone who needs you healed on their schedule is another rush.",
+      "You are allowed to feel joy before you feel finished. Just do not outsource your healing to a stranger’s attention."
+    ]
+  },
+  {
+    "slug": "how-to-move-on-after-heartbreak",
+    "title": "How to Move On After Heartbreak Without Pretending You Are Fine",
+    "excerpt": "A humane timeline for grief, routines, and the first ordinary day.",
+    "category": "Mental Wellness",
+    "author": "Ishita Banerjee",
+    "date": "2025-09-12",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=1200&h=700&fit=crop",
+    "content": [
+      "Moving on is not deleting the person. It is letting your day belong to you again. Eat, sleep, and show up to work in smaller pieces than your pride wants. Grief is physical.",
+      "Remove daily triggers you can control: their hoodie on the chair, the chat pinned at the top, the cafe that was only yours together. Keep one memory if you must. Do not keep the museum.",
+      "Tell one honest person the unpretty version. Isolation turns heartbreak into identity. New tiny plans — a class, a Sunday walk, a call with a cousin — teach your body that the future exists.",
+      "If sadness stays heavy for weeks, or you cannot function, talk to a mental health professional. MyTalk can support the lonely evenings; it does not replace clinical care or emergency help."
+    ]
+  },
+  {
+    "slug": "closure-without-their-apology",
+    "title": "How to Get Closure When They Will Not Apologise",
+    "excerpt": "You can finish a chapter without the speech you deserved.",
+    "category": "Mental Wellness",
+    "author": "Arjun Singh",
+    "date": "2025-09-09",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1200&h=700&fit=crop",
+    "content": [
+      "Closure is often imagined as their perfect explanation. Most people who hurt you cannot or will not give that. Waiting for it keeps them in charge of your ending.",
+      "Write the conversation you needed, then read it to yourself or to a listener. Name what happened, what it cost, and what you will not repeat. That is closure you can actually finish.",
+      "Forgiveness is optional. Understanding is optional. Safety and a next step are not. You can release the daily replay without calling them a good person.",
+      "If the story loops at night, say it out loud once in a structured way. A MyTalk session is a place to put the ending down so it stops living only in your head."
+    ]
+  },
+  {
+    "slug": "no-contact-rule-without-cruelty",
+    "title": "The No Contact Rule Without Cruelty",
+    "excerpt": "Space after a breakup is a recovery tool, not a tactic to make them chase.",
+    "category": "Love & Affairs",
+    "author": "Meera Sharma",
+    "date": "2025-09-06",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=1200&h=700&fit=crop",
+    "content": [
+      "No contact means you stop texting, calling, and checking for a set period so your nervous system can leave the loop. It is for your clarity. Using silence to punish or bait a response keeps you attached.",
+      "Tell them once if a conversation is owed: ‘I need space and I will not be in touch for now.’ Then hold it. Logistics about shared flats or children are exceptions, kept brief and practical.",
+      "Expect grief in week two when the habit of reaching is loudest. Plan those hours: walk, shower, food, one safe person. Do not ‘just check’ the profile.",
+      "If no contact feels impossible alone, book a listener for the urge itself. MyTalk exists so the hardest hour has somewhere to go that is not their chat window."
+    ]
+  },
+  {
+    "slug": "orbiting-after-a-breakup",
+    "title": "Orbiting After a Breakup: When They Watch but Will Not Talk",
+    "excerpt": "Story views and likes with no conversation keep the wound open.",
+    "category": "Love & Affairs",
+    "author": "MyTalk Editorial",
+    "date": "2025-09-03",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&h=700&fit=crop",
+    "content": [
+      "Orbiting is staying in your digital sky after the relationship landed. They watch stories, like an old photo, and never actually speak. It feels like contact. It is not care.",
+      "You can mute, restrict, or remove them. You do not need a speech. If you share friends, you can stay polite in person and still close the private window.",
+      "Ask what you hope the like means. Usually it means they want the feeling of you without the responsibility. You can want them and still refuse that deal.",
+      "Healing speeds up when the feed stops flickering with their name. Fill the gap with a real conversation — a friend, or a confidential MyTalk session on the nights the mute button feels cruel."
+    ]
+  },
+  {
+    "slug": "breadcrumbing-and-mixed-signals",
+    "title": "Breadcrumbing: Why Mixed Signals Feel So Addictive",
+    "excerpt": "Random likes, late ‘you up’ texts, and just enough hope to keep you waiting.",
+    "category": "Dating Tips",
+    "author": "Aditya Kulkarni",
+    "date": "2025-08-31",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=1200&h=700&fit=crop",
+    "content": [
+      "Breadcrumbing is attention without investment. A meme, a midnight voice note, a ‘we should meet’ that never becomes a date. You stay slightly hungry, which is the point.",
+      "Your brain treats intermittent rewards like a slot machine. The rare warm message feels bigger than ten consistent ones would. That is biology, not destiny.",
+      "Decide what counts as effort: a plan with a day and a place. If they will not offer that, stop replying to crumbs. Silence is a boundary, not a game.",
+      "If you keep reopening the chat, tell someone. Accountability beats willpower at 1 a.m. A MyTalk chat can be the place you put the urge before you send ‘you around?’"
+    ]
+  },
+  {
+    "slug": "what-is-a-situationship",
+    "title": "What Is a Situationship? Meaning, Signs, and a Clean Exit",
+    "excerpt": "Almost together, never defined — and why it exhausts you.",
+    "category": "Dating Tips",
+    "author": "Ishita Banerjee",
+    "date": "2025-08-28",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1474418397713-7ede21d49118?w=1200&h=700&fit=crop",
+    "content": [
+      "A situationship is intimacy without an agreement. You act like a couple in private and like a maybe in public. Plans stay vague. Labels are ‘too much’. Your life bends around their mood.",
+      "It feels exciting because uncertainty spikes dopamine. It feels lonely because you cannot introduce them, plan a festival, or ask for care without sounding needy.",
+      "Ask once, clearly: ‘Are we building something exclusive, or keeping this casual?’ A real answer is a choice. A joke, a delay, or ‘why ruin it’ is also an answer.",
+      "Leaving is allowed even if the good nights were real. Grieve the almost. Then stop auditioning for a title they will not give."
+    ]
+  },
+  {
+    "slug": "love-bombing-vs-real-interest",
+    "title": "Love Bombing vs Real Interest: How to Tell the Difference",
+    "excerpt": "Intense early attention can be romance — or a setup for control.",
+    "category": "Love & Affairs",
+    "author": "Arjun Singh",
+    "date": "2025-08-25",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=700&fit=crop",
+    "content": [
+      "Real interest is warm and paced. Love bombing is overwhelming: constant praise, future talk in week one, gifts that feel too large, and irritation when you need a night off.",
+      "The test is what happens when you set a limit. A caring person adjusts. A love-bombing pattern punishes the limit, calls you cold, or threatens to withdraw the fantasy.",
+      "Speed is not proof of depth. Ask about their last relationship, their friends, and how they handle a no. Watch consistency after the first high.",
+      "If you already feel addicted to the attention and scared to slow down, that fear is information. Name it with someone outside the rush before you make a promise."
+    ]
+  },
+  {
+    "slug": "what-gaslighting-sounds-like",
+    "title": "What Gaslighting Sounds Like in Everyday Arguments",
+    "excerpt": "Phrases that make you doubt your memory — and how to steady yourself.",
+    "category": "Relationship Articles",
+    "author": "Meera Sharma",
+    "date": "2025-08-22",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=1200&h=700&fit=crop",
+    "content": [
+      "Gaslighting is not a normal disagreement. It is a pattern of making you distrust what you saw, felt, or remember. ‘That never happened’, ‘you are too sensitive’, and ‘everyone else thinks you are dramatic’ are common lines.",
+      "One clumsy sentence is not abuse. The pattern is: you raise a fact, they rewrite it, you apologise for being confused, and the original issue disappears. Over time you stop bringing things up.",
+      "Keep a private record of dates and exact words if you feel your memory slipping. Check with one safe person who is not invested in the fight. You are allowed to say, ‘I am not debating whether I felt hurt.’",
+      "If you are unsure whether you are overreacting, talk it through somewhere confidential. MyTalk is for sorting reality from fog, not for diagnosing your partner in public."
+    ]
+  },
+  {
+    "slug": "red-flags-on-a-first-date-in-india",
+    "title": "Red Flags on a First Date in India",
+    "excerpt": "Early warning signs that have nothing to do with astrology compatibility.",
+    "category": "Dating Tips",
+    "author": "MyTalk Editorial",
+    "date": "2025-08-19",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&h=700&fit=crop",
+    "content": [
+      "A first date is a sample, not a verdict on your worth. Still, some samples tell you enough. Insults dressed as jokes, pressure to drink or leave the public place, and contempt for waiters or drivers usually travel home with the person.",
+      "Watch how they talk about an ex. Bitterness about ‘all women’ or ‘all men’ is a preview. Watch whether they ask you anything. A monologue about salary, status, or how their mother will judge you is not romance.",
+      "In Indian dating, family comments arrive early. Curiosity is fine. An interrogation about caste, income, and ‘character’ on coffee one is a boundary moment. You can smile and still end the evening.",
+      "You do not owe a second date to politeness. Tell a friend your live location, and if something felt off, say it to a trusted listener before you talk yourself out of it."
+    ]
+  },
+  {
+    "slug": "green-flags-worth-keeping",
+    "title": "Green Flags Worth Keeping: Signs of a Healthy Relationship",
+    "excerpt": "The quiet behaviours that matter more than chemistry on date three.",
+    "category": "Dating Tips",
+    "author": "Aditya Kulkarni",
+    "date": "2025-08-16",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=1200&h=700&fit=crop",
+    "content": [
+      "Green flags are boring in the best way. They reply when they said they would. They remember the small story. They can disagree without humiliation. They introduce you to friends without a performance.",
+      "Look for repair. Everyone snaps. A healthy person comes back, owns the tone, and tries again. Look for consistency between public kindness and private kindness. Look for curiosity about your family, work, and limits.",
+      "Chemistry without safety is a headline, not a home. If you feel calm more often than you feel audited, you are probably with someone who can build.",
+      "Keep a private note of what felt good after dates. Memory favours drama. A written green flag is easier to trust when anxiety gets loud."
+    ]
+  },
+  {
+    "slug": "love-languages-that-actually-land",
+    "title": "Love Languages That Actually Land in Real Life",
+    "excerpt": "Words, time, help, touch, and gifts — translated for busy Indian couples.",
+    "category": "Relationship Articles",
+    "author": "Ishita Banerjee",
+    "date": "2025-08-13",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=700&fit=crop",
+    "content": [
+      "The popular love-language idea is simple: people feel cared for in different currencies. One partner hears love in ‘I am proud of you’. Another feels it when you book the cab, call their mother, or sit down without a phone.",
+      "Guessing creates resentment. Ask, ‘What makes you feel chosen on a normal Tuesday?’ Then offer that thing in a size you can repeat. A daily two-minute check-in beats a rare expensive gesture that still misses.",
+      "Mismatch is normal. If you show love by fixing and they need listening, pause the solution for five minutes. If they buy gifts and you need time, name the evening you want before you criticise the present.",
+      "Languages change under stress. During exams, a new city, or a family wedding, ask again. MyTalk sessions are useful when you know you love each other and still feel unseen."
+    ]
+  },
+  {
+    "slug": "avoidant-partner-who-pulls-away",
+    "title": "When Your Partner Pulls Away: Understanding Avoidant Distance",
+    "excerpt": "Space is not always a breakup. Here is how to tell the difference and what to say.",
+    "category": "Relationship Articles",
+    "author": "Arjun Singh",
+    "date": "2025-08-10",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1200&h=700&fit=crop",
+    "content": [
+      "An avoidant partner often cares and still needs air when emotions rise. Closeness can feel like pressure, so they go quiet, get busy, or change the subject. Chasing harder usually confirms their fear that love will swallow them.",
+      "Say the need without a verdict. ‘I miss you and I can give you tonight. Can we talk tomorrow at 8?’ A time boundary keeps space from becoming disappearance.",
+      "Watch behaviour over weeks, not one bad evening. Consistent return, repair, and honesty are green lights. Repeated vanishing with no plan is not a style. It is neglect.",
+      "You can love someone and still refuse a relationship where you do all the reaching. If you need a place to sort hurt from panic, a MyTalk listener can sit with you before you send the long message."
+    ]
+  },
+  {
+    "slug": "anxious-attachment-and-texting",
+    "title": "Anxious Attachment and Texting: How to Stop the Double-Text Spiral",
+    "excerpt": "A practical way to sit with silence without sending five follow-up messages.",
+    "category": "Dating Tips",
+    "author": "Meera Sharma",
+    "date": "2025-08-07",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=1200&h=700&fit=crop",
+    "content": [
+      "If a delayed reply feels like rejection, your nervous system is doing an old job: scan for abandonment. The phone makes that job louder. Seen receipts, typing bubbles, and last-seen stamps were never designed for anxious hearts.",
+      "Before you send the second message, ask what you want: information, comfort, or control. If it is comfort, texting them again rarely gives it. Put the phone in another room for twenty minutes, drink water, and write the fear in one sentence.",
+      "When you do write, keep it specific. ‘I felt dropped when plans stayed vague. Can we confirm Thursday?’ lands better than ‘Are you mad?’ or a joke that hides panic.",
+      "If texting anxiety is running your evenings, talk it through with someone who is not the person you are dating. MyTalk is built for that kind of private, low-pressure conversation."
+    ]
+  },
+  {
+    "slug": "attachment-styles-in-indian-relationships",
+    "title": "Attachment Styles in Indian Relationships: Anxious, Avoidant, and Secure",
+    "excerpt": "Why some people chase reassurance and others go quiet — and how family habits shape adult love.",
+    "category": "Relationship Articles",
+    "author": "MyTalk Editorial",
+    "date": "2025-08-04",
+    "readingTime": 5,
+    "image": "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=1200&h=700&fit=crop",
+    "content": [
+      "Attachment style is the pattern you learned for closeness: reach, retreat, or stay steady. In many Indian homes, love was shown through food, fees, and duty more than through naming feelings, so adults often arrive at romance fluent in caretaking and clumsy with vulnerability.",
+      "Anxious attachment sounds like checking if they are online, replaying a short reply, and needing proof you matter. Avoidant attachment sounds like ‘I am fine’, delayed replies, and discomfort when a partner wants a plan. Secure attachment can ask, wait, and repair without making love a test.",
+      "You are not stuck with the style you inherited. Name the pattern out loud, slow the text spiral, and practise one clear request instead of a hint. A private MyTalk conversation can help you sort family loyalty from the bond you actually want.",
+      "Search this if you keep thinking ‘why am I like this in relationships’. The answer is usually history, not a character flaw."
     ]
   }
 ]

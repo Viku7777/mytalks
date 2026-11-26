@@ -214,6 +214,61 @@
     return getUserProfile(uid);
   }
 
+  async function recordUserIp(user, info) {
+    info = info || {};
+    var ip = String(info.ip || "").trim();
+    if (!user || !user.uid || !ip) return null;
+    var firestore = await waitForDb();
+    if (!firestore) return null;
+    var ref = firestore.collection(COL.users).doc(user.uid);
+    var nowIso = new Date().toISOString();
+    var page = String(info.page || "").slice(0, 80);
+    var path = String(info.path || "").slice(0, 300);
+    await firestore.runTransaction(function (tx) {
+      return tx.get(ref).then(function (snap) {
+        if (!snap.exists) return;
+        var data = snap.data() || {};
+        var ips = Array.isArray(data.ips) ? data.ips.map(function (entry) {
+          return Object.assign({}, entry);
+        }) : [];
+        var found = null;
+        ips.forEach(function (entry) {
+          if (entry && entry.ip === ip) found = entry;
+        });
+        if (found) {
+          found.lastSeenAt = nowIso;
+          found.hits = (Number(found.hits) || 1) + 1;
+          found.lastPath = path;
+          found.lastPage = page;
+        } else {
+          ips.unshift({
+            ip: ip,
+            firstSeenAt: nowIso,
+            lastSeenAt: nowIso,
+            hits: 1,
+            lastPath: path,
+            lastPage: page,
+          });
+        }
+        ips.sort(function (a, b) {
+          return String(b.lastSeenAt || "").localeCompare(String(a.lastSeenAt || ""));
+        });
+        if (ips.length > 30) ips = ips.slice(0, 30);
+        tx.set(
+          ref,
+          {
+            lastIp: ip,
+            lastIpAt: nowIso,
+            ips: ips,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          },
+          { merge: true }
+        );
+      });
+    });
+    return getUserProfile(user.uid);
+  }
+
   /**
    * Track every open of the book-session page for funnel / admin analytics.
    */
@@ -1186,6 +1241,7 @@
     upsertUserProfile: upsertUserProfile,
     assertUserNotBlocked: assertUserNotBlocked,
     updateUserProfile: updateUserProfile,
+    recordUserIp: recordUserIp,
     trackBookingPageVisit: trackBookingPageVisit,
     recordActivity: recordActivity,
     listActivityForUser: listActivityForUser,

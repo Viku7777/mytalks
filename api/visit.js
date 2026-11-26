@@ -290,7 +290,7 @@ module.exports = async function handler(req, res) {
   if (path.charAt(0) !== "/" || path.indexOf("://") !== -1) path = "/";
   var page = clip(body.page, 80).replace(/[^a-z0-9-]/gi, "") || "page";
   if (page === "admin" || page === "admin-user" || page === "admin-advisor") {
-    return res.json({ ok: true, skipped: true });
+    return res.json({ ok: true, ip: ip, skipped: true });
   }
 
   var header = String(req.headers.authorization || "");
@@ -304,11 +304,10 @@ module.exports = async function handler(req, res) {
         res.statusCode = 401;
         return res.json({ ok: false, error: "Sign-in could not be checked." });
       }
-      saved = await saveUserIp(uid, token, ip, path, page);
-    } else {
-      saved = await saveVisitor(ip, path, page);
+      return res.json({ ok: true, ip: ip, uid: uid });
     }
-    return res.json({ ok: true, saved: saved });
+    saved = await saveVisitor(ip, path, page);
+    return res.json({ ok: true, ip: ip, saved: saved });
   } catch (err) {
     console.error("visit record failed:", err);
     res.statusCode = 500;

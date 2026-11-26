@@ -522,25 +522,46 @@
     return true;
   }
 
-  function postVisit(page, token) {
+  function postVisit(page, token, user) {
     var path = window.location.pathname || "/";
-    if (!visitStamp(token ? "user" : "guest", page + path)) return;
+    if (!visitStamp(token ? "user" : "guest", page + path)) return Promise.resolve();
     var headers = { "Content-Type": "application/json" };
     if (token) headers.Authorization = "Bearer " + token;
-    fetch("/api/visit", {
+    return fetch("/api/visit", {
       method: "POST",
       headers: headers,
       body: JSON.stringify({ path: path, page: page === "index" ? "home" : page }),
       keepalive: true,
-    }).catch(function () {});
+    })
+      .then(function (res) {
+        return res.json();
+      })
+      .then(function (data) {
+        if (!user || !user.uid || !data || !data.ip || !window.MyTalksDB || !window.MyTalksDB.recordUserIp) {
+          return null;
+        }
+        return window.MyTalksDB.recordUserIp(user, {
+          ip: data.ip,
+          path: path,
+          page: page === "index" ? "home" : page,
+        });
+      })
+      .then(function () {
+        if (user && user.uid) {
+          document.dispatchEvent(new CustomEvent("mytalks:ip-saved", { detail: { uid: user.uid } }));
+        }
+      })
+      .catch(function (err) {
+        console.warn("Visit IP was not saved:", err);
+      });
   }
 
   function postVisitForUser(page, user) {
     if (user && user.getIdToken) {
       user.getIdToken().then(function (token) {
-        postVisit(page, token || "");
+        postVisit(page, token || "", user);
       }).catch(function () {
-        postVisit(page, "");
+        postVisit(page, "", user);
       });
       return;
     }
@@ -548,14 +569,29 @@
   }
 
   function recordSiteVisit(key) {
-    if (key === "admin" || key === "admin-user" || key === "admin-advisor" || key === "google-callback") {
-      return;
-    }
+    if (key === "google-callback") return;
+    var staff = key === "admin" || key === "admin-user" || key === "admin-advisor";
     var hinted = false;
     try {
       hinted = !!(JSON.parse(localStorage.getItem("mytalks-session") || "null") || {}).uid;
     } catch (err) {
       hinted = false;
+    }
+    function recordSignedIn() {
+      ensureFirebase().then(function () {
+        var auth = window.MyTalksAuth;
+        var ready = auth && auth.ready ? auth.ready : Promise.resolve(auth && auth.getUser ? auth.getUser() : null);
+        Promise.resolve(ready).then(function (user) {
+          if (staff && (!user || !user.uid)) return;
+          postVisitForUser(key, user);
+        }).catch(function () {
+          if (!staff) postVisit(key, "");
+        });
+      });
+    }
+    if (staff) {
+      recordSignedIn();
+      return;
     }
     if (key === "index" && !hinted) {
       var sendGuest = function () {
@@ -566,15 +602,7 @@
       return;
     }
     if (key === "index") return;
-    ensureFirebase().then(function () {
-      var auth = window.MyTalksAuth;
-      var ready = auth && auth.ready ? auth.ready : Promise.resolve(auth && auth.getUser ? auth.getUser() : null);
-      Promise.resolve(ready).then(function (user) {
-        postVisitForUser(key, user);
-      }).catch(function () {
-        postVisit(key, "");
-      });
-    });
+    recordSignedIn();
   }
 
   async function trackSignedInPage() {

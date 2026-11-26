@@ -111,6 +111,70 @@
       var sample = await window.MyTalksData.loadJson("advisors.json");
       state.advisors = await DB.seedAdvisors(sample);
     }
+    saveAdminCache();
+  }
+
+  var ADMIN_CACHE_KEY = "mytalks-admin-cache";
+
+  function navigationIsReload() {
+    try {
+      var nav = performance.getEntriesByType("navigation")[0];
+      return !!(nav && nav.type === "reload");
+    } catch (err) {
+      return false;
+    }
+  }
+
+  function saveAdminCache() {
+    try {
+      sessionStorage.setItem(
+        ADMIN_CACHE_KEY,
+        JSON.stringify({
+          users: state.users,
+          tickets: state.tickets,
+          bookings: state.bookings,
+          advisors: state.advisors,
+          visits: state.visits,
+          contacts: state.contacts,
+          transactions: state.transactions,
+          coupons: state.coupons,
+          visitors: state.visitors,
+          transactionsError: state.transactionsError || "",
+        })
+      );
+    } catch (err) {
+      /* storage full or private mode */
+    }
+  }
+
+  function restoreAdminCache() {
+    if (navigationIsReload()) {
+      try {
+        sessionStorage.removeItem(ADMIN_CACHE_KEY);
+      } catch (err) {
+        /* ignore */
+      }
+      return false;
+    }
+    try {
+      var raw = sessionStorage.getItem(ADMIN_CACHE_KEY);
+      if (!raw) return false;
+      var data = JSON.parse(raw);
+      if (!data || !Array.isArray(data.users)) return false;
+      state.users = data.users;
+      state.tickets = data.tickets || [];
+      state.bookings = data.bookings || [];
+      state.advisors = data.advisors || [];
+      state.visits = data.visits || [];
+      state.contacts = data.contacts || [];
+      state.transactions = data.transactions || [];
+      state.coupons = data.coupons || [];
+      state.visitors = data.visitors || [];
+      state.transactionsError = data.transactionsError || "";
+      return true;
+    } catch (err) {
+      return false;
+    }
   }
 
   function advisorOptions(selected) {
@@ -1322,7 +1386,7 @@
     if (!user) {
       if (title) title.textContent = "User";
       root.innerHTML =
-        '<a class="profile-back" href="admin?tab=users"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Users</a>' +
+        '<a class="profile-back" href="admin?tab=users" data-admin-back><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Users</a>' +
         '<div class="card"><h2>User not found</h2><p class="mt-4">This account is not in the admin list.</p></div>';
       return;
     }
@@ -1393,7 +1457,7 @@
           .join("")
       : '<tr><td colspan="3">No support tickets.</td></tr>';
     root.innerHTML =
-      '<a class="profile-back" href="admin?tab=users"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Users</a>' +
+      '<a class="profile-back" href="admin?tab=users" data-admin-back><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Users</a>' +
       '<section class="card profile-hero">' +
       photo +
       '<div><p class="profile-kicker">User</p><h2>' +
@@ -1534,7 +1598,7 @@
     if (!advisor) {
       if (title) title.textContent = "Advisor";
       root.innerHTML =
-        '<a class="profile-back" href="admin?tab=advisors"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Advisors</a>' +
+        '<a class="profile-back" href="admin?tab=advisors" data-admin-back><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Advisors</a>' +
         '<div class="card"><h2>Advisor not found</h2><p class="mt-4">This profile is not in the admin list.</p></div>';
       return;
     }
@@ -1592,7 +1656,7 @@
     var hours =
       advisor.hoursStart && advisor.hoursEnd ? advisor.hoursStart + "–" + advisor.hoursEnd : "";
     root.innerHTML =
-      '<a class="profile-back" href="admin?tab=advisors"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Advisors</a>' +
+      '<a class="profile-back" href="admin?tab=advisors" data-admin-back><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Advisors</a>' +
       '<section class="card profile-hero">' +
       photo +
       '<div><p class="profile-kicker">Advisor</p><h2>' +
@@ -2097,9 +2161,25 @@
     else history.replaceState(data, "", next);
   }
 
+  async function refreshOpenUser() {
+    var view = root.getAttribute("data-admin-view") || "";
+    if (view !== "user" || !window.MyTalksDB || !window.MyTalksDB.getUserProfile) return;
+    var id = recordId();
+    if (!id) return;
+    var fresh = await window.MyTalksDB.getUserProfile(id);
+    if (!fresh) return;
+    var idx = state.users.findIndex(function (item) {
+      return String(item.id || item.uid) === String(id);
+    });
+    if (idx >= 0) state.users[idx] = Object.assign({}, state.users[idx], fresh);
+    else state.users.push(fresh);
+    saveAdminCache();
+    renderUserPage();
+  }
+
   async function openAdmin(user) {
     rememberAdmin(user.uid);
-    await loadAll();
+    if (!state.users.length) await loadAll();
     var view = root.getAttribute("data-admin-view") || "";
     if (!view) readAdminLocation();
     adminReady = true;
@@ -2871,6 +2951,33 @@
     readAdminLocation();
     render();
   });
+
+  document.addEventListener("mytalks:ip-saved", function (event) {
+    var savedUid = event.detail && event.detail.uid;
+    if (!savedUid || root.getAttribute("data-admin-view") !== "user") return;
+    if (String(savedUid) !== String(recordId())) return;
+    refreshOpenUser();
+  });
+
+  root.addEventListener("click", function (e) {
+    var back = e.target.closest("[data-admin-back]");
+    if (!back) return;
+    var ref = document.referrer || "";
+    if (ref.indexOf("/admin") === -1) return;
+    e.preventDefault();
+    history.back();
+  });
+
+  if (restoreAdminCache() && storedAdminUid()) {
+    var cachedView = root.getAttribute("data-admin-view") || "";
+    if (cachedView === "user") renderUserPage();
+    else if (cachedView === "advisor") renderAdvisorPage();
+    else {
+      readAdminLocation();
+      render();
+    }
+    adminReady = true;
+  }
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", boot);

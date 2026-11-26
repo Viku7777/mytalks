@@ -40,6 +40,10 @@
   color: var(--color-primary);
 }
 
+[data-theme="dark"] .logo span {
+  color: #c7d2fe;
+}
+
 .logo:hover {
   color: var(--color-text);
 }
@@ -245,7 +249,7 @@ html[data-auth-state="guest"] [data-auth-user] {
   }
 }
 
-.site-footer__nav h4 {
+.site-footer__nav h2 {
   white-space: nowrap;
 }
 
@@ -264,7 +268,7 @@ html[data-auth-state="guest"] [data-auth-user] {
 }
 
 .site-footer__brand p {
-  color: #9ca3af;
+  color: #d1d5db;
   max-width: 18rem;
   margin: 0;
 }
@@ -278,7 +282,7 @@ html[data-auth-state="guest"] [data-auth-user] {
   font-weight: 600;
 }
 
-.site-footer h4 {
+.site-footer h2 {
   color: #fff;
   font-size: 1.25rem;
   font-family: var(--font-display);
@@ -298,7 +302,7 @@ html[data-auth-state="guest"] [data-auth-user] {
   border-radius: var(--radius-lg);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid #374151;
-  color: #9ca3af;
+  color: #d1d5db;
   font-size: 0.875rem;
   line-height: 1.5;
 }
@@ -318,7 +322,7 @@ html[data-auth-state="guest"] [data-auth-user] {
   gap: var(--space-4);
   justify-content: space-between;
   align-items: center;
-  color: #9ca3af;
+  color: #d1d5db;
   font-size: 0.875rem;
 }
 
@@ -420,6 +424,15 @@ html[data-auth-state="guest"] [data-auth-user] {
   flex: 1 1 100%;
   min-width: 0;
   font-size: 0.9375rem;
+}
+
+.cookie-banner a {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+[data-theme="dark"] .cookie-banner a {
+  color: #c7d2fe;
 }
 
 @media (min-width: 480px) {

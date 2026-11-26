@@ -1,7 +1,7 @@
 :root {
-  --color-primary: #5b6cff;
-  --color-secondary: #7c8cff;
-  --color-accent: #ff7a59;
+  --color-primary: #4f46e5;
+  --color-secondary: #4338ca;
+  --color-accent: #c2410c;
   --color-success: #16a34a;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
@@ -14,8 +14,8 @@
   --color-surface: #ffffff;
   --color-surface-elevated: #ffffff;
   --color-overlay: rgba(17, 24, 39, 0.5);
-  --color-primary-soft: rgba(91, 108, 255, 0.1);
-  --color-accent-soft: rgba(255, 122, 89, 0.12);
+  --color-primary-soft: rgba(79, 70, 229, 0.1);
+  --color-accent-soft: rgba(194, 65, 12, 0.12);
   --color-hero-overlay: linear-gradient(
     105deg,
     rgba(250, 248, 245, 0.95) 0%,

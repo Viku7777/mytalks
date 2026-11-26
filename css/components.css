@@ -60,7 +60,7 @@
 }
 
 .btn--accent:hover {
-  filter: brightness(1.05);
+  background: #9a3412;
   color: #fff;
 }
 

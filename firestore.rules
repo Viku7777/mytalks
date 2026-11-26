@@ -239,6 +239,20 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // One row per new IP or new account so the admin email is sent only once.
+    match /mail_notices/{noticeId} {
+      allow get: if true;
+      allow list: if isAdmin();
+      allow create: if noticeId.matches('^[a-f0-9]{24}$')
+        && request.resource.data.keys().hasOnly(['kind', 'label', 'createdAt'])
+        && request.resource.data.kind in ['ip', 'user']
+        && request.resource.data.label is string
+        && request.resource.data.label.size() <= 120
+        && request.resource.data.createdAt is string
+        && request.resource.data.createdAt.size() <= 40;
+      allow update, delete: if false;
+    }
+
     // Contact / inquiry forms
     match /contacts/{contactId} {
       allow create: if request.resource.data.email is string;

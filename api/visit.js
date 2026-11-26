@@ -5,6 +5,7 @@
  * The address comes from the request, never from the JSON body.
  */
 const crypto = require("crypto");
+const { sendNewIp } = require("./admin-notice");
 
 const PROJECT_ID = "location-461df";
 const API_KEY = "AIzaSyBj8PA7Eq04bV3TTL2bC4XmX4a6Ob6F8YQ";
@@ -138,8 +139,9 @@ async function saveVisitor(ip, path, page, retried) {
     if (created.status === 409 && !retried) return saveVisitor(ip, path, page, true);
     if (created.status < 200 || created.status >= 300) {
       console.error("visitor create", created.status, JSON.stringify(created.data).slice(0, 400));
+      return false;
     }
-    return created.status >= 200 && created.status < 300;
+    return "created";
   }
   if (current.status !== 200) {
     console.error("visitor read", current.status, JSON.stringify(current.data).slice(0, 400));
@@ -161,8 +163,9 @@ async function saveVisitor(ip, path, page, retried) {
   });
   if (patched.status < 200 || patched.status >= 300) {
     console.error("visitor update", patched.status, JSON.stringify(patched.data).slice(0, 400));
+    return false;
   }
-  return patched.status >= 200 && patched.status < 300;
+  return "updated";
 }
 
 function readIpEntry(value) {
@@ -307,7 +310,12 @@ module.exports = async function handler(req, res) {
       return res.json({ ok: true, ip: ip, uid: uid });
     }
     saved = await saveVisitor(ip, path, page);
-    return res.json({ ok: true, ip: ip, saved: saved });
+    if (saved === "created") {
+      sendNewIp(ip, path, page, 1).catch(function (err) {
+        console.error("new IP email failed:", err);
+      });
+    }
+    return res.json({ ok: true, ip: ip, saved: !!saved });
   } catch (err) {
     console.error("visit record failed:", err);
     res.statusCode = 500;

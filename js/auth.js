@@ -475,13 +475,38 @@
     });
   }
 
+  function notifyNewAccount(user, extras) {
+    if (!user || !user.getIdToken) return;
+    user.getIdToken().then(function (token) {
+      if (!token) return;
+      fetch((window.MyTalksBase || "") + "/api/admin-notice", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          kind: "user",
+          name: extras.name || user.displayName || "",
+          phone: extras.phone || user.phoneNumber || "",
+        }),
+        keepalive: true,
+      }).catch(function (err) {
+        console.warn("New account notice was not sent:", err);
+      });
+    }).catch(function () {});
+  }
+
   function syncUserToFirestore(user, extras, options) {
     return waitForDbApi().then(function (DB) {
       if (!DB || !DB.upsertUserProfile) {
         console.warn("MyTalksAuth: Firestore user sync unavailable");
         return null;
       }
-      return DB.upsertUserProfile(user, extras || {}, options || {});
+      return DB.upsertUserProfile(user, extras || {}, options || {}).then(function (profile) {
+        if (profile && profile.isNew) notifyNewAccount(user, extras || {});
+        return profile;
+      });
     });
   }
 

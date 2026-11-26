@@ -20,6 +20,7 @@ const API = {
   "/api/send-booking-email": require("./api/send-booking-email"),
   "/api/debug-ingest": require("./api/debug-ingest"),
   "/api/visit": require("./api/visit"),
+  "/api/admin-notice": require("./api/admin-notice"),
 };
 
 const MIME = {

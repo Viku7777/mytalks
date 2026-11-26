@@ -149,7 +149,7 @@
             locale: (typeof navigator !== "undefined" && navigator.language) || "",
           };
           tx.set(ref, created);
-          return created;
+          return Object.assign({ isNew: true }, created);
         }
 
         var existing = snap.data() || {};
@@ -224,6 +224,8 @@
     var nowIso = new Date().toISOString();
     var page = String(info.page || "").slice(0, 80);
     var path = String(info.path || "").slice(0, 300);
+    var isNewIp = false;
+    var visitCount = 1;
     await firestore.runTransaction(function (tx) {
       return tx.get(ref).then(function (snap) {
         if (!snap.exists) return;
@@ -235,12 +237,16 @@
         ips.forEach(function (entry) {
           if (entry && entry.ip === ip) found = entry;
         });
+        var createdIp = false;
         if (found) {
           found.lastSeenAt = nowIso;
           found.hits = (Number(found.hits) || 1) + 1;
           found.lastPath = path;
           found.lastPage = page;
+          visitCount = found.hits;
         } else {
+          createdIp = true;
+          visitCount = 1;
           ips.unshift({
             ip: ip,
             firstSeenAt: nowIso,
@@ -250,6 +256,7 @@
             lastPage: page,
           });
         }
+        isNewIp = createdIp;
         ips.sort(function (a, b) {
           return String(b.lastSeenAt || "").localeCompare(String(a.lastSeenAt || ""));
         });
@@ -266,7 +273,7 @@
         );
       });
     });
-    return getUserProfile(user.uid);
+    return { profile: await getUserProfile(user.uid), isNewIp: isNewIp, hits: visitCount };
   }
 
   /**

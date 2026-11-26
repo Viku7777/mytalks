@@ -544,6 +544,22 @@
           ip: data.ip,
           path: path,
           page: page === "index" ? "home" : page,
+        }).then(function (saved) {
+          if (!saved || !saved.isNewIp || !token) return null;
+          return fetch((window.MyTalksBase || "") + "/api/admin-notice", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify({
+              kind: "ip",
+              path: path,
+              page: page === "index" ? "home" : page,
+              hits: saved.hits || 1,
+            }),
+            keepalive: true,
+          });
         });
       })
       .then(function () {

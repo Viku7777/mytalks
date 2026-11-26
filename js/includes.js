@@ -658,6 +658,77 @@
     return firebaseStack;
   }
 
+  function scheduleHelp(key) {
+    if (key === "admin" || key === "admin-user" || key === "admin-advisor" || key === "google-callback") return;
+    try {
+      if (localStorage.getItem("mytalks-help-offer-3") === "1") return;
+    } catch (err) {
+      return;
+    }
+    var started = Date.now();
+    try {
+      var saved = Number(sessionStorage.getItem("mytalks-help-started") || 0);
+      if (saved) started = saved;
+      else sessionStorage.setItem("mytalks-help-started", String(started));
+    } catch (err) {
+      /* keep the in-memory start */
+    }
+    var wait = Math.max(0, 15000 - (Date.now() - started));
+    setTimeout(function () {
+      openHelpDialog();
+    }, wait);
+  }
+
+  function dismissHelp(dialog) {
+    try {
+      localStorage.setItem("mytalks-help-offer-3", "1");
+    } catch (err) {
+      /* still close the dialog */
+    }
+    if (dialog && dialog.parentNode) dialog.parentNode.removeChild(dialog);
+    document.body.style.overflow = "";
+  }
+
+  function openHelpDialog() {
+    if (document.getElementById("help-dialog")) return;
+    try {
+      if (localStorage.getItem("mytalks-help-offer-3") === "1") return;
+      localStorage.setItem("mytalks-help-offer-3", "1");
+    } catch (err) {
+      return;
+    }
+    var dialog = document.createElement("div");
+    dialog.className = "help-dialog";
+    dialog.id = "help-dialog";
+    dialog.setAttribute("role", "dialog");
+    dialog.setAttribute("aria-modal", "true");
+    dialog.setAttribute("aria-labelledby", "help-dialog-title");
+    dialog.innerHTML =
+      '<div class="help-dialog__card">' +
+      '<button type="button" class="help-dialog__close" aria-label="Close">&times;</button>' +
+      '<div class="help-dialog__mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>' +
+      '<h2 id="help-dialog-title">Need any help?</h2>' +
+      "<p>Questions about a session, a booking, or the site? Message us on WhatsApp and we will help.</p>" +
+      '<a class="help-dialog__wa" href="https://wa.me/917777050076?text=Hi%20MyTalk%2C%20I%20need%20some%20help." target="_blank" rel="noopener noreferrer">' +
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>' +
+      "Message on WhatsApp</a></div>";
+    document.body.appendChild(dialog);
+    document.body.style.overflow = "hidden";
+    var close = dialog.querySelector(".help-dialog__close");
+    if (close) close.focus();
+    dialog.addEventListener("click", function (event) {
+      if (event.target.closest(".help-dialog__close")) dismissHelp(dialog);
+    });
+    dialog.querySelector(".help-dialog__wa").addEventListener("click", function () {
+      dismissHelp(dialog);
+    });
+    document.addEventListener("keydown", function onKey(event) {
+      if (event.key !== "Escape") return;
+      document.removeEventListener("keydown", onKey);
+      dismissHelp(dialog);
+    });
+  }
+
   async function init() {
     const [header, footer, cookie] = await Promise.all([
       loadPartial("#header-root", "header.html"),
@@ -678,6 +749,7 @@
       }
     }
     var key = pageKey(window.location.pathname);
+    scheduleHelp(key);
     recordSiteVisit(key);
     if (key === "index") {
       var started = false;

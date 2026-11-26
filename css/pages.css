@@ -5,6 +5,37 @@
   font-family: var(--font-body);
 }
 
+.wa-float {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right, 0px));
+  bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  z-index: 180;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #25d366;
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.35);
+}
+
+.wa-float svg {
+  width: 2rem;
+  height: 2rem;
+  fill: currentColor;
+}
+
+.wa-float:hover {
+  color: #fff;
+  background: #1ebe5d;
+}
+
+body:has(.cookie-banner.is-visible) .wa-float {
+  bottom: 7.5rem;
+}
+
 /* Home hero — portrait on the right, copy locked to the open left */
 .home-hero {
   position: relative;

@@ -8,6 +8,7 @@
     "vercel:dev": "vercel dev"
   },
   "dependencies": {
+    "@vercel/functions": "^3.11.4",
     "dotenv": "^16.4.7",
     "nodemailer": "^10.1.7",
     "razorpay": "^2.9.8"

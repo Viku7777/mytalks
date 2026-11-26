@@ -133,7 +133,42 @@ function serveStatic(req, res, filePath) {
   var ext = path.extname(filePath).toLowerCase();
   res.statusCode = 200;
   res.setHeader("Content-Type", MIME[ext] || "application/octet-stream");
+  if (ext === ".css" || ext === ".js" || ext === ".png" || ext === ".jpg" || ext === ".jpeg" || ext === ".webp" || ext === ".svg" || ext === ".ico" || ext === ".woff2") {
+    res.setHeader("Cache-Control", "public, max-age=2592000");
+  }
   fs.createReadStream(filePath).pipe(res);
+}
+
+let canonicalToolsPromise;
+function loadCanonicalTools() {
+  if (!canonicalToolsPromise) {
+    canonicalToolsPromise = Promise.all([
+      import("./lib/page-canonical.mjs"),
+      import("./lib/prerender-pages.mjs"),
+    ]).then(function (mods) {
+      return Object.assign({}, mods[0], mods[1]);
+    });
+  }
+  return canonicalToolsPromise;
+}
+
+async function serveCanonicalPage(res, filePath, pathname, searchParams) {
+  var tools = await loadCanonicalTools();
+  var raw = fs.readFileSync(filePath, "utf8");
+  var href = tools.canonicalHref(pathname, searchParams);
+  var rendered = tools.prerenderDocument(raw, pathname, searchParams);
+  var body;
+  if (href && (rendered.found || rendered.dataMissing)) {
+    var source = rendered.found ? rendered.html : raw;
+    body = tools.rewritePageHtml(source, href).html;
+  } else {
+    body = tools.noindexShellHtml(rendered.html || raw);
+  }
+  res.statusCode = 200;
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.setHeader("Cache-Control", "no-store");
+  if (href) res.setHeader("Link", "<" + href + '>; rel="canonical"');
+  res.end(body);
 }
 
 const server = http.createServer(async function (req, res) {
@@ -150,6 +185,18 @@ const server = http.createServer(async function (req, res) {
     res.setHeader("Content-Type", "text/plain; charset=utf-8");
     res.end("Not found");
     return;
+  }
+  var tools = await loadCanonicalTools();
+  if (tools.isProfileOrArticle(pathname)) {
+    if (!tools.canonicalHref(pathname, url.searchParams)) {
+      var dest = pathname.indexOf("advisor-profile") !== -1 ? "/pages/find-advisor" : "/pages/blog";
+      res.statusCode = 301;
+      res.setHeader("Location", dest);
+      res.setHeader("Cache-Control", "no-store");
+      res.end();
+      return;
+    }
+    return serveCanonicalPage(res, filePath, pathname, url.searchParams);
   }
   serveStatic(req, res, filePath);
 });

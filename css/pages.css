@@ -1129,6 +1129,43 @@ tr.is-saving {
   }
 }
 
+.insta-follow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+}
+
+.insta-follow > i {
+  font-size: 2rem;
+  color: var(--color-primary);
+}
+
+.insta-follow h2 {
+  margin: 0 0 var(--space-2);
+  font-size: 1.35rem;
+}
+
+.insta-follow p {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.insta-follow .btn {
+  margin-left: auto;
+}
+
+@media (max-width: 767px) {
+  .insta-follow .btn {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
 .cta-band {
   background: var(--color-bg-dark);
   color: #fff;

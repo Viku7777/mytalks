@@ -214,6 +214,7 @@
   function initAnalytics() {
     if (analytics || analyticsStarting || analyticsFailed) return;
     if (!analyticsAllowed()) return;
+    if (typeof firebase === "undefined" || typeof firebase.analytics !== "function") return;
     if (!canUseAnalyticsEnv()) {
       attachAnalytics(null);
       return;

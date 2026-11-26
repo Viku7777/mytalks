@@ -245,6 +245,21 @@
 
   document.addEventListener("mytalks:cookies-accepted", loadGoogleTagManager);
   document.addEventListener("mytalks:cookies-accepted", loadMetaPixel);
+  document.addEventListener("mytalks:cookies-accepted", function loadFirebaseAnalytics() {
+    var sdk = "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics-compat.js";
+    function start() {
+      if (window.MyTalksFirebase && typeof MyTalksFirebase.initAnalytics === "function") {
+        MyTalksFirebase.initAnalytics();
+      }
+    }
+    if (window.firebase && typeof firebase.analytics === "function") {
+      start();
+      return;
+    }
+    loadScript(sdk).then(start).catch(function (analyticsErr) {
+      console.warn("Firebase Analytics SDK failed to load:", analyticsErr);
+    });
+  });
 
   function initCookieBanner(root) {
     if (!root) return;
@@ -376,9 +391,6 @@
         await Promise.all([
           loadScript(sdk + "/firebase-auth-compat.js"),
           loadScript(sdk + "/firebase-firestore-compat.js"),
-          loadScript(sdk + "/firebase-analytics-compat.js").catch(function (analyticsErr) {
-            console.warn("Firebase Analytics SDK failed to load:", analyticsErr);
-          }),
         ]);
         await loadScript(BASE + "/js/firebase-config.js");
       }
@@ -543,7 +555,11 @@
     });
   }
 
-  var firebaseStack = loadFirebaseStack();
+  var firebaseStack = null;
+  function ensureFirebase() {
+    if (!firebaseStack) firebaseStack = loadFirebaseStack();
+    return firebaseStack;
+  }
 
   async function init() {
     const [header, footer, cookie] = await Promise.all([
@@ -555,14 +571,32 @@
     initMobileNav(header);
     initCookieBanner(cookie);
     document.dispatchEvent(new CustomEvent("mytalks:layout-ready"));
-    await firebaseStack;
-    trackSignedInPage();
-    try {
-      if (localStorage.getItem("mytalks-cookies") === "accepted") {
-        document.dispatchEvent(new CustomEvent("mytalks:cookies-accepted"));
+    function dispatchStoredConsent() {
+      try {
+        if (localStorage.getItem("mytalks-cookies") === "accepted") {
+          document.dispatchEvent(new CustomEvent("mytalks:cookies-accepted"));
+        }
+      } catch (e) {
+        /* storage unavailable */
       }
-    } catch (e) {
-      /* storage unavailable */
+    }
+    var key = pageKey(window.location.pathname);
+    if (key === "index") {
+      var started = false;
+      var kick = function () {
+        if (started) return;
+        started = true;
+        ensureFirebase().then(function () {
+          dispatchStoredConsent();
+          trackSignedInPage();
+        });
+      };
+      window.addEventListener("pointerdown", kick, { once: true, passive: true });
+      window.addEventListener("keydown", kick, { once: true });
+    } else {
+      await ensureFirebase();
+      dispatchStoredConsent();
+      trackSignedInPage();
     }
   }
 

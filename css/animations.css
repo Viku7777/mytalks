@@ -214,6 +214,15 @@
   }
 }
 
+/* Mobile LCP text stays visible. The rise-in animation starts at opacity 0 and holds the heading back. */
+@media (max-width: 899px) {
+  .home-hero__content > * {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
 @keyframes teamShine {
   from {
     transform: translateX(-130%);

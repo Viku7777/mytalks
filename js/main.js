@@ -34,8 +34,10 @@
       { threshold: 0.14, rootMargin: "0px 0px -8% 0px" }
     );
 
-    els.forEach(function (el) {
-      io.observe(el);
+    requestAnimationFrame(function () {
+      els.forEach(function (el) {
+        io.observe(el);
+      });
     });
   }
 
@@ -98,7 +100,11 @@
     cards.forEach(function (el, i) {
       el.classList.add("reveal");
       el.style.setProperty("--reveal-delay", Math.min(i * 0.07, 0.42) + "s");
-      io.observe(el);
+    });
+    requestAnimationFrame(function () {
+      cards.forEach(function (el) {
+        io.observe(el);
+      });
     });
   }
 
@@ -107,6 +113,8 @@
     var media = document.querySelector(".home-hero__media img");
     var hero = document.querySelector(".home-hero");
     if (!media || !hero) return;
+    var narrow = window.matchMedia && window.matchMedia("(max-width: 899px)").matches;
+    if (narrow) return;
 
     var ticking = false;
     window.addEventListener(

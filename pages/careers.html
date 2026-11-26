@@ -29,7 +29,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../css/fontawesome.min.css" media="print" onload="this.media='all'" />
   <link rel="stylesheet" href="../css/variables.css" />
   <link rel="stylesheet" href="../css/base.css" />
   <link rel="stylesheet" href="../css/layout.css" />
@@ -60,7 +60,12 @@
           <article class="feature-item"><div class="feature-item__icon"><i class="fa-solid fa-graduation-cap"></i></div><h3>Growth budget</h3><p>Learning stipends and mentorship.</p></article>
         </div>
         <h2>Open Positions</h2>
-        <div class="grid-2 mt-6" data-careers-list style="display:grid;gap:1rem"></div>
+        <div class="grid-2 mt-6" data-careers-list style="display:grid;gap:1rem">
+          <article class="card" style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:center"><div><h3>Product Designer</h3><p class="hint">Design · Remote / Hybrid · Full-time</p></div><a class="btn btn--secondary btn--sm" href="#apply">Apply</a></article>
+          <article class="card" style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:center"><div><h3>Frontend Engineer</h3><p class="hint">Engineering · Remote · Full-time</p></div><a class="btn btn--secondary btn--sm" href="#apply">Apply</a></article>
+          <article class="card" style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:center"><div><h3>Advisor Success Manager</h3><p class="hint">Operations · Bengaluru / Remote · Full-time</p></div><a class="btn btn--secondary btn--sm" href="#apply">Apply</a></article>
+          <article class="card" style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:center"><div><h3>Content &amp; Trust Writer</h3><p class="hint">Marketing · Remote · Contract</p></div><a class="btn btn--secondary btn--sm" href="#apply">Apply</a></article>
+        </div>
         <h2 class="mt-8" id="apply">Apply</h2>
         <form class="card mt-4" name="career" data-demo-form data-success="Application received.">
           <div class="form-row">

@@ -269,6 +269,15 @@ html[data-auth-state="guest"] [data-auth-user] {
   margin: 0;
 }
 
+.site-footer__follow {
+  margin-top: var(--space-4);
+}
+
+.site-footer__follow a {
+  color: #c7d2fe;
+  font-weight: 600;
+}
+
 .site-footer h4 {
   color: #fff;
   font-size: 1.25rem;

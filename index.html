@@ -1,13 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18546580616"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'AW-18546580616');
+    (function () {
+      var started = false;
+      function startLateAssets() {
+        if (started) return;
+        started = true;
+        var ads = document.createElement("script");
+        ads.async = true;
+        ads.src = "https://www.googletagmanager.com/gtag/js?id=AW-18546580616";
+        document.head.appendChild(ads);
+        gtag("js", new Date());
+        gtag("config", "AW-18546580616");
+        var font = document.createElement("link");
+        font.rel = "stylesheet";
+        font.href = "https://fonts.googleapis.com/css2?family=Outfit:wght@500;600&family=Source+Sans+3:wght@400;600&display=swap";
+        document.head.appendChild(font);
+        var icons = document.createElement("link");
+        icons.rel = "stylesheet";
+        icons.href = "css/fontawesome.min.css";
+        document.head.appendChild(icons);
+      }
+      window.addEventListener("pointerdown", startLateAssets, { once: true, passive: true });
+      window.addEventListener("keydown", startLateAssets, { once: true });
+    })();
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -26,18 +45,51 @@
   <meta name="twitter:title" content="MyTalk — Someone to Talk. Someone to Understand." />
   <meta name="twitter:description" content="Your safe space to talk. Real conversations. Real support on mytalk.in." />
   <meta name="twitter:image" content="https://mytalk.in/assets/images/hero.jpg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="css/variables.css" />
-  <link rel="stylesheet" href="css/base.css" />
-  <link rel="stylesheet" href="css/layout.css" />
-  <link rel="stylesheet" href="css/components.css" />
-  <link rel="stylesheet" href="css/pages.css" />
-  <link rel="stylesheet" href="css/dark.css" />
-  <link rel="stylesheet" href="css/mobile.css" />
-  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="preload" as="image" type="image/webp" href="assets/images/hero-800.webp" imagesrcset="assets/images/hero-800.webp 800w, assets/images/hero.webp 1200w" imagesizes="100vw" fetchpriority="high" />
+  <style>
+    body{margin:0;background:#eceff3;color:#141414;font-family:system-ui,sans-serif}
+    #header-root{min-height:3.75rem}
+    .home-hero{position:relative;min-height:calc(100svh - 3.75rem);display:grid;align-items:end;overflow:hidden}
+    .home-hero__media{position:absolute;inset:0}
+    .home-hero__media img{width:100%;height:100%;object-fit:cover;object-position:78% 12%}
+    .home-hero__overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(248,250,252,.12),rgba(248,250,252,.92) 70%)}
+    .container{width:min(100% - 2rem,72rem);margin-inline:auto}
+    .home-hero__content{position:relative;z-index:1;padding:38vh 0 2rem}
+    .home-hero__brand{font-size:2.25rem;line-height:.95;margin:0 0 .75rem}
+    .home-hero h1{margin:.4rem 0;font-size:1.45rem;line-height:1.05;max-width:18ch}
+    @media (min-width:900px){
+      #header-root{min-height:4.5rem}
+      .home-hero{align-items:center;min-height:calc(100svh - 4.5rem)}
+      .home-hero__media img{object-position:72% 18%}
+      .home-hero__content{padding:4rem 0}
+      .home-hero h1{font-size:2.75rem;max-width:none}
+    }
+    .home-hero__sub,.home-hero__note{margin:.4rem 0}
+    .btn-group{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+    .btn{display:inline-block;padding:.75rem 1rem;border-radius:999px;text-decoration:none}
+    .btn--accent{background:#0f766e;color:#fff}
+    .btn--primary{background:#fff;color:#141414}
+  </style>
+  <link rel="stylesheet" href="css/variables.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="css/base.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="css/layout.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="css/components.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="css/pages.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="css/dark.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="css/mobile.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="css/animations.css" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/pages.css" />
+    <link rel="stylesheet" href="css/dark.css" />
+    <link rel="stylesheet" href="css/mobile.css" />
+    <link rel="stylesheet" href="css/animations.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600&family=Source+Sans+3:wght@400;600&display=swap" />
+    <link rel="stylesheet" href="css/fontawesome.min.css" />
+  </noscript>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -46,10 +98,11 @@
     "url": "https://mytalk.in/",
     "logo": "https://mytalk.in/assets/brand/logo-full-hd.png",
     "image": "https://mytalk.in/assets/images/hero.jpg",
+    "sameAs": ["https://www.instagram.com/mytalkdotin/"],
     "description": "Someone to talk. Someone to understand. Your safe space for private emotional support and relationship guidance."
   }
   </script>
-  <script src="js/theme.js"></script>
+  <script src="js/theme.js" defer></script>
 </head>
 <body class="page-home">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -57,13 +110,18 @@
   <main id="main" class="page-main">
     <section class="home-hero" aria-label="Hero">
       <div class="home-hero__media">
-        <img
-          src="assets/images/hero.jpg?v=1"
-          alt="Happy young Indian woman smiling during a private video conversation on her phone"
-          width="1536"
-          height="1024"
-          fetchpriority="high"
-        />
+        <picture>
+          <source type="image/webp" srcset="assets/images/hero-800.webp 800w, assets/images/hero.webp 1200w" sizes="100vw" />
+          <img
+            src="assets/images/hero-800.jpg"
+            srcset="assets/images/hero-800.jpg 800w, assets/images/hero.jpg?v=1 1536w"
+            sizes="100vw"
+            alt="Happy young Indian woman smiling during a private video conversation on her phone"
+            width="1536"
+            height="1024"
+            fetchpriority="high"
+          />
+        </picture>
         <div class="home-hero__overlay" aria-hidden="true"></div>
       </div>
       <div class="container home-hero__content">
@@ -215,8 +273,22 @@
           <h2>Common questions</h2>
           <p>Clear answers about privacy, booking, and sessions.</p>
           <a class="btn btn--ghost mt-6" href="pages/faq">View all FAQs</a>
+          <p class="mt-4"><a href="pages/services">Services</a> · <a href="pages/careers">Careers</a> · <a href="pages/cancellation-policy">Cancellation policy</a></p>
         </div>
         <div class="faq-preview" data-faq-preview></div>
+      </div>
+    </section>
+
+    <section class="section section--light" aria-label="Instagram">
+      <div class="container">
+        <div class="insta-follow">
+          <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+          <div>
+            <h2>Follow us on Instagram</h2>
+            <p>Stories, tips, and updates from @mytalkdotin. Come say hello.</p>
+          </div>
+          <a class="btn btn--primary" href="https://www.instagram.com/mytalkdotin/" target="_blank" rel="noopener noreferrer">Follow @mytalkdotin</a>
+        </div>
       </div>
     </section>
 

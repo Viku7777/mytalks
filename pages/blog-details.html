@@ -18,6 +18,18 @@
   <meta name="description" content="Read MyTalk blog articles with expert tips on relationships, wellness, and communication." />
   <link rel="canonical" href="https://mytalk.in/pages/blog-details" />
   <meta property="og:url" content="https://mytalk.in/pages/blog-details" />
+  <script>
+    (function () {
+      var params = new URLSearchParams(location.search);
+      var value = params.get("slug") || "";
+      if (!/^[a-z0-9-]{1,120}$/i.test(value)) return;
+      var href = "https://mytalk.in/pages/blog-details?slug=" + value;
+      var link = document.querySelector('link[rel="canonical"]');
+      if (link) link.setAttribute("href", href);
+      var og = document.querySelector('meta[property="og:url"]');
+      if (og) og.setAttribute("content", href);
+    })();
+  </script>
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Blog Article | MyTalk" />
   <meta property="og:description" content="Read MyTalk blog articles with expert tips on relationships, wellness, and communication." />
@@ -29,7 +41,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../css/fontawesome.min.css" media="print" onload="this.media='all'" />
   <link rel="stylesheet" href="../css/variables.css" />
   <link rel="stylesheet" href="../css/base.css" />
   <link rel="stylesheet" href="../css/layout.css" />

@@ -508,6 +508,75 @@
     });
   }
 
+  function visitStamp(mode, page) {
+    var key = mode + "|" + page;
+    try {
+      var prev = sessionStorage.getItem("mytalks-visit-key") || "";
+      var at = Number(sessionStorage.getItem("mytalks-visit-at") || 0);
+      if (prev === key && Date.now() - at < 10 * 60 * 1000) return false;
+      sessionStorage.setItem("mytalks-visit-key", key);
+      sessionStorage.setItem("mytalks-visit-at", String(Date.now()));
+    } catch (err) {
+      /* private mode still sends once */
+    }
+    return true;
+  }
+
+  function postVisit(page, token) {
+    var path = window.location.pathname || "/";
+    if (!visitStamp(token ? "user" : "guest", page + path)) return;
+    var headers = { "Content-Type": "application/json" };
+    if (token) headers.Authorization = "Bearer " + token;
+    fetch("/api/visit", {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify({ path: path, page: page === "index" ? "home" : page }),
+      keepalive: true,
+    }).catch(function () {});
+  }
+
+  function postVisitForUser(page, user) {
+    if (user && user.getIdToken) {
+      user.getIdToken().then(function (token) {
+        postVisit(page, token || "");
+      }).catch(function () {
+        postVisit(page, "");
+      });
+      return;
+    }
+    postVisit(page, "");
+  }
+
+  function recordSiteVisit(key) {
+    if (key === "admin" || key === "admin-user" || key === "admin-advisor" || key === "google-callback") {
+      return;
+    }
+    var hinted = false;
+    try {
+      hinted = !!(JSON.parse(localStorage.getItem("mytalks-session") || "null") || {}).uid;
+    } catch (err) {
+      hinted = false;
+    }
+    if (key === "index" && !hinted) {
+      var sendGuest = function () {
+        postVisit(key, "");
+      };
+      if (window.requestIdleCallback) requestIdleCallback(sendGuest, { timeout: 1500 });
+      else setTimeout(sendGuest, 400);
+      return;
+    }
+    if (key === "index") return;
+    ensureFirebase().then(function () {
+      var auth = window.MyTalksAuth;
+      var ready = auth && auth.ready ? auth.ready : Promise.resolve(auth && auth.getUser ? auth.getUser() : null);
+      Promise.resolve(ready).then(function (user) {
+        postVisitForUser(key, user);
+      }).catch(function () {
+        postVisit(key, "");
+      });
+    });
+  }
+
   async function trackSignedInPage() {
     var auth = window.MyTalksAuth;
     var user = auth && auth.getUser ? auth.getUser() : null;
@@ -581,6 +650,7 @@
       }
     }
     var key = pageKey(window.location.pathname);
+    recordSiteVisit(key);
     if (key === "index") {
       var started = false;
       var kick = function () {
@@ -589,6 +659,11 @@
         ensureFirebase().then(function () {
           dispatchStoredConsent();
           trackSignedInPage();
+          var auth = window.MyTalksAuth;
+          var ready = auth && auth.ready ? auth.ready : Promise.resolve(auth && auth.getUser ? auth.getUser() : null);
+          Promise.resolve(ready).then(function (user) {
+            postVisitForUser("index", user);
+          }).catch(function () {});
         });
       };
       window.addEventListener("pointerdown", kick, { once: true, passive: true });

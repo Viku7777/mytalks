@@ -206,6 +206,39 @@ service cloud.firestore {
       }
     }
 
+    // Signed-out visitors. The server writes the request IP. Admins list them.
+    // A single document can be read by id; the full list stays admin-only.
+    match /visitor_ips/{ipId} {
+      allow get: if true;
+      allow list: if isAdmin();
+      allow create: if ipId.matches('^[a-f0-9]{24}$')
+        && request.resource.data.keys().hasOnly([
+          'ip', 'firstSeenAt', 'lastSeenAt', 'hits', 'lastPath', 'lastPage'
+        ])
+        && request.resource.data.ip is string
+        && request.resource.data.ip.size() > 2
+        && request.resource.data.ip.size() <= 64
+        && request.resource.data.hits == 1
+        && request.resource.data.lastPath is string
+        && request.resource.data.lastPath.size() <= 300
+        && request.resource.data.lastPage is string
+        && request.resource.data.lastPage.size() <= 80
+        && request.resource.data.firstSeenAt is string
+        && request.resource.data.firstSeenAt.size() <= 40
+        && request.resource.data.lastSeenAt is string
+        && request.resource.data.lastSeenAt.size() <= 40;
+      allow update: if request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['lastSeenAt', 'hits', 'lastPath', 'lastPage'])
+        && request.resource.data.hits == resource.data.hits + 1
+        && request.resource.data.lastPath is string
+        && request.resource.data.lastPath.size() <= 300
+        && request.resource.data.lastPage is string
+        && request.resource.data.lastPage.size() <= 80
+        && request.resource.data.lastSeenAt is string
+        && request.resource.data.lastSeenAt.size() <= 40;
+      allow delete: if false;
+    }
+
     // Contact / inquiry forms
     match /contacts/{contactId} {
       allow create: if request.resource.data.email is string;

@@ -19,6 +19,7 @@ const API = {
   "/api/razorpay-webhook": require("./api/razorpay-webhook"),
   "/api/send-booking-email": require("./api/send-booking-email"),
   "/api/debug-ingest": require("./api/debug-ingest"),
+  "/api/visit": require("./api/visit"),
 };
 
 const MIME = {
@@ -204,7 +205,7 @@ const server = http.createServer(async function (req, res) {
 server.listen(PORT, HOST, function () {
   console.log("MyTalk local (static + API) at http://" + HOST + ":" + PORT + "/");
   console.log(
-    "APIs: /api/create-order, /api/verify-payment, /api/razorpay-webhook, /api/send-booking-email"
+    "APIs: /api/create-order, /api/verify-payment, /api/razorpay-webhook, /api/send-booking-email, /api/visit"
   );
   console.log("Press Ctrl+C to stop.");
 });

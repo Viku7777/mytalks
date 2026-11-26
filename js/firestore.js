@@ -10,6 +10,7 @@
     settings: "settings",
     users: "users",
     bookingVisits: "booking_visits",
+    visitorIps: "visitor_ips",
     activity: "activity",
     advisors: "advisors",
     transactions: "transactions",
@@ -79,7 +80,7 @@
 
   function normalizeDoc(id, data) {
     var out = Object.assign({ id: id }, data || {});
-    ["createdAt", "updatedAt", "lastLoginAt", "visitedAt", "lastSeenAt", "lastBookingPageVisitAt"].forEach(function (key) {
+    ["createdAt", "updatedAt", "lastLoginAt", "visitedAt", "lastSeenAt", "lastBookingPageVisitAt", "lastIpAt"].forEach(function (key) {
       if (out[key]) out[key] = toMillis(out[key]);
     });
     return out;
@@ -896,6 +897,14 @@
     return rows;
   }
 
+  async function listVisitorIps() {
+    var rows = await listCollection(COL.visitorIps, 300);
+    rows.sort(function (a, b) {
+      return String(b.lastSeenAt || "").localeCompare(String(a.lastSeenAt || ""));
+    });
+    return rows;
+  }
+
   async function listBookings() {
     var rows = await listCollection(COL.bookings, 400);
     rows.sort(function (a, b) {
@@ -1189,6 +1198,7 @@
     listTickets: listTickets,
     listBookings: listBookings,
     listBookingVisits: listBookingVisits,
+    listVisitorIps: listVisitorIps,
     updateTicket: updateTicket,
     updateBooking: updateBooking,
     setUserAccess: setUserAccess,

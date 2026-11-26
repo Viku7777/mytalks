@@ -14,6 +14,7 @@
     selectedUserId: null,
     selectedAdvisorId: null,
     visits: [],
+    visitors: [],
     contacts: [],
     transactions: [],
     coupons: [],
@@ -90,6 +91,11 @@
             return [];
           })
         : [],
+      DB.listVisitorIps
+        ? DB.listVisitorIps().catch(function () {
+            return [];
+          })
+        : [],
     ]);
     state.users = results[0];
     state.tickets = results[1];
@@ -99,6 +105,7 @@
     state.contacts = results[5] || [];
     state.transactions = results[6] || [];
     state.coupons = results[7] || [];
+    state.visitors = results[8] || [];
     if (state.transactions.length) state.transactionsError = "";
     if (!state.advisors.length && window.MyTalksData) {
       var sample = await window.MyTalksData.loadJson("advisors.json");
@@ -219,6 +226,44 @@
     if (!booking) return "—";
     if (booking.endTime) return (booking.time || "") + "–" + booking.endTime;
     return booking.time || "—";
+  }
+
+  function ipRows(entries, emptyText) {
+    var rows = (Array.isArray(entries) ? entries.slice() : []).filter(function (entry) {
+      return entry && entry.ip;
+    });
+    rows.sort(function (a, b) {
+      return String(b.lastSeenAt || "").localeCompare(String(a.lastSeenAt || ""));
+    });
+    if (!rows.length) {
+      return '<tr><td colspan="5">' + esc(emptyText) + "</td></tr>";
+    }
+    return rows
+      .map(function (entry) {
+        return (
+          '<tr><td data-label="IP">' +
+          esc(entry.ip) +
+          '</td><td data-label="First seen">' +
+          prettyWhen(entry.firstSeenAt) +
+          '</td><td data-label="Last seen">' +
+          prettyWhen(entry.lastSeenAt) +
+          '</td><td data-label="Visits">' +
+          esc(entry.hits || 1) +
+          '</td><td data-label="Last page">' +
+          esc(entry.lastPage || entry.lastPath || "—") +
+          "</td></tr>"
+        );
+      })
+      .join("");
+  }
+
+  function renderVisitors() {
+    return (
+      '<p class="admin-user__hint">People who opened the site without signing in. A signed-in address stays on that user’s profile, not in this list.</p>' +
+      '<div class="table-wrap card"><table><thead><tr><th>IP</th><th>First seen</th><th>Last seen</th><th>Visits</th><th>Last page</th></tr></thead><tbody>' +
+      ipRows(state.visitors, "No signed-out visits yet.") +
+      "</tbody></table></div>"
+    );
   }
 
   function fact(label, value) {
@@ -1383,8 +1428,20 @@
       fact("Last advisor", user.lastAdvisorName) +
       fact("Timezone", user.timezone) +
       fact("Language", user.locale) +
+      fact("Last IP", user.lastIp) +
       fact("Booking page visits", user.bookingPageVisitCount) +
       "</dl></section>" +
+      '<section class="profile-section"><div class="profile-section__head"><h3>IP addresses</h3><p>Every address this account has used.</p></div>' +
+      '<div class="table-wrap card"><table><thead><tr><th>IP</th><th>First seen</th><th>Last seen</th><th>Visits</th><th>Last page</th></tr></thead><tbody>' +
+      ipRows(
+        user.ips && user.ips.length
+          ? user.ips
+          : user.lastIp
+            ? [{ ip: user.lastIp, firstSeenAt: user.lastIpAt, lastSeenAt: user.lastIpAt, hits: 1, lastPage: user.lastPage }]
+            : [],
+        "No IP recorded for this account yet."
+      ) +
+      "</tbody></table></div></section>" +
       '<section class="profile-section"><div class="profile-section__head"><h3>Bookings</h3><p>Newest first.</p></div>' +
       '<div class="table-wrap card"><table><thead><tr><th>Advisor</th><th>Date</th><th>Time</th><th>Status</th><th>Amount</th></tr></thead><tbody>' +
       bookingRows +
@@ -1775,6 +1832,7 @@
     if (tab === "transactions") return (state.transactions || []).length;
     if (tab === "advisors") return state.advisors.length;
     if (tab === "coupons") return (state.coupons || []).length;
+    if (tab === "visitors") return (state.visitors || []).length;
     if (tab === "inquiries") return contactRows("contact").length;
     if (tab === "applications") return contactRows("advisor-apply").length;
     return 0;
@@ -1791,6 +1849,7 @@
       inquiries: "Contact",
       applications: "Applications",
       coupons: "Coupons",
+      visitors: "IP list",
     };
     var icons = {
       users: "fa-users",
@@ -1802,6 +1861,7 @@
       inquiries: "fa-envelope",
       applications: "fa-user-plus",
       coupons: "fa-ticket",
+      visitors: "fa-location-dot",
     };
     var blurbs = {
       users: "Filter by new, active, upcoming bookings, or quiet accounts, then open a timeline.",
@@ -1813,9 +1873,10 @@
       inquiries: "Messages sent from the contact form.",
       applications: "People who asked to become an advisor.",
       coupons: "Create a code, set the limit, and see who used it.",
+      visitors: "Addresses from people who opened the site without signing in.",
     };
     var groups = [
-      { label: "People", tabs: ["users", "advisors"] },
+      { label: "People", tabs: ["users", "visitors", "advisors"] },
       { label: "Sessions", tabs: ["bookings", "tickets"] },
       { label: "Money", tabs: ["payments", "transactions", "coupons"] },
       { label: "Inbox", tabs: ["inquiries", "applications"] },
@@ -1837,7 +1898,9 @@
                 ? renderApplications()
                 : state.tab === "coupons"
                   ? renderCoupons()
-                  : renderUsers();
+                  : state.tab === "visitors"
+                    ? renderVisitors()
+                    : renderUsers();
     var count = tabCount(state.tab);
     var nav = groups
       .map(function (group) {
@@ -1961,6 +2024,7 @@
     inquiries: true,
     applications: true,
     coupons: true,
+    visitors: true,
   };
   var historyMode = "replace";
   var adminReady = false;

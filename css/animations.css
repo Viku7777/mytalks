@@ -150,12 +150,12 @@
     padding-left: 0.35rem;
   }
 
-  .topic-list li:hover i {
+  .topic-list li:hover .topic-icon {
     background: var(--color-primary);
     color: #fff;
   }
 
-  .topic-list i {
+  .topic-list .topic-icon {
     transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
   }
 

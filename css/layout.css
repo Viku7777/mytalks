@@ -209,8 +209,8 @@ html[data-auth-state="guest"] [data-auth-user] {
 }
 
 .site-footer {
-  background: var(--color-bg-dark);
-  color: #e5e7eb;
+  background: #111827;
+  color: #f3f4f6;
   padding: var(--space-16) 0 var(--space-8);
   margin-top: auto;
 }
@@ -268,7 +268,7 @@ html[data-auth-state="guest"] [data-auth-user] {
 }
 
 .site-footer__brand p {
-  color: #d1d5db;
+  color: #f3f4f6;
   max-width: 18rem;
   margin: 0;
 }
@@ -302,7 +302,7 @@ html[data-auth-state="guest"] [data-auth-user] {
   border-radius: var(--radius-lg);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid #374151;
-  color: #d1d5db;
+  color: #f3f4f6;
   font-size: 0.875rem;
   line-height: 1.5;
 }
@@ -322,8 +322,14 @@ html[data-auth-state="guest"] [data-auth-user] {
   gap: var(--space-4);
   justify-content: space-between;
   align-items: center;
-  color: #d1d5db;
+  background: #111827;
+  color: #f9fafb;
   font-size: 0.875rem;
+}
+
+.site-footer__bottom p,
+.site-footer__bottom span {
+  color: #f9fafb;
 }
 
 .site-footer__social {

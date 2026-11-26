@@ -47,7 +47,8 @@
   <meta name="twitter:image" content="https://mytalk.in/assets/images/hero.jpg" />
   <link rel="preload" as="image" type="image/webp" href="assets/images/hero-800.webp" imagesrcset="assets/images/hero-800.webp 800w, assets/images/hero.webp 1200w" imagesizes="100vw" fetchpriority="high" />
   <style>
-    body{margin:0;background:#eceff3;color:#141414;font-family:system-ui,sans-serif}
+    body{margin:0;background:#eceff3;color:#141414;font-family:system-ui,sans-serif;line-height:1.65}
+    .skip-link{position:absolute;top:-100%;left:1rem}
     #header-root{min-height:3.75rem}
     .home-hero{position:relative;min-height:0;display:grid;align-items:end;overflow:hidden}
     .home-hero__media{position:absolute;inset:0}
@@ -57,6 +58,9 @@
     .home-hero__content{position:relative;z-index:1;padding:38vh 0 2rem}
     .home-hero__brand{font-size:2.25rem;line-height:.95;margin:0 0 .75rem}
     .home-hero h1{margin:.4rem 0;font-size:1.45rem;line-height:1.05;max-width:18ch}
+    .home-hero__sub,.home-hero__note{margin:.4rem 0;line-height:1.65}
+    .home-hero__sub{margin-bottom:1.25rem}
+    .home-hero__note{margin-bottom:2rem}
     .section{padding:2.5rem 0}
     .trust-bar__list{display:grid;grid-template-columns:1fr 1fr;list-style:none;margin:2.5rem 0;padding:0}
     .trust-bar__list li{padding:1.25rem 1rem;text-align:center}
@@ -70,9 +74,12 @@
       .section{padding:5rem 0}
       .trust-bar__list{grid-template-columns:repeat(4,1fr);margin:1.5rem 0}
     }
-    .home-hero__sub,.home-hero__note{margin:.4rem 0}
-    .btn-group{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
-    .btn{display:inline-block;padding:.75rem 1rem;border-radius:999px;text-decoration:none}
+    .btn-group{display:flex;flex-direction:column;align-items:stretch;gap:.75rem;margin-top:1rem}
+    .btn{display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:100%;min-height:2.75rem;padding:.875rem 1.5rem;border-radius:999px;text-decoration:none}
+    @media (min-width:480px){
+      .btn-group{flex-direction:row;flex-wrap:wrap}
+      .btn{width:auto}
+    }
     .btn--accent{background:#0f766e;color:#fff}
     .btn--primary{background:#fff;color:#141414}
   </style>
